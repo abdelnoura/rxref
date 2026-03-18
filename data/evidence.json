@@ -1,1 +1,26 @@
-{"last_updated":"","diseases":{}}
+{
+  "last_updated": "2026-03-18",
+  "diseases": {
+    "cap": {
+      "name": "Community-Acquired Pneumonia",
+      "guideline": "IDSA/ATS 2019 CAP Guidelines",
+      "last_updated": "2026-03-18",
+      "new_studies": [],
+      "delta_updates": []
+    },
+    "chf": {
+      "name": "Acute Decompensated Heart Failure",
+      "guideline": "ACC/AHA 2022 Heart Failure Guidelines",
+      "last_updated": "2026-03-18",
+      "new_studies": [],
+      "delta_updates": []
+    },
+    "dka": {
+      "name": "Diabetic Ketoacidosis",
+      "guideline": "ADA DKA Management Guidelines 2023",
+      "last_updated": "2026-03-18",
+      "new_studies": [],
+      "delta_updates": []
+    }
+  }
+}

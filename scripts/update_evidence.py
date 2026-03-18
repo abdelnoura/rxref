@@ -237,6 +237,7 @@ def run_pipeline():
                 articles = search_pubmed(query)
                 print(f"    Found {len(articles)} articles")
                 all_articles.extend(articles)
+                time.sleep(1.5)
             except Exception as e:
                 print(f"    Search failed: {e}")
                 continue

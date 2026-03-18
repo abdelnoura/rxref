@@ -59,7 +59,6 @@ def search_pubmed(query: str, days_back: int = LOOKBACK_DAYS) -> list[dict]:
         "retmax": MAX_PER_QUERY,
         "retmode": "json",
         "sort": "relevance",
-        "filter": "clinicaltrial,randomizedcontrolledtrial,meta-analysis,systematicreview",
     }
     search_url = f"{PUBMED_BASE}/esearch.fcgi"
     r = requests.get(search_url, params=search_params, timeout=15)

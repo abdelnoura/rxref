@@ -1,422 +1,296 @@
 """
-RxRef — Auto Evidence Update Pipeline
-Runs weekly via GitHub Actions.
-Queries PubMed for new high-impact papers, sends abstracts to Claude,
-extracts structured evidence, updates data/evidence.json.
+RxRef Evidence Surveillance Pipeline
+=====================================
+Runs weekly via GitHub Actions. Does NOT change clinical recommendations automatically.
+Surfaces new studies for physician review and updates the "What's New" feed.
+
+Flow:
+  1. Query PubMed for recent high-quality studies on each disease
+  2. Use Claude to screen for clinical relevance and extract structured data
+  3. Write to data/evidence.json — app displays these in the homepage feed
+  4. Physician reviews flagged studies and manually updates REFS in index.html if warranted
+
+Cost: ~$1–3/week in Claude API calls depending on volume of new papers.
 """
 
 import json
 import os
-import time
-import urllib.request
-import urllib.parse
+import re
+import requests
 from datetime import datetime, timedelta
+from anthropic import Anthropic
 
-# ── CONFIG ────────────────────────────────────────────────────────────────────
+client = Anthropic()
 
-ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
-
-# Diseases to monitor. Add more as you expand.
-DISEASES = [
-    {
-        "id": "cap",
+# ─── SEARCH CONFIGURATION ─────────────────────────────────────────────────────
+# Each disease has targeted PubMed queries. Narrow searches = higher relevance.
+DISEASES = {
+    "cap": {
         "name": "Community-Acquired Pneumonia",
-        "pubmed_terms": [
-            "community-acquired pneumonia treatment",
-            "CAP antibiotic duration",
-            "pneumonia corticosteroids",
-            "pneumonia procalcitonin",
-            "MRSA pneumonia community",
+        "queries": [
+            "community acquired pneumonia treatment randomized controlled trial",
+            "community acquired pneumonia antibiotic duration RCT",
+            "CAP corticosteroids randomized trial",
+            "community acquired pneumonia procalcitonin guided therapy",
+            "pneumonia severity score validation",
         ],
-        "guideline": "IDSA/ATS 2019 CAP Guidelines",
-        "key_sections": ["antibiotic choice", "duration", "steroids", "workup", "severity"]
-    },
-    {
-        "id": "chf",
-        "name": "Acute Decompensated Heart Failure",
-        "pubmed_terms": [
-            "acute decompensated heart failure treatment",
-            "HFrEF diuresis",
-            "heart failure SGLT2",
-            "heart failure decongestion",
-        ],
-        "guideline": "ACC/AHA 2022 Heart Failure Guidelines",
-        "key_sections": ["diuresis", "vasodilators", "SGLT2", "discharge criteria"]
-    },
-    {
-        "id": "dka",
-        "name": "Diabetic Ketoacidosis",
-        "pubmed_terms": [
-            "diabetic ketoacidosis treatment",
-            "DKA insulin protocol",
-            "DKA bicarbonate",
-            "DKA fluid resuscitation",
-        ],
-        "guideline": "ADA DKA Management Guidelines 2023",
-        "key_sections": ["fluids", "insulin", "potassium", "bicarbonate", "monitoring"]
-    },
-]
+        "key_journals": ["NEJM", "JAMA", "Lancet", "CHEST", "CID", "Am J Respir Crit Care Med"],
+        "existing_refs": [
+            "IDSA/ATS 2019", "CAPE-COD 2023", "Uranga 2016", "PROACTIVE 2023",
+            "SCOUT-CAP 2023", "Metlay 1997", "Wipf 1999", "Lim 2003", "Fine 1997"
+        ]
+    }
+}
 
-# Only pull from top journals
-HIGH_IMPACT_JOURNALS = [
-    "N Engl J Med", "JAMA", "Lancet", "BMJ",
-    "Ann Intern Med", "JAMA Intern Med", "Crit Care Med",
-    "Chest", "Clin Infect Dis", "Circulation", "J Am Coll Cardiol"
-]
-
-# How far back to look (days)
-LOOKBACK_DAYS = 90
+PUBMED_BASE = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
+LOOKBACK_DAYS = 90  # How far back to search (overlap prevents gaps)
+MAX_PER_QUERY = 20  # Max results per PubMed query
 
 
-# ── PUBMED SEARCH ─────────────────────────────────────────────────────────────
+# ─── PUBMED SEARCH ─────────────────────────────────────────────────────────────
+def search_pubmed(query: str, days_back: int = LOOKBACK_DAYS) -> list[dict]:
+    """Search PubMed for recent studies matching query. Returns list of PMIDs + metadata."""
+    since = (datetime.now() - timedelta(days=days_back)).strftime("%Y/%m/%d")
 
-def search_pubmed(query, max_results=10):
-    """Search PubMed and return list of PMIDs."""
-    date_from = (datetime.now() - timedelta(days=LOOKBACK_DAYS)).strftime("%Y/%m/%d")
-    date_to = datetime.now().strftime("%Y/%m/%d")
-
-    journal_filter = " OR ".join([f'"{j}"[Journal]' for j in HIGH_IMPACT_JOURNALS])
-    full_query = f'({query}) AND ({journal_filter}) AND ("{date_from}"[Date - Publication] : "{date_to}"[Date - Publication])'
-
-    params = urllib.parse.urlencode({
+    # Search for PMIDs
+    search_params = {
         "db": "pubmed",
-        "term": full_query,
-        "retmax": max_results,
+        "term": f"{query} AND {since}[PDAT]:3000[PDAT]",
+        "retmax": MAX_PER_QUERY,
         "retmode": "json",
-        "sort": "relevance"
-    })
+        "sort": "relevance",
+        "filter": "clinicaltrial,randomizedcontrolledtrial,meta-analysis,systematicreview",
+    }
+    search_url = f"{PUBMED_BASE}/esearch.fcgi"
+    r = requests.get(search_url, params=search_params, timeout=15)
+    r.raise_for_status()
+    pmids = r.json().get("esearchresult", {}).get("idlist", [])
 
-    url = f"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?{params}"
-    try:
-        with urllib.request.urlopen(url, timeout=10) as resp:
-            data = json.loads(resp.read())
-            return data.get("esearchresult", {}).get("idlist", [])
-    except Exception as e:
-        print(f"  PubMed search error: {e}")
+    if not pmids:
         return []
 
-
-def fetch_abstract(pmid):
-    """Fetch title, authors, journal, year, abstract for a PMID."""
-    params = urllib.parse.urlencode({
+    # Fetch abstracts for found PMIDs
+    fetch_params = {
         "db": "pubmed",
-        "id": pmid,
-        "retmode": "json"
-    })
-    url = f"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?{params}"
-    try:
-        with urllib.request.urlopen(url, timeout=10) as resp:
-            data = json.loads(resp.read())
-            article = data.get("result", {}).get(pmid, {})
-            title = article.get("title", "")
-            journal = article.get("source", "")
-            pub_date = article.get("pubdate", "")
-            authors = ", ".join([a.get("name", "") for a in article.get("authors", [])[:3]])
-            if len(article.get("authors", [])) > 3:
-                authors += " et al."
-            return {
-                "pmid": pmid,
-                "title": title,
-                "authors": authors,
-                "journal": journal,
-                "year": pub_date[:4] if pub_date else "",
-                "pubmed_url": f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
-            }
-    except Exception as e:
-        print(f"  Fetch error for PMID {pmid}: {e}")
-        return None
+        "id": ",".join(pmids),
+        "retmode": "xml",
+        "rettype": "abstract",
+    }
+    fetch_url = f"{PUBMED_BASE}/efetch.fcgi"
+    r = requests.get(fetch_url, params=fetch_params, timeout=20)
+    r.raise_for_status()
+
+    return parse_pubmed_xml(r.text, pmids)
 
 
-def fetch_full_abstract(pmid):
-    """Fetch the full abstract text for a PMID."""
-    params = urllib.parse.urlencode({
-        "db": "pubmed",
-        "id": pmid,
-        "retmode": "text",
-        "rettype": "abstract"
-    })
-    url = f"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?{params}"
-    try:
-        with urllib.request.urlopen(url, timeout=10) as resp:
-            return resp.read().decode("utf-8")
-    except Exception as e:
-        print(f"  Abstract fetch error for PMID {pmid}: {e}")
-        return ""
+def parse_pubmed_xml(xml_text: str, pmids: list[str]) -> list[dict]:
+    """Extract key fields from PubMed XML response."""
+    articles = []
+
+    # Split on article boundaries
+    article_blocks = re.split(r'<PubmedArticle>', xml_text)[1:]
+
+    for block in article_blocks:
+        try:
+            pmid = re.search(r'<PMID[^>]*>(\d+)</PMID>', block)
+            title = re.search(r'<ArticleTitle[^>]*>(.*?)</ArticleTitle>', block, re.DOTALL)
+            abstract = re.search(r'<AbstractText[^>]*>(.*?)</AbstractText>', block, re.DOTALL)
+            journal = re.search(r'<Title>(.*?)</Title>', block)
+            year = re.search(r'<PubDate>.*?<Year>(\d{4})</Year>', block, re.DOTALL)
+            authors_raw = re.findall(r'<LastName>(.*?)</LastName>', block)
+
+            if not pmid or not title:
+                continue
+
+            # Clean HTML tags from abstract
+            abstract_text = re.sub(r'<[^>]+>', '', abstract.group(1)) if abstract else ""
+
+            articles.append({
+                "pmid": pmid.group(1),
+                "title": re.sub(r'<[^>]+>', '', title.group(1)),
+                "abstract": abstract_text[:2000],  # Truncate for API call
+                "journal": re.sub(r'<[^>]+>', '', journal.group(1)) if journal else "",
+                "year": year.group(1) if year else "",
+                "authors": f"{authors_raw[0]} et al." if authors_raw else "",
+                "pubmed_url": f"https://pubmed.ncbi.nlm.nih.gov/{pmid.group(1)}/",
+            })
+        except Exception:
+            continue
+
+    return articles
 
 
-# ── CLAUDE EXTRACTION ─────────────────────────────────────────────────────────
+# ─── CLAUDE SCREENING ──────────────────────────────────────────────────────────
+def screen_with_claude(articles: list[dict], disease_config: dict) -> list[dict]:
+    """
+    Use Claude to screen articles for clinical relevance.
+    Returns only articles that meet relevance threshold with structured extraction.
+    """
+    if not articles:
+        return []
 
-EXTRACTION_PROMPT = """You are a clinical medicine expert reviewing a research abstract for relevance to residency-level clinical practice.
+    # Deduplicate by PMID
+    seen = set()
+    unique = []
+    for a in articles:
+        if a["pmid"] not in seen:
+            seen.add(a["pmid"])
+            unique.append(a)
 
-Disease context: {disease_name}
-Current guideline: {guideline}
-Key clinical sections this guideline covers: {sections}
+    # Batch articles into groups of 5 for efficient screening
+    batches = [unique[i:i+5] for i in range(0, len(unique), 5)]
+    relevant = []
 
-Abstract to evaluate:
-{abstract}
+    for batch in batches:
+        articles_text = "\n\n".join([
+            f"PMID: {a['pmid']}\nTitle: {a['title']}\nJournal: {a['journal']} ({a['year']})\nAuthors: {a['authors']}\nAbstract: {a['abstract']}"
+            for a in batch
+        ])
 
-Your job:
-1. Decide if this paper is clinically relevant to residents managing {disease_name}
-2. If relevant, extract structured information
+        prompt = f"""You are a clinical evidence screener for a physician reference tool about {disease_config['name']}.
 
-Return ONLY valid JSON, no markdown, no explanation:
+Review these {len(batch)} PubMed abstracts and identify which are CLINICALLY RELEVANT for a practicing hospitalist or resident.
 
+A study is relevant if it:
+- Is an RCT, meta-analysis, or large cohort study (n>200)
+- Directly addresses treatment decisions, risk stratification, or diagnostic workup
+- Could plausibly change or reinforce a clinical recommendation
+- Covers {disease_config['name']} in adult inpatient or outpatient settings
+
+A study is NOT relevant if it:
+- Is a case report, small pilot, or editorial
+- Focuses on pediatric populations exclusively
+- Is a basic science / mechanistic study
+- Duplicates already-integrated evidence: {', '.join(disease_config['existing_refs'])}
+
+ARTICLES TO SCREEN:
+{articles_text}
+
+For each RELEVANT article, respond with JSON only (no markdown, no preamble):
 {{
-  "relevant": true or false,
-  "reason_if_not": "why not relevant (only if relevant=false)",
-  "title": "paper title",
-  "authors": "authors",
-  "journal": "journal name",
-  "year": "year",
-  "study_type": "RCT / Meta-analysis / Observational / Guideline / Case series / etc",
-  "n": number of participants or null,
-  "population": "who was studied (age, setting, condition severity)",
-  "intervention": "what was done",
-  "comparator": "what it was compared to",
-  "primary_outcome": "what they measured",
-  "key_finding": "one sentence: what they found, with numbers if available",
-  "clinical_takeaway": "one sentence: what a resident should do differently or know",
-  "guideline_relationship": "supports / adds_nuance / conflicts / early_signal",
-  "guideline_relationship_explanation": "specifically how this relates to current {guideline}",
-  "practice_change": "no_change / consider_in_select / potential_change / likely_change",
-  "action_label": "one of: No action change / Consider in select patients / Watch for guideline update / Potential practice change",
-  "evidence_grade": "A / B / C",
-  "section_tag": "which section this belongs to: severity / workup / treatment / special_situations / followup",
-  "caveats": "important limitations or applicability concerns for a resident"
+  "relevant_articles": [
+    {{
+      "pmid": "string",
+      "title": "string",
+      "authors": "string",
+      "journal": "string",
+      "year": "string",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/PMID/",
+      "study_type": "RCT|meta-analysis|cohort|guideline|other",
+      "patient_population": "brief description",
+      "key_finding": "1-2 sentence summary of primary result with effect size if available",
+      "clinical_relevance": "supports|conflicts|adds_nuance|new_data",
+      "relates_to": "treatment|risk_stratification|workup|prevention|prognosis",
+      "practice_change_potential": "high|moderate|low",
+      "reviewer_note": "1 sentence explaining why this matters for {disease_config['name']} management"
+    }}
+  ]
 }}
 
-Be strict about relevance — only mark relevant=true if this directly impacts how a resident would manage {disease_name} today or in the near future. Reject review articles, basic science, and papers that are tangential."""
+If no articles are relevant, return: {{"relevant_articles": []}}"""
+
+        try:
+            response = client.messages.create(
+                model="claude-sonnet-4-20250514",
+                max_tokens=2000,
+                messages=[{"role": "user", "content": prompt}]
+            )
+
+            text = response.content[0].text.strip()
+            # Strip any accidental markdown fences
+            text = re.sub(r'^```json\s*', '', text)
+            text = re.sub(r'\s*```$', '', text)
+
+            data = json.loads(text)
+            for item in data.get("relevant_articles", []):
+                # Match back to original article for URL
+                orig = next((a for a in batch if a["pmid"] == item["pmid"]), {})
+                item["pubmed_url"] = orig.get("pubmed_url", f"https://pubmed.ncbi.nlm.nih.gov/{item['pmid']}/")
+                relevant.append(item)
+
+        except (json.JSONDecodeError, KeyError, IndexError) as e:
+            print(f"Screening batch parse error: {e}")
+            continue
+
+    return relevant
 
 
-def extract_with_claude(abstract_text, disease):
-    """Send abstract to Claude and get structured extraction."""
-    if not ANTHROPIC_API_KEY:
-        print("  No API key found — skipping Claude extraction")
-        return None
+# ─── MAIN PIPELINE ─────────────────────────────────────────────────────────────
+def run_pipeline():
+    output_path = "data/evidence.json"
 
-    prompt = EXTRACTION_PROMPT.format(
-        disease_name=disease["name"],
-        guideline=disease["guideline"],
-        sections=", ".join(disease["key_sections"]),
-        abstract=abstract_text[:4000]  # cap at 4000 chars
-    )
+    # Load existing data to preserve previously found articles
+    existing = {}
+    if os.path.exists(output_path):
+        with open(output_path) as f:
+            existing = json.load(f)
 
-    payload = json.dumps({
-        "model": "claude-sonnet-4-20250514",
-        "max_tokens": 1000,
-        "messages": [{"role": "user", "content": prompt}]
-    }).encode("utf-8")
+    all_disease_results = {}
 
-    req = urllib.request.Request(
-        "https://api.anthropic.com/v1/messages",
-        data=payload,
-        headers={
-            "Content-Type": "application/json",
-            "x-api-key": ANTHROPIC_API_KEY,
-            "anthropic-version": "2023-06-01"
-        },
-        method="POST"
-    )
+    for disease_id, config in DISEASES.items():
+        print(f"\n=== Processing {config['name']} ===")
+        all_articles = []
 
-    try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            data = json.loads(resp.read())
-            raw = data["content"][0]["text"].strip()
-            raw = raw.replace("```json", "").replace("```", "").strip()
-            return json.loads(raw)
-    except Exception as e:
-        print(f"  Claude extraction error: {e}")
-        return None
+        # Run all queries for this disease
+        for query in config["queries"]:
+            print(f"  Searching: {query}")
+            try:
+                articles = search_pubmed(query)
+                print(f"    Found {len(articles)} articles")
+                all_articles.extend(articles)
+            except Exception as e:
+                print(f"    Search failed: {e}")
+                continue
 
+        print(f"  Total raw articles: {len(all_articles)}")
 
-# ── DELTA COMPARISON ──────────────────────────────────────────────────────────
+        # Screen with Claude
+        relevant = screen_with_claude(all_articles, config)
+        print(f"  Relevant after screening: {len(relevant)}")
 
-DELTA_PROMPT = """You are a clinical medicine expert. Given new research findings for a disease, 
-generate a Delta View entry comparing the new evidence to the current guideline.
+        # Merge with existing — keep prior articles, add new ones (dedup by pmid)
+        prior = {a["pmid"]: a for a in existing.get(disease_id, {}).get("articles", [])}
+        new_pmids = {a["pmid"] for a in relevant}
 
-Disease: {disease_name}
-Guideline: {guideline}
-New finding: {finding}
-Guideline relationship: {relationship}
+        # Mark new articles
+        for a in relevant:
+            a["found_date"] = datetime.now().strftime("%Y-%m-%d")
+            a["is_new"] = True
 
-Return ONLY valid JSON:
-{{
-  "topic": "brief topic label (3-5 words)",
-  "guideline_says": "what the current guideline recommends on this topic",
-  "new_evidence": "what the new study found, with numbers",
-  "practical_interpretation": "plain language: does this change what I should do? For whom?",
-  "action": "no-change / reinforces / consider / change"
-}}"""
+        # Keep prior articles but unmark them as new
+        for pmid, a in prior.items():
+            if pmid not in new_pmids:
+                a["is_new"] = False
+                relevant.append(a)
 
+        # Sort: new first, then by practice_change_potential
+        priority_map = {"high": 0, "moderate": 1, "low": 2}
+        relevant.sort(key=lambda x: (
+            0 if x.get("is_new") else 1,
+            priority_map.get(x.get("practice_change_potential", "low"), 2)
+        ))
 
-def generate_delta(finding, disease, relationship):
-    """Generate a Delta View entry for a new finding."""
-    if not ANTHROPIC_API_KEY:
-        return None
+        all_disease_results[disease_id] = {
+            "disease_name": config["name"],
+            "last_updated": datetime.now().strftime("%Y-%m-%d"),
+            "article_count": len(relevant),
+            "articles": relevant[:50]  # Cap at 50 stored articles per disease
+        }
 
-    prompt = DELTA_PROMPT.format(
-        disease_name=disease["name"],
-        guideline=disease["guideline"],
-        finding=finding,
-        relationship=relationship
-    )
+    # Write output
+    output = {
+        "pipeline_version": "2.0",
+        "generated": datetime.now().isoformat(),
+        "diseases": all_disease_results
+    }
 
-    payload = json.dumps({
-        "model": "claude-sonnet-4-20250514",
-        "max_tokens": 400,
-        "messages": [{"role": "user", "content": prompt}]
-    }).encode("utf-8")
-
-    req = urllib.request.Request(
-        "https://api.anthropic.com/v1/messages",
-        data=payload,
-        headers={
-            "Content-Type": "application/json",
-            "x-api-key": ANTHROPIC_API_KEY,
-            "anthropic-version": "2023-06-01"
-        },
-        method="POST"
-    )
-
-    try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            data = json.loads(resp.read())
-            raw = data["content"][0]["text"].strip()
-            raw = raw.replace("```json", "").replace("```", "").strip()
-            return json.loads(raw)
-    except Exception as e:
-        print(f"  Delta generation error: {e}")
-        return None
-
-
-# ── LOAD / SAVE EVIDENCE ─────────────────────────────────────────────────────
-
-def load_existing_evidence():
-    """Load existing evidence.json if it exists."""
-    path = "data/evidence.json"
-    if os.path.exists(path):
-        with open(path, "r") as f:
-            return json.load(f)
-    return {"last_updated": "", "diseases": {}}
-
-
-def save_evidence(data):
-    """Save updated evidence.json."""
     os.makedirs("data", exist_ok=True)
-    data["last_updated"] = datetime.now().strftime("%Y-%m-%d")
-    with open("data/evidence.json", "w") as f:
-        json.dump(data, f, indent=2)
-    print(f"\n✓ Saved data/evidence.json")
+    with open(output_path, "w") as f:
+        json.dump(output, f, indent=2)
 
-
-# ── MAIN PIPELINE ─────────────────────────────────────────────────────────────
-
-def run():
-    print("=" * 60)
-    print("RxRef Evidence Update Pipeline")
-    print(f"Running: {datetime.now().strftime('%Y-%m-%d %H:%M UTC')}")
-    print(f"Looking back {LOOKBACK_DAYS} days")
-    print("=" * 60)
-
-    evidence = load_existing_evidence()
-    seen_pmids = set()
-
-    # Collect all existing PMIDs to avoid duplicates
-    for disease_data in evidence.get("diseases", {}).values():
-        for study in disease_data.get("new_studies", []):
-            if study.get("pmid"):
-                seen_pmids.add(study["pmid"])
-
-    for disease in DISEASES:
-        print(f"\n── {disease['name']} ──")
-        disease_id = disease["id"]
-
-        if disease_id not in evidence["diseases"]:
-            evidence["diseases"][disease_id] = {
-                "name": disease["name"],
-                "guideline": disease["guideline"],
-                "last_updated": "",
-                "new_studies": [],
-                "delta_updates": []
-            }
-
-        new_studies = []
-        all_pmids = []
-
-        # Gather PMIDs from all search terms
-        for term in disease["pubmed_terms"]:
-            print(f"  Searching: {term}")
-            pmids = search_pubmed(term, max_results=5)
-            all_pmids.extend(pmids)
-            time.sleep(0.4)  # respect NCBI rate limits
-
-        # Deduplicate
-        unique_pmids = list(dict.fromkeys(all_pmids))
-        new_pmids = [p for p in unique_pmids if p not in seen_pmids]
-        print(f"  Found {len(unique_pmids)} papers, {len(new_pmids)} new")
-
-        for pmid in new_pmids[:12]:  # cap at 12 per disease per run
-            print(f"  Processing PMID {pmid}...")
-
-            meta = fetch_abstract(pmid)
-            if not meta:
-                continue
-
-            abstract_text = fetch_full_abstract(pmid)
-            if not abstract_text:
-                continue
-
-            time.sleep(0.5)
-
-            extraction = extract_with_claude(abstract_text, disease)
-            if not extraction:
-                continue
-
-            if not extraction.get("relevant"):
-                print(f"    → Not relevant: {extraction.get('reason_if_not','')[:60]}")
-                continue
-
-            print(f"    ✓ Relevant: {extraction.get('key_finding','')[:80]}")
-
-            # Merge metadata
-            extraction["pmid"] = pmid
-            extraction["pubmed_url"] = meta["pubmed_url"]
-            extraction["added_date"] = datetime.now().strftime("%Y-%m-%d")
-
-            new_studies.append(extraction)
-            seen_pmids.add(pmid)
-
-            # Generate delta entry if this has guideline implications
-            relationship = extraction.get("guideline_relationship", "")
-            if relationship in ["conflicts", "adds_nuance", "early_signal"] and extraction.get("key_finding"):
-                delta = generate_delta(
-                    extraction["key_finding"] + " " + extraction.get("clinical_takeaway", ""),
-                    disease,
-                    relationship
-                )
-                if delta:
-                    delta["study_ref"] = extraction.get("title", "")[:50]
-                    delta["pmid"] = pmid
-                    evidence["diseases"][disease_id]["delta_updates"].append(delta)
-                    print(f"    + Delta entry added: {delta.get('topic','')}")
-
-            time.sleep(1)  # Claude rate limit buffer
-
-        # Prepend new studies (newest first), keep last 30
-        existing = evidence["diseases"][disease_id]["new_studies"]
-        combined = new_studies + existing
-        evidence["diseases"][disease_id]["new_studies"] = combined[:30]
-
-        # Keep last 10 delta updates
-        evidence["diseases"][disease_id]["delta_updates"] = \
-            evidence["diseases"][disease_id]["delta_updates"][-10:]
-
-        evidence["diseases"][disease_id]["last_updated"] = datetime.now().strftime("%Y-%m-%d")
-        print(f"  Added {len(new_studies)} new studies for {disease['name']}")
-
-    save_evidence(evidence)
-    print("\n✓ Pipeline complete.")
+    total = sum(d["article_count"] for d in all_disease_results.values())
+    print(f"\n✓ Pipeline complete. {total} total relevant articles written to {output_path}")
 
 
 if __name__ == "__main__":
-    run()
+    run_pipeline()

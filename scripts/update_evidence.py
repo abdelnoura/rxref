@@ -10,7 +10,7 @@ Flow:
   3. Write to data/evidence.json — app displays these in the homepage feed
   4. Physician reviews flagged studies and manually updates REFS in index.html if warranted
 
-Cost: ~$1–3/week in Claude API calls depending on volume of new papers.
+Cost: ~$0/week in Claude API calls depending on volume of new papers.
 """
 
 import json

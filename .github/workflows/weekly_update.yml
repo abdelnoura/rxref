@@ -1,0 +1,37 @@
+name: Weekly Evidence Update
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'  # Every Monday 6am UTC (Sunday night US time)
+  workflow_dispatch:      # Also allows manual trigger from GitHub Actions tab
+
+jobs:
+  update-evidence:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write     # Needed to commit updated evidence.json back to repo
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests anthropic
+
+      - name: Run evidence update script
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python scripts/update_evidence.py
+
+      - name: Commit and push if evidence changed
+        run: |
+          git config --local user.email "rxref-bot@users.noreply.github.com"
+          git config --local user.name "RxRef Evidence Bot"
+          git add data/evidence.json
+          git diff --staged --quiet || git commit -m "Weekly evidence update $(date +'%Y-%m-%d')"
+          git push

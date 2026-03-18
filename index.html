@@ -214,17 +214,17 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--fn)
 .apply-unk{font-size:9px;font-weight:700;padding:2px 5px;border-radius:3px;background:var(--amb-l);color:var(--amb);border:1px solid var(--amb-b);flex-shrink:0}
 
 /* ─── DELTA VIEW ─── */
-.delta-block{background:var(--delta-l);border:1px solid var(--delta-b);border-radius:8px;margin-top:18px;overflow:hidden}
-.delta-hd{padding:11px 14px;border-bottom:1px solid var(--delta-b);display:flex;align-items:center;gap:8px}
-.delta-hd-title{font-size:13px;font-weight:700;color:var(--delta)}
-.delta-new-pill{font-size:9px;font-weight:700;padding:1px 6px;border-radius:3px;background:var(--delta);color:#fff;letter-spacing:.3px}
-.delta-intro{font-size:12px;color:var(--delta);padding:10px 14px;line-height:1.5;border-bottom:1px solid rgba(232,127,86,.25)}
+.delta-block{background:var(--sur);border:1px solid var(--bdr);border-radius:8px;margin-top:18px;overflow:hidden}
+.delta-hd{padding:11px 14px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:8px;background:var(--sur2)}
+.delta-hd-title{font-size:13px;font-weight:700;color:var(--tx)}
+.delta-new-pill{font-size:9px;font-weight:700;padding:1px 6px;border-radius:3px;background:var(--acc);color:#fff;letter-spacing:.3px}
+.delta-intro{font-size:12px;color:var(--txm);padding:10px 14px;line-height:1.5;border-bottom:1px solid var(--bdr)}
 .delta-wrap{overflow-x:auto}
 .delta-tbl{width:100%;border-collapse:collapse;min-width:700px}
-.delta-tbl th{padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--delta);text-align:left;background:rgba(232,127,86,.1);border-bottom:1px solid rgba(232,127,86,.2)}
-.delta-tbl td{padding:10px 12px;font-size:12px;border-bottom:1px solid rgba(232,127,86,.15);vertical-align:top;line-height:1.5}
+.delta-tbl th{padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--txs);text-align:left;background:var(--sur2);border-bottom:1px solid var(--bdr)}
+.delta-tbl td{padding:10px 12px;font-size:12px;border-bottom:1px solid var(--sur2);vertical-align:top;line-height:1.5}
 .delta-tbl tr:last-child td{border-bottom:none}
-.delta-tbl tr:hover td{background:rgba(255,255,255,.4)}
+.delta-tbl tr:hover td{background:var(--sur2)}
 .delta-topic{font-weight:600;color:var(--tx);font-size:12px}
 .delta-gl{color:var(--txm);font-size:12px}
 .rel-pill{display:inline-flex;align-items:center;font-size:10px;font-weight:700;padding:2px 6px;border-radius:3px;border:1px solid;margin-bottom:4px}
@@ -233,10 +233,10 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--fn)
 .rp-nuance{background:#FAFAEB;color:#3A3A0A;border-color:#C4B800}
 .rp-early{background:var(--amb-l);color:var(--amb);border-color:var(--amb-b)}
 .act-tag{display:inline-block;font-size:10px;font-weight:600;padding:1px 6px;border-radius:3px;margin-top:4px;background:var(--acc-l);color:var(--acc);border:1px solid #C3D5E8}
-.act-tag.chg{background:var(--delta-l);color:var(--delta);border-color:var(--delta-b)}
+.act-tag.chg{background:#EBF7F0;color:var(--grn);border-color:var(--grn-b)}
 .act-tag.hold{background:var(--amb-l);color:var(--amb);border-color:var(--amb-b)}
-.delta-study-btn{display:inline-block;font-size:10px;font-weight:600;padding:2px 7px;background:rgba(255,255,255,.8);border:1px solid var(--delta-b);border-radius:3px;color:var(--delta);cursor:pointer;font-family:var(--fn);white-space:nowrap;margin:1px 2px 1px 0}
-.delta-study-btn:hover{background:#fff}
+.delta-study-btn{display:inline-block;font-size:10px;font-weight:600;padding:2px 7px;background:var(--acc-l);border:1px solid #C3D5E8;border-radius:3px;color:var(--acc);cursor:pointer;font-family:var(--fn);white-space:nowrap;margin:1px 2px 1px 0}
+.delta-study-btn:hover{background:#DDE8F2}
 
 /* ─── SPECIAL SITUATIONS ─── */
 .acc-item{border:1px solid var(--bdr);border-radius:7px;margin-bottom:6px;overflow:hidden;background:var(--sur)}

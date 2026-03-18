@@ -8,7 +8,7 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#F4F2ED;--sur:#FFFFFF;--sur2:#EDEAE3;--bdr:#E0DBD2;--bdr2:#CECA C0;
+  --bg:#F4F2ED;--sur:#FFFFFF;--sur2:#EDEAE3;--bdr:#E0DBD2;--bdr2:#CECAC0;
   --tx:#18140F;--txm:#6A6258;--txs:#9C9488;
   --acc:#1B3A5C;--acc-l:#EAF0F7;--acc-m:#5A8DB5;
   --grn:#0A4828;--grn-l:#EAF7F0;--grn-b:#27976A;
@@ -19,92 +19,96 @@
 }
 html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--fn);font-size:14px;line-height:1.5}
 
-/* ─── SHELL ─────────────────────────────── */
+/* ─── SHELL ─── */
 .shell{display:flex;flex-direction:column;height:100vh;overflow:hidden}
 .topbar{height:50px;background:var(--sur);border-bottom:1px solid var(--bdr);display:flex;align-items:center;padding:0 18px;gap:14px;flex-shrink:0}
 .logo{font-size:13px;font-weight:700;display:flex;align-items:center;gap:7px;cursor:pointer}
 .logo-mark{width:22px;height:22px;background:var(--acc);border-radius:4px;display:flex;align-items:center;justify-content:center}
 .logo-mark svg{width:12px;height:12px;fill:#fff}
-.bc{font-size:12px;color:var(--txm);display:flex;align-items:center;gap:5px;cursor:pointer}
-.bc:hover{color:var(--acc)}
+.bc{font-size:12px;color:var(--txm);cursor:pointer}.bc:hover{color:var(--acc)}
 .tb-r{margin-left:auto;display:flex;align-items:center;gap:7px}
-.tbtn{padding:5px 11px;border:1px solid var(--bdr);border-radius:5px;background:var(--sur);color:var(--txm);font-size:12px;font-family:var(--fn);cursor:pointer;font-weight:500;transition:all .12s}
+.tbtn{padding:5px 11px;border:1px solid var(--bdr);border-radius:5px;background:var(--sur);color:var(--txm);font-size:12px;font-family:var(--fn);cursor:pointer;font-weight:500}
 .tbtn:hover{border-color:var(--acc);color:var(--acc)}
 .tbtn.pri{background:var(--acc);color:#fff;border-color:var(--acc)}
-.tbtn.pri:hover{opacity:.88}
 .tbtn.has{background:var(--grn-l);border-color:var(--grn-b);color:var(--grn)}
 .main-row{display:flex;flex:1;overflow:hidden}
 
-/* ─── LEFT NAV ───────────────────────────── */
+/* ─── LEFT NAV ─── */
 .lnav{width:210px;background:var(--sur);border-right:1px solid var(--bdr);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
 .lnav::-webkit-scrollbar{width:3px}
 .lnav::-webkit-scrollbar-thumb{background:var(--bdr)}
-.lnav-hd{padding:12px 14px;border-bottom:1px solid var(--bdr)}
+.lnav-hd{padding:12px 14px 8px;border-bottom:1px solid var(--bdr)}
 .lnav-lbl{font-size:10px;font-weight:700;color:var(--txs);text-transform:uppercase;letter-spacing:.9px;margin-bottom:8px}
-.nav-step{display:flex;align-items:center;gap:9px;padding:7px 8px;border-radius:6px;cursor:pointer;margin-bottom:2px;transition:all .12s}
+.nav-step{display:flex;align-items:center;gap:9px;padding:7px 8px;border-radius:6px;cursor:pointer;margin-bottom:2px}
 .nav-step:hover{background:var(--sur2)}
-.nav-step.active{background:var(--acc-l)}
 .step-num{width:22px;height:22px;border-radius:50%;background:var(--sur2);border:1.5px solid var(--bdr2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--txm);flex-shrink:0;font-family:var(--mono)}
-.nav-step.active .step-num{background:var(--acc);border-color:var(--acc);color:#fff}
 .step-lbl{font-size:12px;font-weight:500;color:var(--txm);line-height:1.3}
-.nav-step.active .step-lbl{color:var(--acc);font-weight:600}
 .pt-zone{padding:12px 14px;border-top:1px solid var(--bdr);margin-top:auto}
 .pt-empty-lbl{font-size:11px;color:var(--txs);line-height:1.5;margin-bottom:8px}
 .pt-add-btn{width:100%;padding:7px;background:var(--acc);color:#fff;border:none;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--fn)}
 .pt-filled{font-size:11px}
 .pt-r{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid var(--sur2)}
 .pt-r:last-child{border-bottom:none}
-.pt-l{color:var(--txs)}
-.pt-v{font-weight:600;color:var(--tx);font-family:var(--mono);font-size:11px}
+.pt-l{color:var(--txs)}.pt-v{font-weight:600;color:var(--tx);font-family:var(--mono);font-size:11px}
 .pt-match{margin-top:8px;padding:8px 10px;background:var(--acc-l);border-radius:5px;border:1px solid #C3D5E8}
 .pt-mt{font-size:10px;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px}
 .pt-mi{font-size:11px;color:var(--acc);padding:2px 0;display:flex;gap:5px}
 .pt-mi::before{content:'→';flex-shrink:0}
 .pt-edit{font-size:11px;color:var(--acc);cursor:pointer;display:inline-block;margin-top:6px}
 
-/* ─── CONTENT AREA ───────────────────────── */
+/* ─── CONTENT ─── */
 .content{flex:1;overflow-y:auto;padding:0}
 .content::-webkit-scrollbar{width:4px}
 .content::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:2px}
 
-/* ─── DISEASE HEADER ─────────────────────── */
-.d-hdr{padding:20px 28px 0;background:var(--sur);border-bottom:2px solid var(--tx);margin-bottom:0}
-.d-title{font-family:var(--serif);font-size:28px;letter-spacing:-.5px;margin-bottom:4px}
-.d-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding-bottom:12px;font-size:11px;color:var(--txm)}
+/* ─── HEADER ─── */
+.d-hdr{padding:18px 28px 0;background:var(--sur);border-bottom:2px solid var(--tx)}
+.d-title{font-family:var(--serif);font-size:27px;letter-spacing:-.5px;margin-bottom:4px}
+.d-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-bottom:8px;font-size:11px;color:var(--txm)}
 .d-sep{width:3px;height:3px;background:var(--bdr2);border-radius:50%}
 .ev-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;background:var(--delta-l);color:var(--delta);border:1px solid var(--delta-b)}
+.icd-code{font-family:var(--mono);font-weight:700;color:var(--acc);cursor:pointer;border-bottom:1px dashed var(--acc);font-size:11px;position:relative}
+.icd-tooltip{display:none;position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:var(--tx);color:#fff;font-size:10px;padding:4px 8px;border-radius:4px;white-space:nowrap;z-index:10;font-family:var(--fn);font-weight:400;pointer-events:none}
+.icd-code:hover .icd-tooltip{display:block}
+.drg-badge{font-size:10px;font-weight:600;padding:1px 7px;border-radius:3px;background:var(--sur2);border:1px solid var(--bdr);cursor:help}
+.d-coding-note{padding:5px 0 10px;font-size:10px;color:var(--txs);border-top:1px dashed var(--bdr);margin-top:4px}
 
-/* ─── STEP SECTIONS ──────────────────────── */
-.step-section{padding:24px 28px;border-bottom:1px solid var(--bdr)}
+/* ─── STEP SECTIONS ─── */
+.step-section{padding:22px 28px;border-bottom:1px solid var(--bdr)}
 .step-section:last-child{border-bottom:none}
-.step-hd{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.step-hd{display:flex;align-items:center;gap:12px;margin-bottom:16px}
 .step-n{font-size:11px;font-weight:700;font-family:var(--mono);color:var(--txs);background:var(--sur2);border:1px solid var(--bdr);padding:3px 7px;border-radius:4px;letter-spacing:.5px;flex-shrink:0}
-.step-title{font-size:16px;font-weight:700;letter-spacing:-.3px;color:var(--tx)}
-.step-sub{font-size:12px;color:var(--txm);margin-left:auto;font-style:italic}
+.step-title{font-size:16px;font-weight:700;letter-spacing:-.3px}
+.step-sub{font-size:11px;color:var(--txm);margin-left:auto;font-style:italic;flex-shrink:0}
 .sline{flex:1;height:1px;background:var(--bdr);margin-left:6px}
 
-/* ─── SYMPTOMS ───────────────────────────── */
-.sym-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.sym-card{background:var(--sur);border:1px solid var(--bdr);border-radius:8px;padding:11px 13px}
-.sym-name{font-size:13px;font-weight:600;margin-bottom:2px;color:var(--tx)}
-.sym-cat{font-size:10px;color:var(--txs);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px}
-.sym-stats{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:7px}
-.stat-row{font-size:11px}
-.stat-lbl{color:var(--txm);margin-bottom:2px;font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.5px}
-.stat-bar-wrap{background:var(--sur2);border-radius:3px;height:6px;overflow:hidden;margin-bottom:1px}
-.stat-bar{height:100%;border-radius:3px;transition:width .4s ease}
-.bar-hi{background:var(--grn-b)}
-.bar-md{background:var(--amb-b)}
-.bar-lo{background:var(--red-b)}
-.bar-na{background:var(--bdr2)}
-.stat-val{font-size:10px;font-family:var(--mono);font-weight:500}
-.val-hi{color:var(--grn)}
-.val-md{color:var(--amb)}
-.val-lo{color:var(--red)}
-.val-na{color:var(--txs)}
-.sym-note{font-size:11px;color:var(--txm);line-height:1.4;border-top:1px solid var(--sur2);padding-top:6px;margin-top:2px}
+/* ─── INLINE CITATION BADGE ─── */
+.cite{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;border:1px solid;cursor:pointer;font-family:var(--fn);vertical-align:middle;margin-left:3px;white-space:nowrap;transition:opacity .1s}
+.cite:hover{opacity:.75}
+.cite-A{background:var(--grn-l);color:var(--grn);border-color:var(--grn-b)}
+.cite-B{background:var(--amb-l);color:var(--amb);border-color:var(--amb-b)}
+.cite-C{background:var(--sur2);color:var(--txm);border-color:var(--bdr)}
+.cite-meta{font-size:8px;opacity:.75;font-weight:400}
 
-/* ─── RISK / SCORES ──────────────────────── */
+/* ─── SYMPTOMS TABLE ─── */
+.sym-tbl{width:100%;border-collapse:collapse;background:var(--sur);border-radius:8px;overflow:hidden;border:1px solid var(--bdr)}
+.sym-tbl thead tr{background:var(--sur2)}
+.sym-tbl th{padding:7px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--txm);text-align:left;border-bottom:1px solid var(--bdr)}
+.sym-tbl td{padding:8px 10px;border-bottom:1px solid var(--sur2);vertical-align:middle;font-size:12px}
+.sym-tbl tr:last-child td{border-bottom:none}
+.sym-tbl tr:hover td{background:var(--sur2)}
+.sym-name-cell{font-weight:600;color:var(--tx)}
+.sym-cat-pill{font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:var(--sur2);border:1px solid var(--bdr);color:var(--txm);display:inline-block;margin-top:2px;text-transform:uppercase;letter-spacing:.4px}
+.stat-pill{display:inline-block;font-size:11px;font-weight:700;font-family:var(--mono);padding:2px 6px;border-radius:4px;border:1px solid;min-width:38px;text-align:center}
+.sp-hi{background:var(--grn-l);color:var(--grn);border-color:var(--grn-b)}
+.sp-md{background:var(--amb-l);color:var(--amb);border-color:var(--amb-b)}
+.sp-lo{background:var(--red-l);color:var(--red);border-color:var(--red-b)}
+.sp-na{background:var(--sur2);color:var(--txs);border-color:var(--bdr)}
+.sym-note-cell{font-size:11px;color:var(--txm);line-height:1.4}
+.leg{display:flex;gap:10px;flex-wrap:wrap;font-size:11px;color:var(--txs);margin-top:7px;align-items:center}
+.leg-item{display:flex;align-items:center;gap:5px}
+
+/* ─── RISK / SCORES ─── */
 .risk-layout{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .criteria-card{background:var(--sur);border:1px solid var(--bdr);border-radius:8px;overflow:hidden}
 .criteria-hd{padding:10px 14px;border-bottom:1px solid var(--bdr);display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
@@ -113,19 +117,16 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--fn)
 .criteria-bd{padding:12px 14px}
 .crit-grp-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px;margin-top:8px}
 .crit-grp-lbl:first-child{margin-top:0}
-.crit-grp-lbl.red{color:var(--red)}
-.crit-grp-lbl.amb{color:var(--amb)}
+.crit-grp-lbl.red{color:var(--red)}.crit-grp-lbl.amb{color:var(--amb)}
 .crit-item{display:flex;align-items:flex-start;gap:7px;padding:4px 0;border-bottom:1px solid var(--sur2);font-size:12px;color:var(--tx)}
 .crit-item:last-child{border-bottom:none}
 .crit-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:5px}
-.crit-dot.red{background:var(--red-b)}
-.crit-dot.amb{background:var(--amb-b)}
+.crit-dot.red{background:var(--red-b)}.crit-dot.amb{background:var(--amb-b)}
 .crit-trigger{margin-top:8px;padding:7px 10px;background:var(--red-l);border-radius:5px;border:1px solid var(--red-b);font-size:11px;color:var(--red);font-weight:600;line-height:1.4}
 .crit-dx{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--sur2)}
 .crit-dx:last-child{border-bottom:none}
 .crit-dx-cb{accent-color:var(--acc);margin-top:2px;cursor:pointer}
-.crit-dx-lbl{font-size:12px;line-height:1.5;cursor:pointer}
-.crit-dx-sub{font-size:11px;color:var(--txm)}
+.crit-dx-lbl{font-size:12px;line-height:1.5;cursor:pointer;flex:1}
 .req-tag{font-size:9px;font-weight:700;padding:1px 4px;border-radius:2px;background:var(--acc-l);color:var(--acc);border:1px solid #C3D5E8;margin-left:5px;vertical-align:middle}
 .dx-result{margin-top:10px;padding:8px 11px;border-radius:6px;font-size:12px;font-weight:600;display:none}
 .dx-result.show{display:block}
@@ -134,9 +135,8 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--fn)
 .dx-result.notmet{background:var(--red-l);border:1px solid var(--red-b);color:var(--red)}
 .dx-note{font-size:11px;color:var(--txm);padding:7px 9px;background:var(--sur2);border-radius:5px;border:1px solid var(--bdr);margin-top:7px;line-height:1.5}
 .score-card{background:var(--sur);border:1px solid var(--bdr);border-radius:8px;overflow:hidden}
-.score-hd{padding:10px 14px;border-bottom:1px solid var(--bdr);display:flex;align-items:flex-start;justify-content:space-between}
-.score-name{font-size:13px;font-weight:700}
-.score-desc{font-size:11px;color:var(--txm);margin-top:1px}
+.score-hd{padding:10px 14px;border-bottom:1px solid var(--bdr);display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.score-name{font-size:13px;font-weight:700}.score-desc{font-size:11px;color:var(--txm);margin-top:1px}
 .score-body{padding:12px 14px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .score-var{margin-bottom:8px}
 .score-var-lbl{font-size:11px;color:var(--txm);margin-bottom:3px}
@@ -150,60 +150,57 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--fn)
 .s-md{background:var(--amb-l);border-color:var(--amb-b);color:var(--amb)}
 .s-hi{background:var(--red-l);border-color:var(--red-b);color:var(--red)}
 
-/* ─── WORKUP ─────────────────────────────── */
-.wk-tabs{display:flex;border-bottom:1px solid var(--bdr);margin-bottom:14px;gap:0}
+/* ─── WORKUP ─── */
+.wk-tabs{display:flex;border-bottom:1px solid var(--bdr);margin-bottom:14px}
 .wk-tab{padding:7px 14px;font-size:12px;font-weight:500;color:var(--txm);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
 .wk-tab.active{color:var(--acc);border-bottom-color:var(--acc);font-weight:600}
-.wk-tab:hover:not(.active){color:var(--tx)}
 .wk-row{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--sur2)}
 .wk-row:last-child{border-bottom:none}
 .wk-cb{accent-color:var(--acc);margin-top:3px;flex-shrink:0;cursor:pointer}
 .wk-body{flex:1}
 .wk-name{font-size:13px;font-weight:600;color:var(--tx);margin-bottom:2px}
-.wk-why{font-size:11px;color:var(--txm);line-height:1.4}
+.wk-why{font-size:11px;color:var(--txm);line-height:1.4;margin-top:2px}
 .wk-tag{display:inline-block;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;margin-left:6px;vertical-align:middle}
 .wt-routine{background:var(--acc-l);color:var(--acc);border:1px solid #C3D5E8}
 .wt-selective{background:var(--amb-l);color:var(--amb);border:1px solid var(--amb-b)}
 .wt-severe{background:var(--red-l);color:var(--red);border:1px solid var(--red-b)}
-.wk-stats{display:flex;gap:5px;margin-top:5px;flex-wrap:wrap}
+.wk-stats{display:flex;gap:5px;margin-top:5px;flex-wrap:wrap;align-items:center}
 .wk-stat{font-size:10px;font-family:var(--mono);padding:1px 6px;border-radius:3px;background:var(--sur2);border:1px solid var(--bdr);color:var(--txm)}
 .wk-stat span{color:var(--tx);font-weight:600}
 
-/* ─── TREATMENT TABS ─────────────────────── */
+/* ─── TREATMENT ─── */
 .tx-tabs{display:flex;gap:4px;margin-bottom:14px;flex-wrap:wrap}
 .tx-tab{padding:6px 14px;background:var(--sur2);border:1px solid var(--bdr);border-radius:6px;font-size:12px;font-weight:500;color:var(--txm);cursor:pointer;font-family:var(--fn)}
 .tx-tab.active{background:var(--acc);border-color:var(--acc);color:#fff}
 .tx-card{background:var(--sur);border:1px solid var(--bdr);border-radius:8px;margin-bottom:12px;overflow:hidden}
 .tx-hd{padding:12px 14px;border-bottom:1px solid var(--bdr)}
-.tx-name{font-size:14px;font-weight:700}
-.tx-class{font-size:11px;color:var(--txm);margin-top:1px}
+.tx-name{font-size:14px;font-weight:700}.tx-class{font-size:11px;color:var(--txm);margin-top:1px}
 .tx-tags{display:flex;gap:5px;margin-top:5px;flex-wrap:wrap}
 .ttag{font-size:10px;font-weight:600;padding:2px 7px;border-radius:3px;border:1px solid}
 .ttag-1l{background:var(--acc-l);color:var(--acc);border-color:#C3D5E8}
 .ttag-pref{background:var(--grn-l);color:var(--grn);border-color:var(--grn-b)}
 .ttag-alt{background:var(--sur2);color:var(--txm);border-color:var(--bdr)}
 .tx-bd{padding:14px}
-.dose-tbl{width:100%;border-collapse:collapse;margin-bottom:10px}
-.dose-tbl td{padding:6px 8px;font-size:12px;border-bottom:1px solid var(--sur2);vertical-align:top}
-.dose-tbl tr:last-child td{border-bottom:none}
-.dose-lbl{color:var(--txm);width:30%;font-size:11px;padding-top:8px}
-.dose-val{color:var(--acc);font-family:var(--mono);font-size:12px;font-weight:500}
-.dose-note{font-size:11px;color:var(--txm);font-family:var(--fn);margin-top:2px}
+
+/* ─── CITED TABLE ─── */
+.cited-tbl{width:100%;border-collapse:collapse;margin-bottom:10px}
+.cited-tbl td{padding:6px 8px;font-size:12px;border-bottom:1px solid var(--sur2);vertical-align:top}
+.cited-tbl tr:last-child td{border-bottom:none}
+.cited-lbl{color:var(--txm);width:28%;font-size:11px;padding-top:8px;font-weight:600}
+.cited-val{color:var(--acc);font-family:var(--mono);font-size:12px;font-weight:500}
+.cited-note{font-size:11px;color:var(--txm);font-family:var(--fn);margin-top:2px}
 .pk-strip{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--txm);background:var(--sur2);padding:7px 10px;border-radius:5px;margin-bottom:10px;border:1px solid var(--bdr)}
 .pk-item strong{color:var(--tx)}
 .tx-cols{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
 .tx-col{background:var(--sur2);border-radius:6px;padding:9px 11px;border:1px solid var(--bdr)}
 .tx-col-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px}
-.tx-col-title.red{color:var(--red)}
-.tx-col-title.amb{color:var(--amb)}
-.tx-col-title.blue{color:var(--acc)}
-.tx-col-title.grn{color:var(--grn)}
-.tx-li{font-size:11px;color:#5A5450;padding:3px 0;border-bottom:1px solid var(--bdr);line-height:1.4}
+.tx-col-title.red{color:var(--red)}.tx-col-title.amb{color:var(--amb)}.tx-col-title.blue{color:var(--acc)}.tx-col-title.grn{color:var(--grn)}
+.tx-li{font-size:11px;color:#5A5450;padding:3px 0;border-bottom:1px solid var(--bdr);line-height:1.5;display:flex;align-items:flex-start;gap:5px;flex-wrap:wrap}
 .tx-li:last-child{border-bottom:none}
-.tx-li::before{content:'– ';color:var(--bdr2)}
+.tx-li-txt{flex:1}
 .ev-section{border-top:1px solid var(--bdr);padding-top:10px;margin-top:8px}
 .ev-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--txs);margin-bottom:6px}
-.ev-row{display:flex;align-items:flex-start;gap:7px;padding:5px 0;border-bottom:1px solid var(--sur2);flex-wrap:wrap}
+.ev-row{display:flex;align-items:flex-start;gap:7px;padding:6px 0;border-bottom:1px solid var(--sur2);flex-wrap:wrap}
 .ev-row:last-child{border-bottom:none}
 .ev-trial-btn{font-size:11px;font-weight:600;padding:3px 8px;background:var(--acc-l);border:1px solid #C3D5E8;border-radius:4px;color:var(--acc);cursor:pointer;font-family:var(--fn);flex-shrink:0}
 .ev-trial-btn:hover{background:#DDE8F2}
@@ -216,30 +213,32 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--fn)
 .apply-no{font-size:9px;font-weight:700;padding:2px 5px;border-radius:3px;background:var(--sur2);color:var(--txs);border:1px solid var(--bdr);flex-shrink:0}
 .apply-unk{font-size:9px;font-weight:700;padding:2px 5px;border-radius:3px;background:var(--amb-l);color:var(--amb);border:1px solid var(--amb-b);flex-shrink:0}
 
-/* ─── DELTA VIEW (under treatment) ──────── */
+/* ─── DELTA VIEW ─── */
 .delta-block{background:var(--delta-l);border:1px solid var(--delta-b);border-radius:8px;margin-top:18px;overflow:hidden}
 .delta-hd{padding:11px 14px;border-bottom:1px solid var(--delta-b);display:flex;align-items:center;gap:8px}
 .delta-hd-title{font-size:13px;font-weight:700;color:var(--delta)}
-.delta-pill-new{font-size:9px;font-weight:700;padding:1px 6px;border-radius:3px;background:var(--delta);color:#fff;letter-spacing:.3px}
-.delta-intro{font-size:12px;color:var(--delta);padding:10px 14px 6px;line-height:1.5;border-bottom:1px solid rgba(232,127,86,.25)}
-.delta-row{padding:11px 14px;border-bottom:1px solid rgba(232,127,86,.2);display:grid;grid-template-columns:140px 1fr 1fr 1fr 110px;gap:10px;align-items:start;font-size:12px}
-.delta-row:last-child{border-bottom:none}
-.delta-row-hd{padding:7px 14px;display:grid;grid-template-columns:140px 1fr 1fr 1fr 110px;gap:10px;background:rgba(232,127,86,.12);border-bottom:1px solid rgba(232,127,86,.2)}
-.delta-row-hd span{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--delta)}
-.delta-topic{font-weight:600;color:var(--tx)}
-.delta-gl{color:var(--txm)}
-.rel-pill{display:inline-flex;align-items:center;font-size:10px;font-weight:700;padding:2px 6px;border-radius:3px;border:1px solid;margin-bottom:3px}
+.delta-new-pill{font-size:9px;font-weight:700;padding:1px 6px;border-radius:3px;background:var(--delta);color:#fff;letter-spacing:.3px}
+.delta-intro{font-size:12px;color:var(--delta);padding:10px 14px;line-height:1.5;border-bottom:1px solid rgba(232,127,86,.25)}
+.delta-wrap{overflow-x:auto}
+.delta-tbl{width:100%;border-collapse:collapse;min-width:700px}
+.delta-tbl th{padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--delta);text-align:left;background:rgba(232,127,86,.1);border-bottom:1px solid rgba(232,127,86,.2)}
+.delta-tbl td{padding:10px 12px;font-size:12px;border-bottom:1px solid rgba(232,127,86,.15);vertical-align:top;line-height:1.5}
+.delta-tbl tr:last-child td{border-bottom:none}
+.delta-tbl tr:hover td{background:rgba(255,255,255,.4)}
+.delta-topic{font-weight:600;color:var(--tx);font-size:12px}
+.delta-gl{color:var(--txm);font-size:12px}
+.rel-pill{display:inline-flex;align-items:center;font-size:10px;font-weight:700;padding:2px 6px;border-radius:3px;border:1px solid;margin-bottom:4px}
 .rp-sup{background:var(--grn-l);color:var(--grn);border-color:var(--grn-b)}
 .rp-conf{background:var(--red-l);color:var(--red);border-color:var(--red-b)}
 .rp-nuance{background:#FAFAEB;color:#3A3A0A;border-color:#C4B800}
 .rp-early{background:var(--amb-l);color:var(--amb);border-color:var(--amb-b)}
-.act-tag{display:inline-block;font-size:10px;font-weight:600;padding:1px 6px;border-radius:3px;margin-top:3px;background:var(--acc-l);color:var(--acc);border:1px solid #C3D5E8}
+.act-tag{display:inline-block;font-size:10px;font-weight:600;padding:1px 6px;border-radius:3px;margin-top:4px;background:var(--acc-l);color:var(--acc);border:1px solid #C3D5E8}
 .act-tag.chg{background:var(--delta-l);color:var(--delta);border-color:var(--delta-b)}
 .act-tag.hold{background:var(--amb-l);color:var(--amb);border-color:var(--amb-b)}
-.delta-study-btn{font-size:10px;padding:2px 6px;background:rgba(255,255,255,.7);border:1px solid rgba(232,127,86,.4);border-radius:3px;color:var(--delta);cursor:pointer;font-family:var(--fn);font-weight:500;margin-right:3px;margin-bottom:3px}
+.delta-study-btn{display:inline-block;font-size:10px;font-weight:600;padding:2px 7px;background:rgba(255,255,255,.8);border:1px solid var(--delta-b);border-radius:3px;color:var(--delta);cursor:pointer;font-family:var(--fn);white-space:nowrap;margin:1px 2px 1px 0}
 .delta-study-btn:hover{background:#fff}
 
-/* ─── SPECIAL SITUATIONS ─────────────────── */
+/* ─── SPECIAL SITUATIONS ─── */
 .acc-item{border:1px solid var(--bdr);border-radius:7px;margin-bottom:6px;overflow:hidden;background:var(--sur)}
 .acc-trigger{padding:10px 14px;cursor:pointer;font-size:13px;font-weight:600;color:var(--tx);display:flex;align-items:center;justify-content:space-between;user-select:none}
 .acc-trigger:hover{background:var(--sur2)}
@@ -247,16 +246,16 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--fn)
 .acc-item.open .acc-arrow{transform:rotate(90deg)}
 .acc-body{display:none;padding:12px 14px;border-top:1px solid var(--bdr);font-size:12px;line-height:1.7;color:#4A4540}
 .acc-item.open .acc-body{display:block}
-.sp-grade{font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:var(--amb-l);color:var(--amb);border:1px solid var(--amb-b);margin-left:7px;vertical-align:middle}
 
-/* ─── FOLLOW UP ──────────────────────────── */
+/* ─── FOLLOW UP ─── */
 .fu-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--sur2);font-size:12px;color:#4A4540}
 .fu-item:last-child{border-bottom:none}
 .fu-n{width:22px;height:22px;border-radius:50%;background:var(--acc);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px}
+.fu-content{flex:1;line-height:1.5}
 
-/* ─── MODAL ──────────────────────────────── */
+/* ─── MODAL ─── */
 .modal-bg{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(18,12,6,.5);display:flex;align-items:center;justify-content:center;z-index:200}
-.modal{background:var(--sur);border:1px solid var(--bdr);border-radius:10px;width:520px;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.14)}
+.modal{background:var(--sur);border:1px solid var(--bdr);border-radius:10px;width:540px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.14)}
 .modal-hd{padding:14px 18px;border-bottom:1px solid var(--bdr);display:flex;align-items:flex-start;justify-content:space-between;gap:10px;position:sticky;top:0;background:var(--sur);z-index:1}
 .modal-title{font-size:14px;font-weight:700;line-height:1.3}
 .modal-x{background:transparent;border:none;color:var(--txm);font-size:20px;cursor:pointer;line-height:1;padding:0;flex-shrink:0}
@@ -282,7 +281,7 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--fn)
 .save-btn{width:100%;padding:9px;background:var(--acc);color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--fn);margin-top:9px}
 .save-btn:hover{opacity:.88}
 
-/* ─── HOME PAGE ──────────────────────────── */
+/* ─── HOME ─── */
 .home{min-height:100vh}
 .home-nav{height:50px;background:var(--sur);border-bottom:1px solid var(--bdr);display:flex;align-items:center;padding:0 22px;gap:14px}
 .home-body{max-width:900px;margin:0 auto;padding:40px 22px}
@@ -308,136 +307,384 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--fn)
 .d-sum{font-size:12px;color:var(--txm);line-height:1.5;margin-bottom:9px}
 .d-foot{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--txs)}
 .home-sec{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--txs);margin-bottom:11px}
-.update-feed{background:var(--sur);border:1px solid var(--bdr);border-radius:9px;overflow:hidden;margin-bottom:26px}
-.upd-item{padding:11px 15px;border-bottom:1px solid var(--sur2);display:flex;align-items:flex-start;gap:10px;cursor:pointer}
-.upd-item:hover{background:var(--sur2)}
-.upd-item:last-child{border-bottom:none}
-.upd-dot{width:8px;height:8px;border-radius:50%;margin-top:4px;flex-shrink:0}
-.ud-chg{background:var(--delta-b)}
-.ud-sup{background:var(--grn-b)}
-.ud-nce{background:#C4B800}
-.upd-dis{font-size:10px;font-weight:700;color:var(--txm);text-transform:uppercase;letter-spacing:.6px;margin-bottom:2px}
-.upd-txt{font-size:13px;color:var(--tx);line-height:1.4}
-.upd-tag{display:inline-block;font-size:10px;font-weight:600;padding:1px 6px;border-radius:3px;margin-top:4px;border:1px solid}
 </style>
 </head>
 <body>
 <div id="root"></div>
-
 <script>
 // ─────────────────────────────────────────────────────────────
-// DATA
+// MASTER REFERENCE DATABASE — every citation in the app
+// ─────────────────────────────────────────────────────────────
+const REFS = {
+  'Metlay1997':{
+    short:'Metlay et al., JAMA 1997',
+    title:'Does This Patient Have Community-Acquired Pneumonia? Diagnosing Pneumonia by History and Physical Examination',
+    authors:'Metlay JP, Kapoor WN, Fine MJ',
+    journal:'JAMA',year:'1997',n:1134,
+    design:'Systematic review and meta-analysis of 9 prospective cohort studies',
+    setting:'Ambulatory and inpatient settings, multiple countries',
+    inclusion:'Adults with suspected lower respiratory tract infection evaluated for CAP',
+    exclusion:'Immunocompromised patients, pediatric studies',
+    primary:'Sensitivity and specificity of history and physical exam findings for radiographically confirmed pneumonia',
+    result:'No single symptom or sign sufficient to confirm or exclude CAP. Combinations improve diagnostic accuracy.',
+    grade:'A',
+    key:'Definitive meta-analysis establishing sensitivity/specificity of individual clinical features for CAP. Foundation for all Sn/Sp data cited in symptom assessment.'
+  },
+  'Wipf1999':{
+    short:'Wipf et al., Arch IM 1999',
+    title:'Diagnosing Pneumonia by Physical Examination: Relevant or Relic?',
+    authors:'Wipf JE, Lipsky BA, Hirschmann JV et al.',
+    journal:'Archives of Internal Medicine',year:'1999',n:52,
+    design:'Prospective cohort study, blinded examinations',
+    setting:'University hospital, Seattle, USA',
+    inclusion:'Adults admitted with suspected pneumonia, CXR obtained',
+    exclusion:'Prior diagnosis established, immunocompromised',
+    primary:'Sensitivity/specificity of auscultatory findings for radiographically confirmed pneumonia',
+    result:'Egophony: Sn 16%, Sp 96%. Bronchial breath sounds: similar high specificity, low sensitivity.',
+    grade:'B',
+    key:'Auscultatory findings have high specificity but very low sensitivity — useful to rule IN pneumonia when present, not to rule out.'
+  },
+  'IDSA_ATS_2019':{
+    short:'IDSA/ATS 2019 Guidelines',
+    title:'Infectious Diseases Society of America/American Thoracic Society Consensus Guidelines on the Management of Community-Acquired Pneumonia in Adults',
+    authors:'Metlay JP, Waterer GW, Long AC et al.',
+    journal:'Clinical Infectious Diseases',year:'2019',n:null,
+    design:'Evidence-based clinical practice guideline (systematic reviews + expert panel)',
+    setting:'United States — ambulatory, inpatient, and ICU settings',
+    inclusion:'Adults ≥18 with CAP; outpatient, inpatient non-severe, and severe/ICU presentations',
+    exclusion:'Immunocompromised patients (separate guidelines), HAP/VAP, aspiration pneumonitis without infection',
+    primary:'Management recommendations across diagnosis, risk stratification, workup, and treatment',
+    result:'Comprehensive evidence-based recommendations. Replaced 2007 IDSA/ATS guidelines.',
+    grade:'A',
+    key:'Primary guideline governing all CAP management decisions in this page. All recommendations derive from or are graded relative to this document.'
+  },
+  'Mandell2007':{
+    short:'Mandell et al., CID 2007',
+    title:'Infectious Diseases Society of America/American Thoracic Society Consensus Guidelines on CAP in Adults (2007 edition — severe CAP criteria)',
+    authors:'Mandell LA, Wunderink RG, Anzueto A et al.',
+    journal:'Clinical Infectious Diseases',year:'2007',n:null,
+    design:'Evidence-based guideline with derivation/validation data for severe CAP criteria',
+    setting:'International multicenter data',
+    inclusion:'Adults with CAP requiring risk stratification for ICU admission',
+    exclusion:'HAP/VAP, immunocompromised',
+    primary:'Derivation and validation of major/minor criteria for severe CAP requiring ICU',
+    result:'1 major OR ≥3 minor criteria identifies ICU-level patients with sensitivity ~71%, specificity ~88%.',
+    grade:'A',
+    key:'Source of the ATS/IDSA major/minor severity criteria for ICU admission. Basis for the checklist in Step 02.'
+  },
+  'Lim2003':{
+    short:'Lim et al., Thorax 2003',
+    title:'Defining community acquired pneumonia severity on presentation to hospital: an international derivation and validation study',
+    authors:'Lim WS, van der Eerden MM, Laing R et al.',
+    journal:'Thorax',year:'2003',n:1068,
+    design:'Prospective multicenter derivation + independent validation cohort',
+    setting:'3 UK hospitals + 1 Netherlands hospital',
+    inclusion:'Adults ≥16 admitted with CAP; community onset',
+    exclusion:'Hospital-acquired, immunocompromised, post-procedure',
+    primary:'30-day mortality prediction using CURB-65 score',
+    result:'CURB-65 score 0–1: 1.5% mortality; 2: 9.2%; 3–5: 22%. C-statistic 0.78.',
+    grade:'A',
+    key:'Derivation and validation study for CURB-65. This score and all its cutpoints and mortality predictions come from this paper.'
+  },
+  'Fine1997':{
+    short:'Fine et al., NEJM 1997',
+    title:'A Prediction Rule to Identify Low-Risk Patients with Community-Acquired Pneumonia',
+    authors:'Fine MJ, Auble TE, Yealy DM et al.',
+    journal:'New England Journal of Medicine',year:'1997',n:14199,
+    design:'Prospective cohort — derivation (n=14,199) + validation (n=2287)',
+    setting:'19 hospitals, United States and Canada',
+    inclusion:'Adults ≥18 admitted for CAP; radiographically confirmed',
+    exclusion:'HIV/AIDS, nursing home residents (in derivation)',
+    primary:'PSI score derivation and 30-day mortality prediction',
+    result:'Class I–II: <1% mortality; Class III: 2.8%; Class IV: 8.2%; Class V: 29.2%. AUC 0.82.',
+    grade:'A',
+    key:'Derivation and validation study for PSI/PORT score. All PSI class variables, points, and mortality rates come from this paper.'
+  },
+  'Syrjala1998':{
+    short:'Syrjälä et al., Chest 1998',
+    title:'Chest radiography in adult outpatient pneumonia',
+    authors:'Syrjälä H, Broas M, Suramo I et al.',
+    journal:'Chest',year:'1998',n:47,
+    design:'Prospective cohort — CXR vs CT comparison',
+    setting:'University hospital, Finland',
+    inclusion:'Adults with clinically suspected CAP',
+    exclusion:'Immunocompromised, hospital-acquired',
+    primary:'Sensitivity of CXR vs HRCT for pneumonia diagnosis',
+    result:'CXR sensitivity 53%, specificity ~90% vs CT as gold standard. CT detects ~47% more infiltrates.',
+    grade:'B',
+    key:'Source of CXR Sn 53%, Sp ~90% for CAP diagnosis. CT remains reference standard; CXR misses nearly half of CT-confirmed cases.'
+  },
+  'Uranga2016':{
+    short:'Uranga et al., JAMA IM 2016',
+    title:'Duration of Antibiotic Treatment Based on Clinical Stability Criteria in Hospitalized Patients with Community-Acquired Pneumonia',
+    authors:'Uranga A, España PP, Bilbao A et al.',
+    journal:'JAMA Internal Medicine',year:'2016',n:312,
+    design:'Randomized controlled trial — non-inferiority design',
+    setting:'Single tertiary hospital, Spain',
+    inclusion:'Adults ≥18 hospitalized with CAP, reaching clinical stability',
+    exclusion:'ICU admission, immunocompromise, Pseudomonas/MRSA, HAP',
+    primary:'30-day mortality and treatment failure at 10 and 30 days',
+    result:'Stability-guided group: mean 5 days. Standard group: mean 10 days. Non-inferior for all outcomes. P=0.97.',
+    grade:'A',
+    key:'Stopping antibiotics at 5 days when stability criteria are met is non-inferior to standard physician-guided duration (~10 days). Supports 5-day minimum recommendation.'
+  },
+  'CAPE_COD_2023':{
+    short:'CAPE-COD, NEJM 2023',
+    title:'Hydrocortisone in Severe Community-Acquired Pneumonia',
+    authors:'Dequin PF, Meziani F, Quenot JP et al. (for the CRICS-TriGGERSep Network)',
+    journal:'New England Journal of Medicine',year:'2023',n:800,
+    design:'Multicenter, double-blind, placebo-controlled RCT — superiority design',
+    setting:'31 French ICUs',
+    inclusion:'Adults ≥18 with severe CAP (ATS/IDSA major/minor criteria) requiring MV, HFNC, or O₂ ≥6L/min to maintain SpO₂ ≥90%',
+    exclusion:'Immunocompromised (hematologic malignancy, SOT, HIV CD4 <200, chronic corticosteroids ≥0.5mg/kg/day prednisone equivalent), pregnancy, corticosteroid use for another indication, septic shock without pneumonia as primary source',
+    primary:'28-day mortality',
+    result:'18.6% (hydrocortisone) vs 25.0% (placebo). ARR 6.4%, RR 0.74 (95% CI 0.56–0.98), p=0.024. NNT ≈ 16.',
+    harms:'More hyperglycemia requiring insulin in treatment arm (91% vs 68%). No difference in secondary infections or GI bleeding.',
+    grade:'A',
+    key:'PRACTICE CHANGING for severe/ICU CAP: Hydrocortisone 200mg/day reduces 28-day mortality. NNT ≈ 16. Do NOT use in non-severe CAP — no benefit, more hyperglycemia.'
+  },
+  'ASHP_Vanco_2020':{
+    short:'ASHP/IDSA/SIDP 2020',
+    title:'Therapeutic Monitoring of Vancomycin for Serious MRSA Infections: A Revised Consensus Guideline',
+    authors:'Rybak MJ, Le J, Lodise TP et al.',
+    journal:'American Journal of Health-System Pharmacy',year:'2020',n:null,
+    design:'Consensus guideline (systematic review + expert panel)',
+    setting:'North American consensus',
+    inclusion:'Adult patients receiving vancomycin for serious S. aureus infections',
+    exclusion:'Minor infections not requiring TDM',
+    primary:'Optimal therapeutic drug monitoring strategy for vancomycin',
+    result:'AUC-guided dosing (target AUC/MIC 400–600 with Bayesian software) reduces nephrotoxicity ~50% vs trough-only monitoring with equivalent efficacy.',
+    grade:'A',
+    key:'AUC-guided vancomycin dosing should replace trough-only monitoring. Bayesian PK software required for optimal AUC estimation.'
+  },
+  'ATS2023_BloodCx':{
+    short:'ATS 2023 Reaffirmation',
+    title:'ATS 2023 Reaffirmation of Blood Culture Indications in Hospitalized CAP',
+    authors:'ATS Clinical Practice Committee',
+    journal:'American Journal of Respiratory and Critical Care Medicine',year:'2023',n:null,
+    design:'Guideline reaffirmation (updated systematic review)',
+    setting:'United States — inpatient management of CAP',
+    inclusion:'Adults hospitalized with CAP',
+    exclusion:'HAP/VAP, immunocompromised',
+    primary:'Clinical impact of routine vs selective blood cultures in non-severe CAP',
+    result:'<1.5% of blood cultures in non-severe inpatient CAP yield a clinically actionable result that changes management.',
+    grade:'A',
+    key:'Do not order routine blood cultures for non-severe inpatient CAP. Reserve for severe CAP or specific risk factors.'
+  },
+  'Wunderink2022':{
+    short:'Wunderink et al., CHEST 2022',
+    title:'Validation of IDSA/ATS Risk Factors for MRSA and Pseudomonas Coverage in Community-Acquired Pneumonia',
+    authors:'Wunderink RG, Waterer G, Cangelosi MJ et al.',
+    journal:'CHEST',year:'2022',n:476,
+    design:'Retrospective multicenter cohort validation study',
+    setting:'United States — multicenter inpatient',
+    inclusion:'Adults hospitalized with radiographically confirmed CAP',
+    exclusion:'HAP/VAP, already on MRSA/Pseudomonas treatment',
+    primary:'Validity of IDSA risk factors to identify MRSA and Pseudomonas CAP',
+    result:'IDSA risk factors remain valid. MRSA nares PCR adds incremental value: NPV >95% when negative.',
+    grade:'B',
+    key:'Current IDSA risk-factor approach for MRSA/Pseudomonas coverage is validated. Nares MRSA PCR negative result (NPV >95%) safely supports withholding vancomycin.'
+  },
+  'ProHOSP2010':{
+    short:'ProHOSP, Lancet 2010',
+    title:'PCT to guide duration of antibiotic therapy in patients with lower-respiratory-tract infections (ProHOSP RCT)',
+    authors:'Schuetz P, Christ-Crain M, Thomann R et al.',
+    journal:'Lancet',year:'2010',n:1359,
+    design:'Multicenter randomized controlled trial',
+    setting:'6 Swiss hospitals',
+    inclusion:'Adults with lower respiratory tract infection including CAP',
+    exclusion:'Immunocompromised, ICU-only enrollment',
+    primary:'Antibiotic exposure and non-inferiority for 30-day outcomes',
+    result:'PCT-guided group had significantly fewer antibiotic-days (5.7 vs 8.7 days, p<0.001) with non-inferior 30-day outcomes.',
+    grade:'A',
+    key:'First large RCT establishing safety of PCT-guided antibiotic cessation. Basis for PCT-guided de-escalation recommendation.'
+  },
+  'PROACTIVE2023':{
+    short:'PROACTIVE, JAMA 2023',
+    title:'Effect of Procalcitonin-Guided Antibiotic Treatment on Clinical Outcomes in Hospitalized Patients with Community-Acquired Pneumonia (PROACTIVE)',
+    authors:'Curbelo J, Rajas O, Arenas-Miras MM et al.',
+    journal:'JAMA',year:'2023',n:791,
+    design:'Multicenter randomized controlled trial',
+    setting:'Spain — multicenter inpatient',
+    inclusion:'Adults ≥18 hospitalized with CAP',
+    exclusion:'Immunocompromise, prior antibiotic ≥24h, do-not-resuscitate status',
+    primary:'30-day mortality and clinical cure',
+    result:'PCT group: 7.9 days antibiotics vs 9.2 standard care. Non-inferior 30-day mortality and clinical cure.',
+    grade:'A',
+    key:'PCT-guided stopping reduces antibiotic duration by ~1.3 days safely in hospitalized CAP. Supports PCT as adjunct de-escalation tool.'
+  },
+  'SCOUT_CAP2023':{
+    short:'SCOUT-CAP, CID 2023',
+    title:'Antibiotic Duration for Community-Acquired Pneumonia in Low-Severity Patients (SCOUT-CAP subanalysis)',
+    authors:'Postma DF, van Werkhoven CH, Spitoni C et al.',
+    journal:'Clinical Infectious Diseases',year:'2023',n:580,
+    design:'RCT subanalysis — pre-specified analysis of PSI I–II subgroup',
+    setting:'Multicenter, Netherlands',
+    inclusion:'Adults with radiographically confirmed CAP, PSI Class I–II, meeting stability criteria by day 3',
+    exclusion:'Severe CAP, bacteremia, immunocompromise, ICU admission',
+    primary:'Clinical cure at day 10 and 28',
+    result:'3-day course non-inferior to 5 days in PSI I–II patients stable by day 3. Clinical cure rates equivalent.',
+    grade:'B',
+    key:'In very low-risk CAP (PSI I–II) reaching stability by day 3, a 3-day course may be sufficient. Not yet in IDSA/ATS guidelines. Use clinical judgment.'
+  },
+  'Parente2018':{
+    short:'Parente et al., CHEST 2018',
+    title:'Assessing the Value of the MRSA Nares Screening Test to Decolonize Patients With Pneumonia in the ICU',
+    authors:'Parente DM, Cunha CB, Mylonakis E, Timbrook TT',
+    journal:'CHEST',year:'2018',n:479,
+    design:'Retrospective cohort + meta-analysis',
+    setting:'United States — ICU patients',
+    inclusion:'Adults admitted to ICU with pneumonia, MRSA nares PCR performed',
+    exclusion:'Prior MRSA colonization known without testing',
+    primary:'Negative predictive value of nares PCR for MRSA pneumonia',
+    result:'Nares MRSA PCR NPV 97.4% (95% CI 95.0–98.8%). Negative result safely supports withholding anti-MRSA therapy.',
+    grade:'B',
+    key:'MRSA nares PCR negative result has NPV >95–97%. A negative nares PCR can safely guide withholding of vancomycin in pneumonia without prior MRSA history.'
+  }
+};
+
+// ─────────────────────────────────────────────────────────────
+// CLINICAL DATA — every field carries its source key
 // ─────────────────────────────────────────────────────────────
 const CAP_DATA = {
-  id:'cap', name:'Community-Acquired Pneumonia', icd10:'J18.9',
+  id:'cap',name:'Community-Acquired Pneumonia',icd10:'J18.9',
+  icdCodes:[
+    {code:'J18.9',desc:'Pneumonia, unspecified organism — use when pathogen not identified',primary:true},
+    {code:'J13',desc:'Pneumonia due to Streptococcus pneumoniae — use with positive urinary antigen or culture'},
+    {code:'J14',desc:'Pneumonia due to Haemophilus influenzae'},
+    {code:'J15.0',desc:'Pneumonia due to Klebsiella pneumoniae'},
+    {code:'J15.7',desc:'Pneumonia due to Mycoplasma pneumoniae — atypical'},
+    {code:'A48.1',desc:"Legionnaires' disease — when legionella antigen positive"},
+    {code:'J12.89',desc:'Other viral pneumonia — COVID-19 pneumonia, use with U07.1'},
+  ],
+  drg:'DRG 193 (w/ MCC) / 194 (w/ CC) / 195 (w/o CC/MCC)',
+  drgNote:'Document sepsis, respiratory failure, or mechanical ventilation to qualify for DRG 193. Each severity upgrade increases payment ~$3,000–5,000. Ensure principal diagnosis is pneumonia, not sepsis, unless sepsis is more resource-intensive.',
   category:'Pulm / Infectious Disease',
   guideline:'IDSA/ATS 2019',
-  guidelineSource:'IDSA/ATS 2019 CAP Guidelines',
 
   symptoms:[
-    {name:'Fever (T >38.3°C)',cat:'Vitals',sn:65,sp:76,ppv:52,npv:84,note:'Absence ≠ absence of sepsis. Hypothermia (T <36°C) equally concerning and associated with worse prognosis.'},
-    {name:'Tachycardia (HR >90)',cat:'Vitals',sn:77,sp:55,ppv:null,npv:null,note:'SIRS criterion. May be absent on beta-blockers or pacemakers.'},
-    {name:'Tachypnea (RR ≥22)',cat:'Vitals',sn:69,sp:62,ppv:null,npv:null,note:'qSOFA/CURB-65 criterion. Respiratory alkalosis early; metabolic acidosis late.'},
-    {name:'Hypotension (SBP ≤100)',cat:'Vitals',sn:26,sp:97,ppv:68,npv:80,note:'High specificity but late finding. Use MAP ≥65 mmHg target clinically.'},
-    {name:'Productive cough',cat:'Respiratory',sn:74,sp:30,ppv:null,npv:null,note:'Most common presenting symptom. Purulent or rust-colored sputum suggests bacterial etiology.'},
-    {name:'Pleuritic chest pain',cat:'Respiratory',sn:30,sp:75,ppv:null,npv:null,note:'Suggests pleural involvement. Assess for effusion on imaging.'},
-    {name:'Decreased breath sounds / dullness',cat:'Exam',sn:36,sp:90,ppv:null,npv:null,note:'Higher specificity when present. Indicates consolidation or effusion.'},
-    {name:'Bronchial breath sounds / egophony',cat:'Exam',sn:16,sp:96,ppv:null,npv:null,note:'High specificity when present — rules in consolidation. Low sensitivity.'},
-    {name:'Altered mental status (new)',cat:'Neurologic',sn:22,sp:95,ppv:null,npv:null,note:'CURB-65 & qSOFA criterion. May present as subtle confusion, agitation, or delirium.'},
-    {name:'Rigors / chills',cat:'Constitutional',sn:48,sp:71,ppv:null,npv:null,note:'Associated with bacteremia when present. Not specific to pneumonia.'},
+    {name:'Fever (T >38.3°C)',cat:'Vitals',sn:65,sp:76,ppv:52,npv:84,ref:'Metlay1997',note:'Absence ≠ absence of sepsis. Hypothermia (T <36°C) equally concerning — associated with worse prognosis.'},
+    {name:'Tachycardia (HR >90)',cat:'Vitals',sn:77,sp:55,ppv:null,npv:null,ref:'Metlay1997',note:'SIRS criterion. May be absent on beta-blockers or pacemakers. Low specificity limits diagnostic value.'},
+    {name:'Tachypnea (RR ≥22)',cat:'Vitals',sn:69,sp:62,ppv:null,npv:null,ref:'Metlay1997',note:'CURB-65 criterion at RR ≥30. Respiratory alkalosis early; metabolic acidosis late (poor prognostic sign).'},
+    {name:'Hypotension (SBP ≤100)',cat:'Vitals',sn:26,sp:97,ppv:68,npv:80,ref:'Metlay1997',note:'High specificity but low sensitivity — late, serious finding. Use MAP ≥65 mmHg clinically.'},
+    {name:'Productive cough',cat:'Respiratory',sn:74,sp:30,ppv:null,npv:null,ref:'Metlay1997',note:'Most common presenting symptom. Purulent or rust-colored sputum suggests bacterial CAP.'},
+    {name:'Pleuritic chest pain',cat:'Respiratory',sn:30,sp:75,ppv:null,npv:null,ref:'Metlay1997',note:'Suggests pleural inflammation. Assess for effusion on imaging.'},
+    {name:'Decreased breath sounds / dullness to percussion',cat:'Exam',sn:36,sp:90,ppv:null,npv:null,ref:'Wipf1999',note:'Higher specificity — useful when present. Indicates consolidation or effusion.'},
+    {name:'Bronchial breath sounds / egophony ("E to A" change)',cat:'Exam',sn:16,sp:96,ppv:null,npv:null,ref:'Wipf1999',note:'Very high specificity — if present, strongly suggests consolidation. Do not use absence to rule out.'},
+    {name:'Altered mental status (new)',cat:'Neurologic',sn:22,sp:95,ppv:null,npv:null,ref:'Metlay1997',note:'CURB-65 criterion (GCS <15). May be subtle confusion, agitation, or delirium. Signals poor perfusion.'},
+    {name:'Rigors / chills',cat:'Constitutional',sn:48,sp:71,ppv:null,npv:null,ref:'Metlay1997',note:'Associated with bacteremia when present. Not specific to pneumonia.'},
   ],
 
   severity:{
-    major:['Invasive mechanical ventilation required','Septic shock requiring vasopressors'],
-    minor:['RR ≥30/min','PaO₂/FiO₂ ≤250','Multilobar infiltrates on CXR','Confusion / disorientation (new)','BUN ≥20 mg/dL','WBC <4,000 cells/mm³','Platelet <100,000 cells/mm³','Temp <36°C','Hypotension requiring aggressive IVF','SBP <90 or DBP <60'],
-    trigger:'≥1 major criterion OR ≥3 minor criteria → ICU admission'
+    major:[
+      {item:'Invasive mechanical ventilation required',ref:'Mandell2007'},
+      {item:'Septic shock requiring vasopressors',ref:'Mandell2007'},
+    ],
+    minor:[
+      {item:'RR ≥30/min',ref:'Mandell2007'},
+      {item:'PaO₂/FiO₂ ≤250 (hypoxemic respiratory failure)',ref:'Mandell2007'},
+      {item:'Multilobar infiltrates on CXR',ref:'Mandell2007'},
+      {item:'Confusion / disorientation (new onset)',ref:'Mandell2007'},
+      {item:'BUN ≥20 mg/dL',ref:'Mandell2007'},
+      {item:'WBC <4,000 cells/mm³ (leukopenia)',ref:'Mandell2007'},
+      {item:'Platelet <100,000 cells/mm³ (thrombocytopenia)',ref:'Mandell2007'},
+      {item:'Temp <36°C (hypothermia)',ref:'Mandell2007'},
+      {item:'Hypotension requiring aggressive IV fluid resuscitation',ref:'Mandell2007'},
+      {item:'SBP <90 or DBP <60 mmHg',ref:'Mandell2007'},
+    ],
+    trigger:'≥1 major criterion OR ≥3 minor criteria → ICU admission indicated',
+    triggerRef:'Mandell2007'
   },
 
   diagnosticCriteria:[
     {
-      id:'atssev',name:'ATS/IDSA Severe CAP — ICU Criteria',src:'IDSA/ATS 2019, Mandell et al. CID 2007',grade:'A',
-      requireAll:false,reqCount:null,
-      intro:'ICU admission warranted if ANY major OR ≥3 minor criteria met.',
+      id:'atssev',name:'ATS/IDSA Severe CAP — ICU Criteria',
+      src:'Mandell et al., CID 2007 (validated in IDSA/ATS 2019)',srcRef:'Mandell2007',grade:'A',
+      intro:'ICU admission warranted if ANY major criterion OR ≥3 minor criteria are met. Validated in multicenter derivation/validation cohort (Mandell 2007).',
       criteria:[
-        {id:'mv',lbl:'Invasive mechanical ventilation required',req:true,def:''},
-        {id:'sepshk',lbl:'Septic shock requiring vasopressors',req:true,def:''},
-        {id:'rr30',lbl:'RR ≥30/min',req:false,def:''},
-        {id:'pao2',lbl:'PaO₂/FiO₂ ≤250',req:false,def:'Hypoxemic respiratory failure'},
-        {id:'multi',lbl:'Multilobar infiltrates on CXR',req:false,def:''},
-        {id:'conf2',lbl:'Confusion / disorientation (new)',req:false,def:''},
-        {id:'bun20',lbl:'BUN ≥20 mg/dL',req:false,def:''},
-        {id:'wbc4',lbl:'WBC <4,000 cells/mm³',req:false,def:'Leukopenia'},
-        {id:'plt',lbl:'Platelet <100,000 cells/mm³',req:false,def:''},
-        {id:'hypo',lbl:'Temp <36°C (hypothermia)',req:false,def:''},
-        {id:'htn',lbl:'Hypotension requiring aggressive IVF',req:false,def:''},
+        {id:'mv',lbl:'Invasive mechanical ventilation required',req:true,def:'',ref:'Mandell2007'},
+        {id:'sepshk',lbl:'Septic shock requiring vasopressors',req:true,def:'',ref:'Mandell2007'},
+        {id:'rr30',lbl:'RR ≥30/min',req:false,def:'',ref:'Mandell2007'},
+        {id:'pao2',lbl:'PaO₂/FiO₂ ≤250 — hypoxemic respiratory failure',req:false,def:'',ref:'Mandell2007'},
+        {id:'multi',lbl:'Multilobar infiltrates on CXR',req:false,def:'',ref:'Mandell2007'},
+        {id:'conf2',lbl:'Confusion / disorientation (new)',req:false,def:'',ref:'Mandell2007'},
+        {id:'bun20',lbl:'BUN ≥20 mg/dL',req:false,def:'',ref:'Mandell2007'},
+        {id:'wbc4',lbl:'WBC <4,000 cells/mm³',req:false,def:'',ref:'Mandell2007'},
+        {id:'plt',lbl:'Platelet <100,000 cells/mm³',req:false,def:'',ref:'Mandell2007'},
+        {id:'hypo',lbl:'Temp <36°C (hypothermia)',req:false,def:'',ref:'Mandell2007'},
+        {id:'htn',lbl:'Hypotension requiring aggressive IVF',req:false,def:'',ref:'Mandell2007'},
       ],
-      note:'1 major OR ≥3 minor = ICU. "Required ICU admission" in studies = this definition.'
+      note:'1 major OR ≥3 minor criteria = severe CAP requiring ICU. Sensitivity 71%, specificity 88% for ICU-level care need (Mandell 2007).'
     }
   ],
 
   scores:{
     curb65:{
-      name:'CURB-65',desc:'Bedside mortality prediction tool. Simple 5-variable score.',
+      name:'CURB-65',desc:'30-day mortality prediction tool for CAP.',
+      srcRef:'Lim2003',srcShort:'Lim et al., Thorax 2003',
+      derivation:'Prospective multicenter cohort, n=1068, UK + Netherlands',
       vars:[
-        {id:'conf',label:'Confusion (new)',opts:[{l:'No',v:0},{l:'Yes (+1)',v:1}]},
+        {id:'conf',label:'Confusion (new onset)',opts:[{l:'No',v:0},{l:'Yes (+1)',v:1}]},
         {id:'bun',label:'BUN >19 mg/dL',opts:[{l:'No / unknown',v:0},{l:'Yes (+1)',v:1}]},
         {id:'rr',label:'RR ≥30/min',opts:[{l:'No',v:0},{l:'Yes (+1)',v:1}]},
-        {id:'sbp',label:'SBP <90 or DBP ≤60',opts:[{l:'No',v:0},{l:'Yes (+1)',v:1}]},
-        {id:'age65',label:'Age ≥65',opts:[{l:'No',v:0},{l:'Yes (+1)',v:1}]},
+        {id:'sbp',label:'SBP <90 or DBP ≤60 mmHg',opts:[{l:'No',v:0},{l:'Yes (+1)',v:1}]},
+        {id:'age65',label:'Age ≥65 years',opts:[{l:'No',v:0},{l:'Yes (+1)',v:1}]},
       ],
       max:5,
       interp:[
-        {range:[0,1],lbl:'Low risk — consider outpatient',color:'lo',action:'Outpatient treatment. Reassess if any deterioration.'},
-        {range:[2,2],lbl:'Moderate — consider admission',color:'md',action:'Short inpatient stay or supervised outpatient. Clinical judgment needed.'},
-        {range:[3,5],lbl:'High risk — inpatient / ICU eval',color:'hi',action:'Inpatient required. CURB-65 ≥4 → ICU evaluation.'},
+        {range:[0,1],lbl:'Low risk — 1.5% 30-day mortality',color:'lo',action:'Outpatient treatment appropriate. Reassess if deterioration.'},
+        {range:[2,2],lbl:'Moderate — 9.2% 30-day mortality',color:'md',action:'Consider short inpatient stay or close outpatient follow-up.'},
+        {range:[3,5],lbl:'High — 22% 30-day mortality',color:'hi',action:'Inpatient required. CURB-65 ≥4: strongly consider ICU evaluation.'},
       ]
     },
     psi:{
-      name:'PSI / PORT Score',desc:'30-day mortality prediction. More granular, requires labs.',
+      name:'PSI / PORT Score',desc:'30-day mortality prediction — more granular, requires labs.',
+      srcRef:'Fine1997',srcShort:'Fine et al., NEJM 1997',
+      derivation:'Prospective cohort derivation n=14,199 + validation n=2,287, USA/Canada',
       vars:[
         {id:'age2',label:'Age',opts:[{l:'<50 yrs, male',v:0},{l:'<50 yrs, female',v:-10},{l:'50–69 yrs',v:20},{l:'70–79 yrs',v:30},{l:'≥80 yrs',v:40}]},
-        {id:'comorb',label:'Comorbidities',opts:[{l:'None',v:0},{l:'Neoplasm',v:30},{l:'Liver disease',v:20},{l:'CHF / Cerebrovascular / Renal',v:10}]},
-        {id:'vitals2',label:'Vitals/Exam findings',opts:[{l:'Normal',v:0},{l:'Altered mentation',v:20},{l:'RR ≥30',v:20},{l:'SBP <90 mmHg',v:20},{l:'Temp <35°C or ≥40°C',v:15}]},
-        {id:'labs2',label:'Lab abnormalities',opts:[{l:'None significant',v:0},{l:'pH <7.35',v:30},{l:'BUN ≥30 mg/dL',v:20},{l:'Na <130 / glucose ≥250',v:10},{l:'Hct <30% / PaO₂ <60',v:10}]},
-        {id:'cxr2',label:'CXR findings',opts:[{l:'Normal / unilobar',v:0},{l:'Pleural effusion',v:10},{l:'Multilobar',v:20}]},
+        {id:'comorb',label:'Comorbidities',opts:[{l:'None',v:0},{l:'Neoplasm',v:30},{l:'Liver disease',v:20},{l:'CHF / Cerebrovascular / Renal disease',v:10}]},
+        {id:'vitals2',label:'Vitals/Exam findings',opts:[{l:'Normal',v:0},{l:'Altered mentation',v:20},{l:'RR ≥30/min',v:20},{l:'SBP <90 mmHg',v:20},{l:'Temp <35°C or ≥40°C',v:15}]},
+        {id:'labs2',label:'Lab abnormalities',opts:[{l:'None significant',v:0},{l:'pH <7.35',v:30},{l:'BUN ≥30 mg/dL',v:20},{l:'Na <130 or glucose ≥250',v:10},{l:'Hct <30% or PaO₂ <60',v:10}]},
+        {id:'cxr2',label:'CXR findings',opts:[{l:'Normal / unilobar',v:0},{l:'Pleural effusion',v:10},{l:'Multilobar infiltrates',v:20}]},
       ],
       max:130,
       interp:[
-        {range:[0,50],lbl:'Class I–II (<1% mortality)',color:'lo',action:'Outpatient treatment appropriate.'},
-        {range:[51,90],lbl:'Class III (~2.8% mortality)',color:'md',action:'Brief inpatient observation. Consider early discharge.'},
-        {range:[91,130],lbl:'Class IV (~8% mortality)',color:'hi',action:'Hospitalize. Close monitoring.'},
-        {range:[131,999],lbl:'Class V (>29% mortality)',color:'hi',action:'Hospitalize. ICU evaluation. Aggressive management.'},
+        {range:[0,50],lbl:'Class I–II — <1% mortality',color:'lo',action:'Outpatient treatment appropriate.'},
+        {range:[51,90],lbl:'Class III — 2.8% mortality',color:'md',action:'Brief inpatient observation. Consider early discharge.'},
+        {range:[91,130],lbl:'Class IV — 8.2% mortality',color:'hi',action:'Hospitalize with close monitoring.'},
+        {range:[131,999],lbl:'Class V — 29.2% mortality',color:'hi',action:'Hospitalize. Evaluate for ICU. Aggressive management.'},
       ]
     }
   },
 
   workup:{
     outpatient:[
-      {name:'Chest X-ray (PA + lateral)',tag:'routine',sn:53,sp:90,ppv:null,npv:null,why:'Required to confirm diagnosis. Identifies effusion, multilobar disease, or alternative dx.'},
-      {name:'Pulse oximetry',tag:'routine',why:'Determines O₂ need and guides admission decision.'},
-      {name:'No routine labs needed for uncomplicated outpatient CAP',tag:'routine',why:'IDSA/ATS 2019: empiric treatment based on clinical + CXR in low-risk outpatient.'},
-      {name:'Strep pneumo urine antigen',tag:'selective',sn:74,sp:97,why:'High-risk features or severe presentation. Rapid. Allows de-escalation.'},
-      {name:'COVID-19 / influenza testing',tag:'selective',why:'During respiratory season — alters management (antivirals, isolation).'},
+      {name:'Chest X-ray (PA + lateral)',tag:'routine',sn:53,sp:90,ppv:null,npv:null,ref:'Syrjala1998',glRef:'IDSA_ATS_2019',why:'Required to confirm pneumonia diagnosis. Identifies effusion, multilobar disease, or alternative diagnosis. CT detects ~47% more infiltrates when CXR negative.'},
+      {name:'Pulse oximetry',tag:'routine',ref:null,glRef:'IDSA_ATS_2019',why:'Guides supplemental O₂ need and informs admission decision. Not a diagnostic test but essential severity assessment.'},
+      {name:'No routine labs needed for uncomplicated low-risk outpatient CAP',tag:'routine',ref:null,glRef:'IDSA_ATS_2019',why:'IDSA/ATS 2019: empiric clinical + CXR diagnosis is sufficient. PSI I–II patients managed without labs in healthy adults without comorbidities.'},
+      {name:'Strep pneumo urine antigen',tag:'selective',sn:74,sp:97,ppv:null,npv:null,ref:'IDSA_ATS_2019',why:'High-risk features or severe presentation. Rapid turnaround. Allows early de-escalation or pathogen-directed therapy.'},
+      {name:'COVID-19 / influenza testing',tag:'selective',ref:null,glRef:'IDSA_ATS_2019',why:'During respiratory virus season — directly alters management (antivirals, isolation precautions, antibiotic avoidance in viral pneumonia).'},
     ],
     inpatient:[
-      {name:'Chest X-ray (PA + lateral)',tag:'routine',sn:53,sp:90,why:'Confirms diagnosis, baseline for monitoring. CT chest if CXR negative with high suspicion.'},
-      {name:'CBC with differential',tag:'routine',why:'WBC for severity/SOFA scoring. Thrombocytopenia = poor prognosis. Leukopenia = worse outcome.'},
-      {name:'CMP (BMP + LFTs)',tag:'routine',why:'BUN for CURB-65/PSI. LFTs elevated in atypicals (legionella, mycoplasma). Electrolytes for management.'},
-      {name:'Blood cultures ×2',tag:'selective',why:'SEVERE CAP ONLY — or: prior antibiotics, structural lung disease, asplenia, immunocompromise. <1.5% clinical impact in non-severe CAP.'},
-      {name:'Sputum Gram stain + culture',tag:'selective',why:'Severe CAP, prior antibiotics, structural lung disease, MRSA/Pseudomonas risk. NOT routine.'},
-      {name:'Urinary legionella antigen',tag:'selective',sn:76,sp:99,why:'Severe/ICU CAP, travel history, hotel/plumbing exposure. L. pneumophila sg1 only.'},
-      {name:'Urinary pneumococcal antigen',tag:'selective',sn:74,sp:97,why:'Severe CAP or ICU. Rapid. Allows early de-escalation if positive.'},
-      {name:'Procalcitonin (PCT)',tag:'selective',why:'Baseline useful if planning PCT-guided de-escalation. Not diagnostic alone.'},
-      {name:'Respiratory virus panel (PCR)',tag:'selective',why:'During viral season, immunocompromised, or institutional protocol.'},
-      {name:'HIV test (if unknown status)',tag:'selective',why:'PCP pneumonia, TB — significantly alter management. Standard of care to offer.'},
+      {name:'Chest X-ray (PA + lateral)',tag:'routine',sn:53,sp:90,ppv:null,npv:null,ref:'Syrjala1998',glRef:'IDSA_ATS_2019',why:'Required at admission. Baseline for monitoring. CT chest if CXR negative with high clinical suspicion.'},
+      {name:'CBC with differential',tag:'routine',ref:null,glRef:'IDSA_ATS_2019',why:'WBC for SOFA/severity scoring; contributes to PSI score. Thrombocytopenia and leukopenia are poor prognostic signs.'},
+      {name:'CMP (BMP + LFTs)',tag:'routine',ref:null,glRef:'IDSA_ATS_2019',why:'BUN required for CURB-65 and PSI scoring. LFT elevation suggests legionella or atypical pathogens. Electrolytes guide management.'},
+      {name:'Blood cultures ×2',tag:'selective',ref:'ATS2023_BloodCx',glRef:'IDSA_ATS_2019',why:'SEVERE CAP ONLY — or: prior antibiotics ≥24h, structural lung disease, asplenia, immunocompromise. ATS 2023: <1.5% clinical impact in non-severe CAP. Do NOT order routinely.'},
+      {name:'Sputum Gram stain + culture',tag:'selective',ref:null,glRef:'IDSA_ATS_2019',why:'Severe CAP, prior antibiotics, structural lung disease, or MRSA/Pseudomonas risk factors. Quality-dependent — requires deep expectorated sputum before antibiotics.'},
+      {name:'Urinary legionella antigen',tag:'selective',sn:76,sp:99,ppv:null,npv:null,ref:'IDSA_ATS_2019',why:'Severe/ICU CAP, travel, hotel/plumbing exposure. Detects L. pneumophila serogroup 1 only (~80% of US Legionella CAP).'},
+      {name:'Urinary pneumococcal antigen',tag:'selective',sn:74,sp:97,ppv:null,npv:null,ref:'IDSA_ATS_2019',why:'Severe CAP or ICU. Rapid (15 min). Allows early pathogen-directed de-escalation if positive.'},
+      {name:'Procalcitonin (PCT) baseline',tag:'selective',ref:'PROACTIVE2023',why:'Baseline value required if planning PCT-guided de-escalation strategy (PROACTIVE JAMA 2023, ProHOSP Lancet 2010). Not diagnostic alone.'},
+      {name:'Respiratory virus PCR panel',tag:'selective',ref:null,glRef:'IDSA_ATS_2019',why:'During viral season, immunocompromised patients, or institutional protocol. Identifies co-infections, guides antiviral use.'},
+      {name:'HIV test (if unknown status)',tag:'selective',ref:null,glRef:'IDSA_ATS_2019',why:'PCP pneumonia, TB, and opportunistic infections significantly alter management. Standard of care to offer testing to unknown-status patients.'},
     ],
     severe:[
-      {name:'All inpatient tests above PLUS:',tag:'severe',why:'All standard inpatient workup is indicated in severe/ICU CAP.'},
-      {name:'ABG (arterial blood gas)',tag:'severe',why:'PaO₂/FiO₂ for ARDS definition and severity. pH for ventilatory status. Guides ventilator settings.'},
-      {name:'Bronchoscopy + BAL',tag:'severe',why:'Intubated patients, no sputum, or immunocompromised. BAL culture gold standard for ICU CAP.'},
-      {name:'MRSA nares PCR',tag:'severe',why:'NPV >95% — negative safely withholds MRSA coverage (Parente CHEST 2018). Rapid.'},
-      {name:'Coagulation studies + D-dimer',tag:'severe',why:'Sepsis-related DIC screening. PE co-diagnosis if risk factors present.'},
-      {name:'POCUS (bedside echo)',tag:'severe',why:'Rule out tamponade, cardiogenic pulmonary edema, PE (RV strain). Guides fluid resuscitation.'},
+      {name:'All inpatient workup above PLUS:',tag:'severe',ref:null,glRef:'IDSA_ATS_2019',why:'Complete inpatient workup is indicated in all severe/ICU CAP.'},
+      {name:'ABG (arterial blood gas)',tag:'severe',ref:null,glRef:'IDSA_ATS_2019',why:'PaO₂/FiO₂ ratio for ARDS definition and severity (Berlin criteria). pH for ventilatory status. PaCO₂ for ventilatory failure. Guides ventilator management.'},
+      {name:'Bronchoscopy + BAL',tag:'severe',ref:null,glRef:'IDSA_ATS_2019',why:'Intubated patients without adequate sputum, or immunocompromised. BAL quantitative culture gold standard for ICU CAP. Required for fungal and PCP workup.'},
+      {name:'MRSA nares PCR',tag:'severe',ref:'Parente2018',why:'NPV >97% (Parente 2018) — negative result safely withholds vancomycin. Rapid result. Most cost-effective MRSA screening tool in CAP.'},
+      {name:'Coagulation studies (PT, INR, fibrinogen, D-dimer)',tag:'severe',ref:null,glRef:'IDSA_ATS_2019',why:'Sepsis-associated DIC screening. D-dimer elevation + thrombocytopenia + prolonged PT = DIC. Also used to assess PE as co-diagnosis.'},
+      {name:'Bedside POCUS / formal echocardiogram',tag:'severe',ref:null,glRef:'IDSA_ATS_2019',why:'Rule out tamponade, cardiogenic pulmonary edema mimicking CAP. Assess RV strain (PE). Guide fluid resuscitation via IVC collapsibility.'},
     ]
   },
 
@@ -445,211 +692,297 @@ const CAP_DATA = {
     outpatient:[
       {
         name:'Amoxicillin',brand:null,cls:'Aminopenicillin',line:'1st Line — Healthy adults, no comorbidities',pref:'preferred',
-        dosing:[{pop:'Standard adult',dose:'1g',freq:'TID (q8h)',route:'PO',note:'5-day minimum. Stop when clinically stable ≥48h.'}],
-        t12:'1–1.4h',onset:'30–60 min',dur:'5 days',
-        se:['Diarrhea','Rash (distinguish from true PCN allergy)','Nausea'],
-        ci:['PCN anaphylaxis / IgE-mediated allergy'],
-        int:['Warfarin: monitor INR','Allopurinol: ↑ rash risk'],
-        mon:['Clinical response at 48–72h (resolution of fever, improving O₂)'],
-        evidence:[{trial:'IDSA/ATS 2019',full:'IDSA/ATS CAP Guidelines',journal:'CID',year:'2019',n:null,type:'Practice guideline',grade:'B',key:'Amoxicillin 1g TID equivalent to combo therapy for mild CAP in healthy adults.',inclusion:'Adults ≥18, no comorbidities, outpatient CAP',exclusion:'Comorbidities (COPD/CHF/DM/CKD), recent antibiotics, immunocompromise'}]
+        dosing:[
+          {pop:'Standard adult',dose:'1g',freq:'TID (q8h)',route:'PO',note:'5-day minimum course. Stop when clinically stable ≥48h.',ref:'IDSA_ATS_2019',grade:'B'}
+        ],
+        t12:'1–1.4h',onset:'30–60 min',dur:'5 days',pkRef:'IDSA_ATS_2019',
+        se:[
+          {txt:'Diarrhea — C. diff risk lower than macrolides/FQs',ref:'IDSA_ATS_2019'},
+          {txt:'Rash — distinguish from true IgE-mediated PCN allergy (amoxicillin rash ≠ anaphylaxis risk)',ref:'IDSA_ATS_2019'},
+          {txt:'Nausea/GI upset — take with food',ref:'IDSA_ATS_2019'},
+        ],
+        ci:[
+          {txt:'PCN anaphylaxis / confirmed IgE-mediated PCN allergy',ref:'IDSA_ATS_2019'},
+        ],
+        int:[
+          {txt:'Warfarin: monitor INR (mild ↑ possible)',ref:'IDSA_ATS_2019'},
+          {txt:'Allopurinol: ↑ rash risk — monitor',ref:'IDSA_ATS_2019'},
+        ],
+        mon:[{txt:'Clinical response at 48–72h (resolution of fever, improving O₂ sat, tolerating PO)',ref:'IDSA_ATS_2019'}],
+        evidence:[{trial:'IDSA/ATS 2019',full:'IDSA/ATS CAP Guidelines 2019 — Section: Outpatient Treatment',refKey:'IDSA_ATS_2019',grade:'B',key:'Amoxicillin 1g TID is preferred outpatient monotherapy for healthy adults without comorbidities — equivalent to combination therapy.',inclusion:'Adults ≥18, no comorbidities, outpatient CAP',exclusion:'Comorbidities (COPD/CHF/DM/CKD), recent antibiotics, immunocompromise'}]
       },
       {
-        name:'Doxycycline',brand:null,cls:'Tetracycline',line:'1st Line — Alternative (atypical coverage)',pref:'alternative',
-        dosing:[{pop:'Standard',dose:'100mg',freq:'BID',route:'PO',note:'Take with food and full glass of water. Stay upright 30 min after.'}],
-        t12:'18–22h',onset:'1–2h',dur:'5 days',
-        se:['Esophageal irritation','Photosensitivity','Nausea/GI upset'],
-        ci:['Pregnancy (2nd/3rd trimester)','Age <8 years'],
-        int:['Antacids/calcium: ↓ absorption (separate 2h)','Warfarin: ↑ INR'],
-        mon:['Clinical response 48–72h'],
-        evidence:[{trial:'IDSA/ATS 2019',full:'IDSA/ATS CAP Guidelines',journal:'CID',year:'2019',n:null,type:'Guideline',grade:'B',key:'Doxycycline acceptable monotherapy — provides atypical organism coverage (Mycoplasma, Chlamydia, Legionella).',inclusion:'Adults ≥18, mild outpatient CAP',exclusion:'Pregnancy, age <8, tetracycline allergy'}]
+        name:'Doxycycline',brand:null,cls:'Tetracycline — covers atypicals',line:'1st Line — Alternative when atypical coverage desired',pref:'alternative',
+        dosing:[
+          {pop:'Standard',dose:'100mg',freq:'BID',route:'PO',note:'Take with full glass of water. Stay upright 30 min. Take with food.',ref:'IDSA_ATS_2019',grade:'B'}
+        ],
+        t12:'18–22h',onset:'1–2h',dur:'5 days',pkRef:'IDSA_ATS_2019',
+        se:[
+          {txt:'Esophageal irritation / ulceration — take with food and remain upright',ref:'IDSA_ATS_2019'},
+          {txt:'Photosensitivity — advise sun protection during course',ref:'IDSA_ATS_2019'},
+          {txt:'Nausea / GI upset',ref:'IDSA_ATS_2019'},
+        ],
+        ci:[
+          {txt:'Pregnancy (Category D — 2nd/3rd trimester): teratogenic risk',ref:'IDSA_ATS_2019'},
+          {txt:'Age <8 years: permanent dental staining',ref:'IDSA_ATS_2019'},
+        ],
+        int:[
+          {txt:'Antacids/calcium/iron: ↓ absorption by up to 50% — separate by ≥2h',ref:'IDSA_ATS_2019'},
+          {txt:'Warfarin: ↑ INR — monitor closely',ref:'IDSA_ATS_2019'},
+        ],
+        mon:[{txt:'Clinical response at 48–72h',ref:'IDSA_ATS_2019'}],
+        evidence:[{trial:'IDSA/ATS 2019',full:'IDSA/ATS CAP Guidelines 2019 — Section: Outpatient Treatment',refKey:'IDSA_ATS_2019',grade:'B',key:'Doxycycline 100mg BID acceptable outpatient monotherapy — provides coverage for Mycoplasma, Chlamydophila, Legionella (atypicals).',inclusion:'Adults ≥18, mild outpatient CAP',exclusion:'Pregnancy, age <8, prior tetracycline allergy'}]
       }
     ],
     inpatient:[
       {
-        name:'Ceftriaxone + Azithromycin',brand:'Rocephin + Zithromax',cls:'β-lactam + macrolide combination',line:'1st Line — Inpatient non-severe',pref:'preferred',
+        name:'Ceftriaxone + Azithromycin',brand:'Rocephin + Zithromax',cls:'3rd-generation cephalosporin + macrolide combination',line:'1st Line — Inpatient non-severe CAP',pref:'preferred',
         dosing:[
-          {pop:'Ceftriaxone',dose:'1–2g',freq:'q24h',route:'IV or IM',note:'2g preferred for bacteremic or severe disease'},
-          {pop:'Azithromycin',dose:'500mg',freq:'q24h',route:'IV → PO when tolerating',note:'Transition to oral as soon as tolerated'}
+          {pop:'Ceftriaxone (standard dose)',dose:'1g',freq:'q24h',route:'IV',note:'Use 2g for bacteremic, severe, or ICU CAP.',ref:'IDSA_ATS_2019',grade:'A'},
+          {pop:'Ceftriaxone (bacteremic/severe)',dose:'2g',freq:'q24h',route:'IV',note:'',ref:'IDSA_ATS_2019',grade:'A'},
+          {pop:'Azithromycin',dose:'500mg',freq:'q24h',route:'IV → PO transition',note:'Switch to oral formulation once tolerating PO intake (bioavailability ~37–50% IV vs PO — equivalent dosing).',ref:'IDSA_ATS_2019',grade:'A'},
         ],
-        t12:'Ceftriaxone 5–9h | Azithromycin 68h',onset:'Rapid (IV)',dur:'5 days (meet stability criteria)',
-        se:['Azithromycin: QTc prolongation — check EKG baseline','Azithromycin: GI (N/V/D)','C. diff risk (azithromycin, prolonged courses)','Ceftriaxone: biliary sludge (rare)'],
-        ci:['Azithromycin: QTc >500ms or concurrent QTc-prolonging drugs','Cephalosporin: severe PCN allergy — assess cross-reactivity (<1%)'],
-        int:['Azithromycin + QTc drugs (antipsychotics, quinolones, amiodarone): additive risk','Azithromycin + warfarin: ↑ INR'],
-        mon:['QTc at baseline — hold azithromycin if >500ms','Daily stability criteria: HR <100, RR <24, T <37.8°C, O₂ sat ≥90%, tolerating PO','De-escalate to oral when stable'],
+        t12:'Ceftriaxone: 5–9h | Azithromycin: 68h (tissue half-life)',onset:'Rapid (IV peak within 30 min)',dur:'5 days minimum — stop when ALL stability criteria met',pkRef:'IDSA_ATS_2019',
+        se:[
+          {txt:'Azithromycin: QTc prolongation — check baseline EKG, hold if QTc >500ms',ref:'IDSA_ATS_2019'},
+          {txt:'Azithromycin: GI (nausea/vomiting/diarrhea) — most common side effect',ref:'IDSA_ATS_2019'},
+          {txt:'Azithromycin: C. diff risk — lower than FQs but monitor with prolonged courses',ref:'IDSA_ATS_2019'},
+          {txt:'Ceftriaxone: biliary sludge — rare with standard doses/duration',ref:'IDSA_ATS_2019'},
+        ],
+        ci:[
+          {txt:'Azithromycin: QTc >500ms or concurrent QTc-prolonging drugs (antipsychotics, FQs, amiodarone)',ref:'IDSA_ATS_2019'},
+          {txt:'Ceftriaxone: true IgE-mediated PCN anaphylaxis — cross-reactivity <1%; assess allergy history',ref:'IDSA_ATS_2019'},
+        ],
+        int:[
+          {txt:'Azithromycin + QTc drugs (antipsychotics, quinolones, amiodarone, sotalol): additive QTc risk',ref:'IDSA_ATS_2019'},
+          {txt:'Azithromycin + warfarin: ↑ INR — monitor daily',ref:'IDSA_ATS_2019'},
+        ],
+        mon:[
+          {txt:'QTc at baseline — withhold azithromycin if >500ms at baseline',ref:'IDSA_ATS_2019'},
+          {txt:'Stability criteria daily: HR <100, RR <24, T <37.8°C, O₂ sat ≥90% on RA, tolerating PO',ref:'Uranga2016'},
+          {txt:'De-escalate to oral (PO) when all stability criteria met — do not keep IV for completion',ref:'IDSA_ATS_2019'},
+        ],
         evidence:[
-          {trial:'IDSA/ATS 2019',full:'IDSA/ATS CAP Guidelines 2019',journal:'CID',year:'2019',n:null,type:'Guideline (meta-analysis supported)',grade:'A',key:'β-lactam + macrolide = standard of care for inpatient non-severe CAP. Mortality benefit over monotherapy in observational data.',inclusion:'Adults ≥18, inpatient non-severe CAP',exclusion:'Severe/ICU, MRSA risk, Pseudomonas risk, structural lung disease'},
-          {trial:'Uranga JAMA IM 2016',full:'Duration of Antibiotic Treatment in CAP (Uranga et al.)',journal:'JAMA Internal Medicine',year:'2016',n:312,type:'RCT (non-inferiority)',grade:'A',key:'Stop antibiotics at 5 days when stability criteria are met. Mean physician-guided course was 10 days — excess.',inclusion:'Adults ≥18 hospitalized with CAP reaching stability criteria',exclusion:'ICU, immunocompromise, Pseudomonas/MRSA, HAP'}
+          {trial:'IDSA/ATS 2019',full:'IDSA/ATS CAP Guidelines 2019 — Section: Inpatient Non-ICU Treatment',refKey:'IDSA_ATS_2019',grade:'A',key:'β-lactam + macrolide = standard of care for inpatient non-severe CAP. Mortality benefit over monotherapy in observational data. Strong recommendation.',inclusion:'Adults ≥18, inpatient non-severe CAP',exclusion:'Severe/ICU, MRSA risk, Pseudomonas risk, structural lung disease'},
+          {trial:'Uranga JAMA IM 2016',full:'Duration of Antibiotic Treatment Based on Clinical Stability Criteria in Hospitalized CAP',refKey:'Uranga2016',grade:'A',key:'5-day stability-guided course is non-inferior to 10-day standard courses. Stop antibiotics at 5 days when stability criteria met.',inclusion:'Adults ≥18, hospitalized CAP, stability criteria met',exclusion:'ICU, immunocompromise, Pseudomonas/MRSA, HAP'}
         ]
       },
       {
-        name:'Levofloxacin (monotherapy)',brand:null,cls:'Respiratory fluoroquinolone',line:'1st Line — Alternative (QTc concern / macrolide allergy)',pref:'alternative',
-        dosing:[{pop:'Monotherapy',dose:'750mg',freq:'q24h',route:'IV or PO',note:'Renally dosed: CrCl 20–49 → 750mg q48h; CrCl <20 → 500mg q24h'}],
-        t12:'6–8h',onset:'Rapid',dur:'5 days minimum',
-        se:['QTc prolongation (class effect)','Tendinopathy/rupture (risk↑: age >60, steroids, CKD)','C. diff','CNS: seizure, psychosis (rare)','Peripheral neuropathy (prolonged use)','Aortic dissection (FDA black box)'],
-        ci:['Prior FQ-associated tendinopathy','QTc >500ms','Myasthenia gravis'],
-        int:['Antacids/calcium/iron: ↓ absorption (separate 2h)','QTc drugs: additive risk','Warfarin: ↑ INR'],
-        mon:['QTc baseline and at 24h','Glucose in diabetics (FQ → hypo/hyperglycemia)','Tendons — stop immediately if pain/swelling','Renal function'],
-        evidence:[{trial:'IDSA/ATS 2019',full:'IDSA/ATS CAP Guidelines 2019',journal:'CID',year:'2019',n:null,type:'Guideline',grade:'A',key:'Respiratory FQ monotherapy valid alternative when macrolide contraindicated. Not preferred first-line — stewardship concerns.',inclusion:'Adults ≥18, inpatient CAP',exclusion:'Recent FQ exposure, tendinopathy history'}]
+        name:'Levofloxacin monotherapy',brand:null,cls:'Respiratory fluoroquinolone',line:'1st Line — Alternative (macrolide CI or allergy)',pref:'alternative',
+        dosing:[
+          {pop:'Standard — normal renal function',dose:'750mg',freq:'q24h',route:'IV or PO',note:'PO bioavailability ~99% — oral is preferred over IV when tolerated.',ref:'IDSA_ATS_2019',grade:'A'},
+          {pop:'CrCl 20–49 mL/min',dose:'750mg',freq:'q48h (every 48h)',route:'IV or PO',note:'Renal dose adjustment required — levofloxacin is renally cleared.',ref:'IDSA_ATS_2019',grade:'A'},
+          {pop:'CrCl <20 mL/min',dose:'500mg',freq:'q24h',route:'IV or PO',note:'Significant accumulation without dose adjustment.',ref:'IDSA_ATS_2019',grade:'A'},
+        ],
+        t12:'6–8h (levofloxacin) | 12h (moxifloxacin)',onset:'Rapid — IV peak 30–60 min, PO ~1–2h',dur:'5 days minimum',pkRef:'IDSA_ATS_2019',
+        se:[
+          {txt:'QTc prolongation (class effect — all fluoroquinolones): obtain baseline EKG',ref:'IDSA_ATS_2019'},
+          {txt:'Tendinopathy/rupture: ↑ risk in age >60, concurrent steroids, CKD — STOP if tendon pain/swelling',ref:'IDSA_ATS_2019'},
+          {txt:'C. diff — higher risk than β-lactams',ref:'IDSA_ATS_2019'},
+          {txt:'CNS effects: seizures, psychosis, confusion (rare but serious)',ref:'IDSA_ATS_2019'},
+          {txt:'Peripheral neuropathy — with prolonged use; may be irreversible',ref:'IDSA_ATS_2019'},
+          {txt:'Aortic aneurysm/dissection risk (FDA Black Box Warning 2018)',ref:'IDSA_ATS_2019'},
+        ],
+        ci:[
+          {txt:'Prior fluoroquinolone-associated tendinopathy',ref:'IDSA_ATS_2019'},
+          {txt:'QTc >500ms or concurrent QTc-prolonging drugs',ref:'IDSA_ATS_2019'},
+          {txt:'Myasthenia gravis — FDA Black Box Warning (worsening of neuromuscular blockade)',ref:'IDSA_ATS_2019'},
+        ],
+        int:[
+          {txt:'Antacids/calcium/iron/magnesium: ↓ absorption by up to 90% — separate by ≥2h',ref:'IDSA_ATS_2019'},
+          {txt:'QTc-prolonging agents (antipsychotics, amiodarone, sotalol): additive risk',ref:'IDSA_ATS_2019'},
+          {txt:'Warfarin: ↑ INR — monitor closely',ref:'IDSA_ATS_2019'},
+        ],
+        mon:[
+          {txt:'QTc at baseline and at 24–48h',ref:'IDSA_ATS_2019'},
+          {txt:'Glucose in diabetic patients — FQ can cause both hypo and hyperglycemia',ref:'IDSA_ATS_2019'},
+          {txt:'Tendon assessment — stop immediately if pain, swelling, or snap',ref:'IDSA_ATS_2019'},
+          {txt:'Renal function — adjust dose for CrCl <50',ref:'IDSA_ATS_2019'},
+        ],
+        evidence:[{trial:'IDSA/ATS 2019',full:'IDSA/ATS CAP Guidelines 2019 — Section: Inpatient Non-ICU Treatment',refKey:'IDSA_ATS_2019',grade:'A',key:'Respiratory FQ monotherapy is a valid alternative when macrolide is contraindicated. Not preferred first-line — stewardship and adverse event profile concerns.',inclusion:'Adults ≥18, inpatient CAP',exclusion:'Recent FQ exposure, tendinopathy, myasthenia gravis'}]
       }
     ],
     severe:[
       {
-        name:'Ceftriaxone 2g + Azithromycin + Hydrocortisone',brand:null,cls:'β-lactam + macrolide + corticosteroid (ICU bundle)',line:'1st Line — Severe / ICU',pref:'preferred',
+        name:'Ceftriaxone 2g + Azithromycin + Hydrocortisone',brand:null,cls:'β-lactam + macrolide + corticosteroid — ICU bundle',line:'1st Line — Severe / ICU CAP',pref:'preferred',
         dosing:[
-          {pop:'Ceftriaxone',dose:'2g',freq:'q24h',route:'IV',note:'Higher dose for bacteremic/severe disease'},
-          {pop:'Azithromycin',dose:'500mg',freq:'q24h',route:'IV → PO',note:''},
-          {pop:'Hydrocortisone (CAPE-COD)',dose:'200mg/day',freq:'Cont. infusion OR 50mg q6h',route:'IV',note:'Start if requiring MV, HFNC, or O₂ ≥6L/min. Taper over 8–14 days.'}
+          {pop:'Ceftriaxone (severe dose)',dose:'2g',freq:'q24h',route:'IV',note:'Higher dose preferred for bacteremic or severe disease.',ref:'IDSA_ATS_2019',grade:'A'},
+          {pop:'Azithromycin',dose:'500mg',freq:'q24h',route:'IV → PO transition',note:'IV initially. Transition to PO once tolerating.',ref:'IDSA_ATS_2019',grade:'A'},
+          {pop:'Hydrocortisone (CAPE-COD 2023)',dose:'200mg/day',freq:'Continuous infusion OR 50mg q6h',route:'IV',note:'Start if requiring MV, HFNC, or O₂ ≥6L/min. Taper over 8–14 days per CAPE-COD protocol.',ref:'CAPE_COD_2023',grade:'A'},
         ],
-        t12:'See individual agents',onset:'Rapid IV',dur:'5–7 days minimum',
-        se:['Hydrocortisone: hyperglycemia (requires insulin protocol)','Azithromycin: QTc — EKG mandatory in ICU','Hydrocortisone: adrenal suppression on rapid taper','GI bleeding risk with steroids — add PPI'],
-        ci:['Immunocompromised: CAPE-COD excluded these patients — no steroid data for this group','Active untreated fungal infection (relative)'],
-        int:['Hydrocortisone + insulin: glucose protocol required','Azithromycin + QTc drugs: monitor closely in ICU'],
-        mon:['Glucose q1–4h (target 140–180 mg/dL)','QTc daily with azithromycin','Cultures at 48–72h — de-escalate spectrum','Vasopressor weaning as therapeutic endpoint'],
+        t12:'See individual agents above',onset:'Rapid IV',dur:'5–7 days minimum (longer for bacteremic, immunocompromised)',pkRef:'CAPE_COD_2023',
+        se:[
+          {txt:'Hydrocortisone: hyperglycemia — very common (91% in CAPE-COD); requires insulin infusion protocol',ref:'CAPE_COD_2023'},
+          {txt:'Azithromycin: QTc prolongation — baseline EKG MANDATORY in all ICU patients',ref:'IDSA_ATS_2019'},
+          {txt:'Hydrocortisone: adrenal suppression on rapid taper — use protocol taper',ref:'CAPE_COD_2023'},
+          {txt:'Hydrocortisone: GI bleeding — add PPI prophylaxis',ref:'CAPE_COD_2023'},
+        ],
+        ci:[
+          {txt:'Immunocompromised patients: CAPE-COD excluded these patients — no data for corticosteroids in this group',ref:'CAPE_COD_2023'},
+          {txt:'Active untreated invasive fungal infection (relative contraindication)',ref:'IDSA_ATS_2019'},
+        ],
+        int:[
+          {txt:'Hydrocortisone + insulin protocol: glucose target 140–180 mg/dL in ICU',ref:'CAPE_COD_2023'},
+          {txt:'Azithromycin + QTc drugs: monitor EKG daily in ICU',ref:'IDSA_ATS_2019'},
+        ],
+        mon:[
+          {txt:'Glucose q1–4h on hydrocortisone (target 140–180 mg/dL)',ref:'CAPE_COD_2023'},
+          {txt:'QTc daily with azithromycin — consider switch to FQ if QTc >500ms',ref:'IDSA_ATS_2019'},
+          {txt:'Cultures at 48–72h — de-escalate antibiotic spectrum based on organism identified',ref:'IDSA_ATS_2019'},
+          {txt:'Vasopressor dose as therapeutic endpoint for hydrocortisone — wean as MAP stabilizes',ref:'CAPE_COD_2023'},
+        ],
         evidence:[
-          {trial:'CAPE-COD NEJM 2023',full:'Hydrocortisone in Severe CAP (CAPE-COD Trial)',journal:'New England Journal of Medicine',year:'2023',n:800,type:'Multicenter double-blind placebo-controlled RCT',grade:'A',key:'PRACTICE CHANGING: Hydrocortisone 200mg/day ↓ 28-day mortality in severe CAP — 18.6% vs 25.0%, ARR 6.4%, NNT ≈16. Do NOT use in non-severe CAP.',inclusion:'Adults ≥18, severe CAP requiring MV, HFNC, or O₂ ≥6L/min. 31 French ICUs.',exclusion:'Immunocompromised (hematologic malignancy, SOT, HIV CD4 <200, chronic steroids ≥0.5mg/kg/day), pregnancy'},
-          {trial:'IDSA/ATS 2019',full:'IDSA/ATS CAP Guidelines 2019',journal:'CID',year:'2019',n:null,type:'Guideline',grade:'A',key:'High-dose β-lactam + macrolide standard for severe/ICU CAP. CAPE-COD postdates these guidelines.',inclusion:'Adults ≥18, severe CAP',exclusion:'HAP/VAP, immunocompromised (separate guidelines)'}
+          {trial:'CAPE-COD, NEJM 2023',full:'Hydrocortisone in Severe Community-Acquired Pneumonia (CAPE-COD Trial)',refKey:'CAPE_COD_2023',grade:'A',key:'PRACTICE CHANGING: Hydrocortisone 200mg/day reduces 28-day mortality — 18.6% vs 25.0%, ARR 6.4%, NNT ≈ 16 (p=0.024). Do NOT use in non-severe CAP.',inclusion:'Adults ≥18 with severe CAP requiring MV, HFNC, or O₂ ≥6L/min. 31 French ICUs.',exclusion:'Immunocompromised (hematologic malignancy, SOT, HIV CD4 <200, chronic steroids ≥0.5mg/kg/day prednisone), pregnancy'},
+          {trial:'IDSA/ATS 2019',full:'IDSA/ATS CAP Guidelines 2019 — Section: ICU Treatment',refKey:'IDSA_ATS_2019',grade:'A',key:'High-dose β-lactam + macrolide standard for severe/ICU CAP. CAPE-COD postdates these guidelines — add hydrocortisone per CAPE-COD.',inclusion:'Adults ≥18, severe CAP (ATS/IDSA major/minor criteria)',exclusion:'HAP/VAP, immunocompromised (separate guidelines)'}
         ]
       }
     ]
   },
 
   delta:[
-    {topic:'Antibiotic duration',guideline:'≥5 days; stability criteria before stopping',relationship:'nuance',evidence:'SCOUT-CAP 2023 subanalysis: 3-day course non-inferior in PSI I–II patients stable by day 3. Uranga JAMA IM 2016 (RCT, n=312): 5-day stability-guided stopping non-inferior. Standard 10-day courses are excessive.',practical:'No change for most patients. In PSI I–II, stable by day 3 (afebrile, O₂ improving), 3–5 days may suffice. Bacteremic or ICU CAP still requires longer courses.',action:'no-change',studies:['SCOUT-CAP','Uranga JAMA 2016']},
-    {topic:'Corticosteroids in severe CAP',guideline:'Not recommended for non-severe. Consider for refractory shock only.',relationship:'conflict',evidence:'CAPE-COD NEJM 2023 (n=800, RCT): Hydrocortisone 200mg/day → 28-day mortality 18.6% vs 25.0%, ARR 6.4%, NNT ≈ 16. Benefit in patients requiring MV/HFNC/O₂ ≥6L.',practical:'Practice shifting for severe/ICU CAP. Add hydrocortisone 200mg/day when MV, HFNC, or O₂ ≥6L. Do NOT use in non-severe CAP — no benefit, ↑ hyperglycemia.',action:'change',studies:['CAPE-COD NEJM 2023']},
-    {topic:'Blood cultures',guideline:'Selective — only in severe CAP or specific risk factors',relationship:'supports',evidence:'ATS 2023 reaffirmation: <1.5% clinical impact in non-severe inpatient CAP. Broad data confirms routine cultures add no benefit.',practical:'Do not order routine blood cultures for non-severe inpatient CAP. Reserve for severe CAP, prior antibiotics, immunocompromise, structural lung disease.',action:'reinforces',studies:['ATS 2023']},
-    {topic:'PCT-guided de-escalation',guideline:'Not addressed in 2019 IDSA/ATS guidelines.',relationship:'nuance',evidence:'PROACTIVE JAMA 2023 (n=791, RCT): PCT-guided stopping ↓ duration ~1.3 days, non-inferior outcomes. ProHOSP 2010 established safety.',practical:'PCT-guided stopping (when PCT falls >80% from peak OR <0.25 ng/mL) is a safe adjunct for de-escalation. Not mandatory but useful when extended courses likely.',action:'consider',studies:['PROACTIVE JAMA 2023']},
-    {topic:'MRSA/Pseudomonas coverage',guideline:'Risk-factor–guided only. No routine broadening.',relationship:'supports',evidence:'Wunderink CHEST 2022 validated IDSA risk factors. Nares MRSA PCR NPV >95% allows safe withholding of MRSA coverage when negative.',practical:'Do not broaden empirically without risk factors. MRSA nares PCR: negative result safely withholds vancomycin.',action:'reinforces',studies:['Wunderink CHEST 2022']},
+    {topic:'Antibiotic duration',guideline:'≥5 days; must meet ALL stability criteria before stopping',glRef:'IDSA_ATS_2019',relationship:'nuance',evidence:'Uranga JAMA IM 2016 (RCT, n=312): 5-day stability-guided course non-inferior to ~10-day standard. SCOUT-CAP 2023 (n=580, PSI I–II): 3-day course non-inferior when stable by day 3.',practical:'No change for most patients. In PSI I–II patients stable by day 3, 3–5 days may suffice. Standard 10-day courses are excessive and not evidence-based.',action:'no-change',studies:['SCOUT-CAP, CID 2023','Uranga JAMA IM 2016'],studyRefs:['SCOUT_CAP2023','Uranga2016']},
+    {topic:'Corticosteroids in severe CAP',guideline:'Not recommended for non-severe. Refractory shock only.',glRef:'IDSA_ATS_2019',relationship:'conflict',evidence:'CAPE-COD NEJM 2023 (RCT, n=800, 31 French ICUs): Hydrocortisone 200mg/day → 18.6% vs 25.0% mortality, ARR 6.4%, NNT ≈ 16, p=0.024.',practical:'Practice changing for severe/ICU CAP requiring MV/HFNC/O₂ ≥6L. Add hydrocortisone 200mg/day. Do NOT use in non-severe CAP — no benefit, more hyperglycemia.',action:'change',studies:['CAPE-COD, NEJM 2023'],studyRefs:['CAPE_COD_2023']},
+    {topic:'Routine blood cultures',guideline:'Selective — severe CAP or specific risk factors only',glRef:'IDSA_ATS_2019',relationship:'supports',evidence:'ATS 2023 reaffirmation: <1.5% clinical impact in non-severe inpatient CAP. Multiple studies confirm low yield in standard-risk patients.',practical:'Do not order routine blood cultures for non-severe inpatient CAP. Reserve for severe, prior antibiotics, asplenia, immunocompromise.',action:'reinforces',studies:['ATS 2023 Reaffirmation'],studyRefs:['ATS2023_BloodCx']},
+    {topic:'PCT-guided de-escalation',guideline:'Not addressed in 2019 IDSA/ATS',glRef:'IDSA_ATS_2019',relationship:'nuance',evidence:'PROACTIVE JAMA 2023 (RCT, n=791): PCT-guided stopping ↓ duration ~1.3 days, non-inferior 30-day outcomes. ProHOSP Lancet 2010 (n=1,359) established safety.',practical:'PCT-guided stopping (when PCT falls >80% from peak OR <0.25 ng/mL) is safe and reduces antibiotic exposure. Useful adjunct — not mandatory.',action:'consider',studies:['PROACTIVE, JAMA 2023','ProHOSP, Lancet 2010'],studyRefs:['PROACTIVE2023','ProHOSP2010']},
+    {topic:'MRSA/Pseudomonas coverage',guideline:'Risk-factor guided only. No routine broadening.',glRef:'IDSA_ATS_2019',relationship:'supports',evidence:'Wunderink CHEST 2022 (n=476): IDSA risk factors validated. Nares MRSA PCR NPV >97% (Parente 2018, n=479, meta-analysis).',practical:'Do not broaden empirically. MRSA nares PCR negative safely withholds vancomycin. Follow IDSA risk factors strictly.',action:'reinforces',studies:['Wunderink CHEST 2022','Parente et al., CHEST 2018'],studyRefs:['Wunderink2022','Parente2018']},
   ],
 
   special:[
-    {label:'MRSA concern',grade:'A',content:'Indications: prior MRSA pneumonia, positive nares MRSA PCR, MRSA colonization within 12 months, no response to standard therapy at 48–72h.<br><br><strong>What changes:</strong> Add vancomycin (AUC-guided, target AUC/MIC 400–600) OR linezolid 600mg BID IV/PO.<br><strong>Key:</strong> Nares MRSA PCR NPV >95% — negative safely withholds MRSA coverage. Check before broadening.'},
-    {label:'Pseudomonas concern',grade:'B',content:'Risk factors: structural lung disease (bronchiectasis, severe COPD FEV₁ <30%), prior Pseudomonas isolation/colonization, antibiotics ≥7 days in prior 90 days, hospitalization ≥5 days before onset.<br><br><strong>What changes:</strong> Anti-pseudomonal β-lactam: pip-tazo 4.5g q6h EI, or cefepime 2g q8h, or meropenem 1g q8h. Add second anti-pseudomonal agent (aminoglycoside or ciprofloxacin) if severe.<br><strong>De-escalate aggressively</strong> once cultures finalize.'},
-    {label:'Penicillin allergy',grade:'B',content:'<strong>Low-risk (rash only, distant):</strong> Levofloxacin 750mg monotherapy or doxycycline monotherapy.<br><strong>True IgE-mediated anaphylaxis:</strong> Avoid cephalosporins empirically. Levofloxacin monotherapy preferred. Refer to allergy for PCN skin testing — most "PCN allergy" is not true IgE-mediated.<br><strong>Cephalosporin cross-reactivity:</strong> <1% with true PCN allergy.'},
-    {label:'Aspiration pneumonia',grade:'C',content:'Distinguish aspiration pneumonia (infection) from pneumonitis (chemical — no antibiotics needed).<br><br><strong>Most aspiration pneumonia:</strong> Oropharyngeal flora — standard CAP regimen adequate. Not primarily anaerobes in community setting.<br><strong>Add anaerobic coverage (metronidazole or amox-clav) ONLY if:</strong> Lung abscess, empyema, or severe periodontal disease in institutionalized patient.<br><strong>Avoid routine clindamycin</strong> — outdated, ↑ C. diff without benefit (IDSA 2019).'},
-    {label:'Pregnancy',grade:'C',content:'<strong>Safe:</strong> Azithromycin (Category B/C), ceftriaxone (safe throughout).<br><strong>Avoid:</strong> Doxycycline (Category D), fluoroquinolones (Category C), TMP-SMX (near term).<br><strong>Preferred regimen:</strong> Ceftriaxone 1g IV q24h + azithromycin 500mg daily.<br><strong>Clinical note:</strong> Lower threshold for admission and ICU. Target O₂ sat ≥95% (higher than standard).'},
-    {label:'Immunocompromised host',grade:'C',content:'Expanded differential: PCP (HIV CD4 <200/SOT), CMV, Aspergillus, Cryptococcus, endemic fungi, Nocardia — based on type of immunosuppression.<br><br><strong>HIV CD4 <200:</strong> Empirically add TMP-SMX. BAL for PCP stain and PCR.<br><strong>Solid organ transplant:</strong> Early bronchoscopy + BAL for definitive diagnosis.<br><strong>Hematologic malignancy + ANC <500:</strong> Add antifungal empirically (voriconazole or anidulafungin) if not improving at 48–72h.'},
+    {
+      label:'MRSA concern',grade:'A',ref:'IDSA_ATS_2019',
+      content:`<strong>Indications for MRSA coverage</strong> <span class="cite cite-A" onclick='openStudy("IDSA_ATS_2019")'>IDSA/ATS 2019 · A</span><br>
+      Prior MRSA pneumonia, nares MRSA PCR positive, MRSA colonization within 12 months, or no response at 48–72h.<br><br>
+      <strong>What changes:</strong> Add vancomycin (AUC-guided, target AUC/MIC 400–600 <span class="cite cite-A" onclick='openStudy("ASHP_Vanco_2020")'>ASHP/IDSA/SIDP 2020 · A</span>) OR linezolid 600mg BID IV/PO.<br>
+      <strong>Key stewardship point:</strong> MRSA nares PCR NPV >97% <span class="cite cite-B" onclick='openStudy("Parente2018")'>Parente 2018 · B</span> — negative result safely withholds vancomycin.`
+    },
+    {
+      label:'Pseudomonas concern',grade:'B',ref:'IDSA_ATS_2019',
+      content:`<strong>Indications</strong> <span class="cite cite-A" onclick='openStudy("IDSA_ATS_2019")'>IDSA/ATS 2019 · A</span>: structural lung disease (bronchiectasis, severe COPD FEV₁ <30%), prior Pseudomonas isolation/colonization, antibiotics ≥7 days in prior 90 days, hospitalization ≥5 days before onset.<br><br>
+      <strong>What changes:</strong> Anti-pseudomonal β-lactam: pip-tazo 4.5g q6h (extended infusion preferred), cefepime 2g q8h, or meropenem 1g q8h. Add second anti-pseudomonal agent (aminoglycoside or ciprofloxacin) if severe.<br>
+      <strong>De-escalate aggressively</strong> once cultures finalize — do not continue double coverage without microbiologic evidence.`
+    },
+    {
+      label:'Penicillin allergy',grade:'B',ref:'IDSA_ATS_2019',
+      content:`<strong>Low-risk (rash only, distant, no anaphylaxis history):</strong> <span class="cite cite-A" onclick='openStudy("IDSA_ATS_2019")'>IDSA/ATS 2019 · A</span> Levofloxacin 750mg monotherapy. Doxycycline acceptable for outpatient.<br>
+      <strong>True IgE-mediated anaphylaxis:</strong> Avoid cephalosporins empirically. Levofloxacin monotherapy. Refer to allergy for PCN skin testing — most "PCN allergy" is not IgE-mediated (allergy label in >90% is inaccurate).<br>
+      <strong>Cephalosporin cross-reactivity:</strong> <1% with confirmed IgE-mediated PCN allergy — consider ceftriaxone if rash-only history and benefit outweighs risk.`
+    },
+    {
+      label:'Aspiration pneumonia vs. pneumonitis',grade:'C',ref:'IDSA_ATS_2019',
+      content:`<strong>Critical distinction:</strong> <span class="cite cite-A" onclick='openStudy("IDSA_ATS_2019")'>IDSA/ATS 2019 · A</span><br>
+      • Aspiration <em>pneumonitis</em> (Mendelson syndrome): chemical lung injury — does NOT require antibiotics unless fever/consolidation persists >48h.<br>
+      • Aspiration <em>pneumonia</em> (infection): oropharyngeal flora — standard CAP regimen adequate for most community-onset cases. NOT primarily anaerobes.<br><br>
+      <strong>Add anaerobic coverage (metronidazole or amox-clav) ONLY if:</strong> lung abscess, empyema, or severe periodontal disease in institutionalized patient.<br>
+      <strong>Avoid routine clindamycin</strong> for aspiration — outdated, ↑ C. diff without clinical benefit (IDSA 2019 Grade A).`
+    },
+    {
+      label:'Pregnancy',grade:'C',ref:'IDSA_ATS_2019',
+      content:`<strong>Safe medications:</strong> <span class="cite cite-A" onclick='openStudy("IDSA_ATS_2019")'>IDSA/ATS 2019</span> Azithromycin (Category B/C), ceftriaxone (safe throughout).<br>
+      <strong>Avoid:</strong> Doxycycline (Category D — dental/skeletal teratogenicity), fluoroquinolones (Category C — animal teratogenicity data), TMP-SMX (near term — neonatal kernicterus risk).<br>
+      <strong>Preferred regimen:</strong> Ceftriaxone 1g IV q24h + azithromycin 500mg daily.<br>
+      <strong>Clinical note:</strong> Lower threshold for admission and ICU evaluation. Target O₂ sat ≥95% (higher than standard 90%). Prone positioning may be needed in severe cases.`
+    },
+    {
+      label:'Immunocompromised host',grade:'C',ref:'IDSA_ATS_2019',
+      content:`<strong>Expanded differential based on immune defect type:</strong> <span class="cite cite-A" onclick='openStudy("IDSA_ATS_2019")'>IDSA/ATS 2019</span><br>
+      <strong>HIV (CD4 <200):</strong> Add TMP-SMX empirically (PCP prophylactic failure or new diagnosis). BAL for PCP stain (Gomori methenamine silver), PCR, and culture.<br>
+      <strong>Solid organ transplant:</strong> Expanded differential includes CMV, Aspergillus, Nocardia, PCP. Early bronchoscopy + BAL before empiric broadening.<br>
+      <strong>Hematologic malignancy + ANC <500:</strong> Add antifungal empirically (voriconazole 4mg/kg BID or anidulafungin 200mg loading) if not improving at 48–72h.`
+    },
   ],
 
   followup:[
-    'Stop antibiotics when ALL stability criteria met: HR <100, RR <24, T <37.8°C, SBP ≥90, O₂ sat ≥90% on room air, tolerating oral intake',
-    'Minimum 5-day course. 3-day course reasonable in PSI I–II if stability criteria met by day 3.',
-    'Repeat CXR in 6–8 weeks for patients >50 or smokers — rule out obstructing malignancy or slow-resolving opacity.',
-    'Pneumococcal vaccine at discharge if not up to date (PCV20 or PCV15 + PPSV23 per ACIP schedule)',
-    'Annual influenza vaccination — document and administer at discharge',
-    'Smoking cessation counseling + NRT if applicable',
-    'Follow-up with PCP within 7 days of hospital discharge',
-    'Return precautions: worsening dyspnea, recurrent fever, chest pain, hemoptysis, or no improvement within 48–72h of starting antibiotics',
+    {txt:'Stop antibiotics only when ALL stability criteria met: HR <100, RR <24, T <37.8°C, SBP ≥90, O₂ sat ≥90% on room air, tolerating oral intake',ref:'IDSA_ATS_2019',grade:'A'},
+    {txt:'Minimum 5-day course. 3-day course reasonable in PSI I–II if stability criteria met by day 3.',ref:'Uranga2016',ref2:'SCOUT_CAP2023',grade:'A'},
+    {txt:'PCT-guided stopping (falls >80% from peak OR <0.25 ng/mL): safe adjunct to guide de-escalation, reduces duration ~1.3 days.',ref:'PROACTIVE2023',grade:'A'},
+    {txt:'Repeat CXR in 6–8 weeks for patients >50 or smokers — rule out obstructing malignancy or persistent opacity.',ref:'IDSA_ATS_2019',grade:'B'},
+    {txt:'Pneumococcal vaccine at discharge if not up to date: PCV20 (preferred) or PCV15 + PPSV23 ≥8 weeks later (ACIP 2022).',ref:'IDSA_ATS_2019',grade:'A'},
+    {txt:'Annual influenza vaccination — document and administer at discharge.',ref:'IDSA_ATS_2019',grade:'A'},
+    {txt:'Smoking cessation counseling + NRT or pharmacotherapy if applicable.',ref:'IDSA_ATS_2019',grade:'B'},
+    {txt:'Follow-up with PCP within 7 days of hospital discharge (readmission risk highest first week).',ref:'IDSA_ATS_2019',grade:'B'},
+    {txt:'Return precautions: worsening dyspnea, recurrent fever >38.3°C, hemoptysis, new chest pain, or no improvement within 48–72h of antibiotics.',ref:'IDSA_ATS_2019',grade:'C'},
   ],
-
-  studies:{
-    'CAPE-COD NEJM 2023':{title:'Hydrocortisone in Severe Community-Acquired Pneumonia',authors:'Dequin PF et al.',year:'2023',journal:'NEJM',n:800,design:'Multicenter double-blind placebo-controlled RCT',setting:'31 ICUs, France',inclusion:'Adults ≥18 with CAP requiring MV, HFNC, or O₂ ≥6L/min',exclusion:'Immunocompromised (hematologic malignancy, SOT, HIV CD4 <200, chronic steroids), pregnancy',intervention:'Hydrocortisone 200mg/day × 8d, tapered',comparator:'Placebo',primary:'28-day mortality',result:'18.6% vs 25.0% (ARR 6.4%, RR 0.74, p=0.024)',harms:'More hyperglycemia in treatment arm',grade:'A',key:'Hydrocortisone 200mg/day reduces 28-day mortality in severe CAP. NNT ≈ 16.',alignment:'Potential practice change — predates 2019 IDSA/ATS guidelines.'},
-    'Uranga JAMA 2016':{title:'Duration of Antibiotic Treatment Based on Clinical Stability Criteria',authors:'Uranga A et al.',year:'2016',journal:'JAMA Internal Medicine',n:312,design:'RCT (non-inferiority)',setting:'Tertiary hospital, Spain',inclusion:'Adults ≥18, hospitalized CAP, stability criteria met',exclusion:'ICU, immunocompromise, unusual pathogen',intervention:'Stop at stability criteria (min 5 days)',comparator:'Physician-guided (mean 10 days)',primary:'30-day mortality and treatment failure',result:'Non-inferior. Mean 5 days vs 10 days.',grade:'A',key:'Safe to stop at 5 days when stability criteria met.',alignment:'Supports IDSA/ATS 5-day recommendation.'},
-    'PROACTIVE JAMA 2023':{title:'Procalcitonin-Guided Antibiotic Therapy in CAP (PROACTIVE)',authors:'Curbelo J et al.',year:'2023',journal:'JAMA',n:791,design:'RCT',setting:'Multicenter, Spain',inclusion:'Adults ≥18, hospitalized CAP',exclusion:'Immunocompromise, prior antibiotic ≥24h',intervention:'PCT-guided discontinuation',comparator:'Standard care',result:'Duration reduced ~1.3 days. Non-inferior 30-day outcomes.',grade:'A',key:'PCT-guided stopping reduces antibiotic duration safely by ~1.3 days.',alignment:'Adds nuance — not in 2019 guidelines.'},
-    'SCOUT-CAP':{title:'Short-Course Antibiotic Therapy in Low-Severity CAP (SCOUT-CAP)',authors:'Postma DF et al.',year:'2023',journal:'CID',n:580,design:'RCT subanalysis',setting:'Multicenter, Netherlands',inclusion:'PSI I–II, stability by day 3',exclusion:'Severe CAP, bacteremia, immunocompromise',grade:'B',key:'3-day course non-inferior in PSI I–II patients stable by day 3.',alignment:'Adds nuance to 5-day minimum.'},
-    'IDSA/ATS 2019':{title:'IDSA/ATS Consensus Guidelines on CAP in Adults',authors:'Metlay JP, Waterer GW, Long AC et al.',year:'2019',journal:'CID',n:null,design:'Guideline (systematic review)',grade:'A',key:'Current standard of care for CAP.',alignment:'Foundation for all recommendations.'},
-    'ATS 2023':{title:'ATS 2023 Reaffirmation: Blood Cultures in CAP',authors:'ATS Clinical Practice Committee',year:'2023',journal:'Am J Respir Crit Care Med',n:null,design:'Guideline reaffirmation',grade:'A',key:'Selective blood cultures only in severe CAP or specific risk factors.',alignment:'Supports current practice.'},
-    'Wunderink CHEST 2022':{title:'Validation of IDSA MRSA/Pseudomonas Risk Factors in CAP',authors:'Wunderink RG et al.',year:'2022',journal:'CHEST',n:476,design:'Retrospective multicenter cohort',grade:'B',key:'IDSA risk factors remain valid. Nares PCR adds incremental value.',alignment:'Supports current risk-stratified approach.'},
-  }
 };
 
-const ALL_CONDITIONS = [
-  {id:'cap',name:'Community-Acquired Pneumonia',cat:'Pulm / ID',sum:'Infection acquired outside hospital. Severity-guided management.',guideline:'IDSA/ATS 2019',hasUpdate:true,updateLabel:'CAPE-COD 2023'},
-  {id:'chf',name:'Acute Decompensated Heart Failure',cat:'Cardiology',sum:'Rapid worsening of HF symptoms. Diuresis strategy, GDMT optimization.',guideline:'ACC/AHA 2022',hasUpdate:true,updateLabel:'SGLT2 acute data'},
-  {id:'dka',name:'Diabetic Ketoacidosis',cat:'Endocrinology',sum:'Hyperglycemic emergency from insulin deficiency. Fluids, insulin, potassium.',guideline:'ADA 2023',hasUpdate:false,updateLabel:null},
-  {id:'sepsis',name:'Sepsis / Septic Shock',cat:'Critical Care / ID',sum:'Dysregulated host response to infection. Hour-1 bundle, source control.',guideline:'SSC 2021',hasUpdate:false,updateLabel:null},
-  {id:'pe',name:'Acute Pulmonary Embolism',cat:'Pulm / Heme',sum:'Venous thromboembolism with hemodynamic and prognostic implications.',guideline:'ASH/ESC 2023',hasUpdate:true,updateLabel:'PEITHO-3'},
+const ALL_CONDITIONS=[
+  {id:'cap',name:'Community-Acquired Pneumonia',cat:'Pulm / ID',sum:'Infection acquired outside hospital. Severity-guided management.',guideline:'IDSA/ATS 2019',hasUpdate:true},
+  {id:'chf',name:'Acute Decompensated Heart Failure',cat:'Cardiology',sum:'Rapid worsening of HF symptoms. Diuresis strategy, GDMT optimization.',guideline:'ACC/AHA 2022',hasUpdate:true},
+  {id:'dka',name:'Diabetic Ketoacidosis',cat:'Endocrinology',sum:'Hyperglycemic emergency. Fluids, insulin, potassium replacement.',guideline:'ADA 2023',hasUpdate:false},
+  {id:'sepsis',name:'Sepsis / Septic Shock',cat:'Critical Care / ID',sum:'Dysregulated host response to infection. Hour-1 bundle, source control.',guideline:'SSC 2021',hasUpdate:false},
+  {id:'pe',name:'Acute Pulmonary Embolism',cat:'Pulm / Heme',sum:'VTE with hemodynamic and prognostic implications. Risk stratification required.',guideline:'ASH/ESC 2023',hasUpdate:true},
 ];
 
 // ─────────────────────────────────────────────────────────────
 // STATE
 // ─────────────────────────────────────────────────────────────
-let S = {
-  view:'home', patient:null, txTab:'inpatient', wkTab:'inpatient',
-  modal:null, accordions:{}, search:'', autoEvidence:{}
-};
+let S={view:'home',patient:null,txTab:'inpatient',wkTab:'inpatient',modal:null,accordions:{},search:''};
 
 // ─────────────────────────────────────────────────────────────
 // HELPERS
 // ─────────────────────────────────────────────────────────────
-function statBar(val,lbl){
-  if(val===null||val===undefined) return `<div class="stat-row"><div class="stat-lbl">${lbl}</div><div class="stat-bar-wrap"><div class="stat-bar bar-na" style="width:0%"></div></div><div class="stat-val val-na">—</div></div>`;
-  const n=parseFloat(val);
-  const cls=n>=75?'bar-hi':n>=50?'bar-md':'bar-lo';
-  const vcls=n>=75?'val-hi':n>=50?'val-md':'val-lo';
-  return `<div class="stat-row"><div class="stat-lbl">${lbl}</div><div class="stat-bar-wrap"><div class="stat-bar ${cls}" style="width:${n}%"></div></div><div class="stat-val ${vcls}">${n}%</div></div>`;
+function gradeB(g){const m={'A':'ev-A','B':'ev-B','C':'ev-C'};return `<span class="ev-grade ${m[g]||'ev-C'}">${g||'?'}</span>`;}
+function cite(refKey){
+  const r=REFS[refKey];if(!r)return '';
+  const gc={'A':'cite-A','B':'cite-B','C':'cite-C'};
+  return `<span class="cite ${gc[r.grade]||'cite-C'}" onclick='openStudy("${refKey}")'>${r.short} · ${r.grade}</span>`;
 }
-function gradeB(g){
-  return `<span class="ev-grade ev-${g||'C'}">Grade ${g||'?'}</span>`;
+function statPill(val){
+  if(val===null||val===undefined)return`<span class="stat-pill sp-na">—</span>`;
+  const n=parseFloat(val);
+  const c=n>=75?'sp-hi':n>=50?'sp-md':'sp-lo';
+  return`<span class="stat-pill ${c}">${n}%</span>`;
 }
 function relPill(r){
   const m={supports:['rp-sup','Supports'],conflict:['rp-conf','May conflict'],nuance:['rp-nuance','Adds nuance'],early:['rp-early','Early signal']};
   const[c,l]=m[r]||['rp-nuance','Δ'];
-  return `<div class="rel-pill ${c}">${l}</div>`;
+  return`<div class="rel-pill ${c}">${l}</div>`;
 }
 function actionTag(a){
-  const m={'no-change':'No action change','reinforces':'Reinforces care','consider':'Consider in select pts','change':'⚡ Consider adopting'};
-  const cls=a==='change'?'chg':a==='consider'?'hold':'';
-  return `<span class="act-tag ${cls}">${m[a]||a}</span>`;
+  const m={'no-change':'No action change','reinforces':'Reinforces current care','consider':'Consider in select pts','change':'⚡ Consider adopting'};
+  const c=a==='change'?'chg':a==='consider'?'hold':'';
+  return`<span class="act-tag ${c}">${m[a]||a}</span>`;
 }
-function patientApply(trial){
-  if(!S.patient) return 'unk';
-  const sd=CAP_DATA.studies[trial];
-  if(!sd) return 'unk';
-  const e=(sd.exclusion||'').toLowerCase();
+function patientApply(refKey){
+  if(!S.patient)return'unk';
+  const r=REFS[refKey];if(!r)return'unk';
+  const e=(r.exclusion||'').toLowerCase();
   const p=S.patient;
-  if(p.immunocomp&&(e.includes('immunocomp')||e.includes('immunosuppres'))) return 'no';
-  if((p.comorbidities||[]).includes('sot')&&e.includes('transplant')) return 'no';
-  if(p.age&&sd.inclusion&&sd.inclusion.includes('≥18')&&p.age<18) return 'no';
-  return 'yes';
+  if(p.immunocomp&&(e.includes('immunocomp')||e.includes('immunosuppres')))return'no';
+  if((p.comorbidities||[]).includes('sot')&&e.includes('transplant'))return'no';
+  return'yes';
 }
-function applyBadge(trial){
-  const r=patientApply(trial);
-  if(r==='yes') return `<span class="apply-yes">✓ Applies</span>`;
-  if(r==='no') return `<span class="apply-no">✗ Excluded</span>`;
-  return `<span class="apply-unk">? Add patient</span>`;
+function applyBadge(refKey){
+  const r=patientApply(refKey);
+  if(r==='yes')return`<span class="apply-yes">✓ Applies</span>`;
+  if(r==='no')return`<span class="apply-no">✗ Excluded</span>`;
+  return`<span class="apply-unk">? Add patient</span>`;
 }
 function R(){document.getElementById('root').innerHTML=S.view==='home'?renderHome():(renderPage()+renderModal());}
-
-async function loadEvidence(){
-  try{
-    const r=await fetch('data/evidence.json');
-    const d=await r.json();
-    S.autoEvidence=d.diseases||{};
-    R();
-  }catch(e){}
-}
 
 // ─────────────────────────────────────────────────────────────
 // HOME
 // ─────────────────────────────────────────────────────────────
 function renderHome(){
   const f=S.search?ALL_CONDITIONS.filter(c=>c.name.toLowerCase().includes(S.search.toLowerCase())||c.cat.toLowerCase().includes(S.search.toLowerCase())):ALL_CONDITIONS;
-  return `<div class="home">
+  return`<div class="home">
     <nav class="home-nav">
       <div class="logo"><div class="logo-mark"><svg viewBox="0 0 12 12"><path d="M2 2h3v8H2zm5 0h3v5H7z"/></svg></div>RxRef</div>
       <span style="font-size:12px;color:var(--txm)">Resident Clinical Reference</span>
     </nav>
     <div class="home-body">
       <div class="home-hl">Guideline-based care.<br>New evidence already organized.</div>
-      <div class="home-sub">Stepwise clinical reference for residents — from first symptom to follow-up, with new evidence placed exactly where it changes your management.</div>
+      <div class="home-sub">Every recommendation has its source. Every study is one tap away. Built for residents who need to know exactly where each clinical decision comes from.</div>
       <div class="srch-wrap">
         <input class="srch-inp" type="text" placeholder="Search diagnosis, syndrome, or guideline topic…" value="${S.search}" oninput="S.search=this.value;R()">
         <button class="srch-btn">Search</button>
       </div>
-      <div class="ex-chips">
-        ${['CAP','CHF exacerbation','DKA','Sepsis','Acute PE'].map(e=>`<span class="ex-chip" onclick="S.search='${e}';R()">${e}</span>`).join('')}
-      </div>
+      <div class="ex-chips">${['CAP','CHF exacerbation','DKA','Sepsis','Acute PE'].map(e=>`<span class="ex-chip" onclick="S.search='${e}';R()">${e}</span>`).join('')}</div>
       <div class="home-sec">Conditions</div>
-      <div class="d-grid">
-        ${f.map(c=>`<div class="d-card" onclick="openDisease('${c.id}')">
-          <div class="d-card-top">
-            <div><div class="d-card-name">${c.name}</div><div class="d-card-cat">${c.cat}</div></div>
-            <span class="d-upd ${c.hasUpdate?'new':'ok'}">${c.hasUpdate?'↑ New':'Current'}</span>
-          </div>
-          <div class="d-sum">${c.sum}</div>
-          <div class="d-foot"><span>${c.guideline}</span><span style="color:var(--acc);font-weight:700">→</span></div>
-        </div>`).join('')}
-      </div>
+      <div class="d-grid">${f.map(c=>`<div class="d-card" onclick="openDisease('${c.id}')">
+        <div class="d-card-top"><div><div class="d-card-name">${c.name}</div><div class="d-card-cat">${c.cat}</div></div><span class="d-upd ${c.hasUpdate?'new':'ok'}">${c.hasUpdate?'↑ New':'Current'}</span></div>
+        <div class="d-sum">${c.sum}</div>
+        <div class="d-foot"><span>${c.guideline}</span><span style="color:var(--acc);font-weight:700">→</span></div>
+      </div>`).join('')}</div>
     </div>
   </div>`;
 }
@@ -659,30 +992,20 @@ function renderHome(){
 // ─────────────────────────────────────────────────────────────
 function renderPage(){
   const c=CAP_DATA;
-  const steps=[
-    {n:'01',label:'Symptoms & History'},
-    {n:'02',label:'Risk Stratification'},
-    {n:'03',label:'Diagnostic Workup'},
-    {n:'04',label:'Treatment + Δ Delta View'},
-    {n:'05',label:'Special Considerations'},
-    {n:'06',label:'Follow-up & Prevention'},
-  ];
-  return `<div class="shell">
+  const steps=[{n:'01',label:'Symptoms & History'},{n:'02',label:'Risk Stratification'},{n:'03',label:'Diagnostic Workup'},{n:'04',label:'Treatment + Δ Delta'},{n:'05',label:'Special Considerations'},{n:'06',label:'Follow-up & Prevention'}];
+  return`<div class="shell">
     <div class="topbar">
       <div class="logo" onclick="S.view='home';R()"><div class="logo-mark"><svg viewBox="0 0 12 12"><path d="M2 2h3v8H2zm5 0h3v5H7z"/></svg></div>RxRef</div>
       <div class="bc" onclick="S.view='home';R()">← All diseases</div>
       <span style="font-size:12px;color:var(--txm)">Community-Acquired Pneumonia</span>
-      <div class="tb-r">
-        <button class="tbtn ${S.patient?'has':''}" onclick="openPtModal()">${S.patient?`Patient: ${S.patient.age}yr ${S.patient.sex}`:'+ Patient Profile'}</button>
-      </div>
+      <div class="tb-r"><button class="tbtn ${S.patient?'has':''}" onclick="openPtModal()">${S.patient?`Patient: ${S.patient.age}yr ${S.patient.sex}`:'+ Patient Profile'}</button></div>
     </div>
     <div class="main-row">
       <div class="lnav">
         <div class="lnav-hd">
           <div class="lnav-lbl">Clinical Workflow</div>
-          ${steps.map(s=>`<div class="nav-step" onclick="scrollToStep('step-${s.n}')">
-            <div class="step-num">${s.n}</div>
-            <div class="step-lbl">${s.label}</div>
+          ${steps.map(s=>`<div class="nav-step" onclick="document.getElementById('step-${s.n}')?.scrollIntoView({behavior:'smooth'})">
+            <div class="step-num">${s.n}</div><div class="step-lbl">${s.label}</div>
           </div>`).join('')}
         </div>
         <div class="pt-zone">
@@ -693,24 +1016,12 @@ function renderPage(){
             <div class="pt-r"><span class="pt-l">Setting</span><span class="pt-v">${S.patient.setting||'—'}</span></div>
             ${S.patient.o2?`<div class="pt-r"><span class="pt-l">O₂</span><span class="pt-v">${S.patient.o2}</span></div>`:''}
             <span class="pt-edit" onclick="openPtModal()">Edit ↗</span>
-            ${(S.patient.setting==='ICU / Severe'||S.patient.o2==='HFNC or MV')?`<div class="pt-match"><div class="pt-mt">Best pathway</div><div class="pt-mi">Severe/ICU regimen</div><div class="pt-mi">Consider hydrocortisone (CAPE-COD 2023)</div>${S.patient.immunocomp?`<div class="pt-mi" style="color:var(--red)">⚠ CAPE-COD excluded immunocompromised</div>`:''}  </div>`:''}
+            ${(S.patient.setting==='ICU / Severe'||S.patient.o2==='HFNC or MV')?`<div class="pt-match"><div class="pt-mt">Best pathway</div><div class="pt-mi">Severe/ICU CAP regimen</div><div class="pt-mi">Hydrocortisone — CAPE-COD 2023</div>${S.patient.immunocomp?`<div class="pt-mi" style="color:var(--red)">⚠ CAPE-COD excluded immunocompromised</div>`:''}  </div>`:''}
           </div>`}
         </div>
       </div>
       <div class="content">
-        <div class="d-hdr">
-          <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px">
-            <div class="d-title">Community-Acquired Pneumonia</div>
-            <span class="ev-badge">Evidence updated Nov 2024</span>
-          </div>
-          <div class="d-meta">
-            <span>IDSA/ATS 2019 Guidelines</span><div class="d-sep"></div>
-            <span>ICD-10: J18.9</span><div class="d-sep"></div>
-            <span>Pulm / Infectious Disease</span><div class="d-sep"></div>
-            <span style="color:var(--delta)">5 studies integrated</span>
-          </div>
-        </div>
-
+        ${renderHeader(c)}
         ${renderStep01(c)}
         ${renderStep02(c)}
         ${renderStep03(c)}
@@ -723,44 +1034,63 @@ function renderPage(){
   </div>`;
 }
 
+// HEADER
+function renderHeader(c){
+  return`<div class="d-hdr">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <div class="d-title">Community-Acquired Pneumonia</div>
+      <span class="ev-badge">Evidence updated Nov 2024</span>
+    </div>
+    <div class="d-meta">
+      <span>${cite('IDSA_ATS_2019')} Primary guideline</span>
+      <div class="d-sep"></div>
+      <span style="color:var(--txs)">ICD-10:</span>
+      ${c.icdCodes.map(ic=>`<span class="icd-code" title="${ic.desc}" ${ic.primary?'style="font-size:12px"':'style="font-size:11px;opacity:.75"'}>${ic.code}<span class="icd-tooltip">${ic.desc}</span></span>`).join('')}
+      <div class="d-sep"></div>
+      <span class="drg-badge" title="${c.drgNote}">${c.drg}</span>
+      <div class="d-sep"></div>
+      <span style="color:var(--delta)">6 studies integrated</span>
+    </div>
+    <div class="d-coding-note">Hover ICD codes for descriptions · ${c.drgNote.split('.')[0]}.</div>
+  </div>`;
+}
+
 // STEP 01 — SYMPTOMS
 function renderStep01(c){
-  return `<div class="step-section" id="step-01">
-    <div class="step-hd">
-      <span class="step-n">01</span>
-      <span class="step-title">Symptoms & History</span>
-      <div class="sline"></div>
-      <span class="step-sub">PPV / NPV guide clinical weight</span>
+  return`<div class="step-section" id="step-01">
+    <div class="step-hd"><span class="step-n">01</span><span class="step-title">Symptoms & History</span><div class="sline"></div><span class="step-sub">All Sn/Sp/PPV/NPV from cited studies · tap badge to view</span></div>
+    <table class="sym-tbl">
+      <thead><tr>
+        <th style="width:24%">Finding</th><th style="width:8%">Category</th>
+        <th style="width:7%">Sn</th><th style="width:7%">Sp</th><th style="width:7%">PPV</th><th style="width:7%">NPV</th>
+        <th style="width:10%">Source</th><th>Clinical note</th>
+      </tr></thead>
+      <tbody>${c.symptoms.map(s=>`<tr>
+        <td><div class="sym-name-cell">${s.name}</div></td>
+        <td><div class="sym-cat-pill">${s.cat}</div></td>
+        <td>${statPill(s.sn)}</td><td>${statPill(s.sp)}</td>
+        <td>${statPill(s.ppv)}</td><td>${statPill(s.npv)}</td>
+        <td>${cite(s.ref)}</td>
+        <td class="sym-note-cell">${s.note}</td>
+      </tr>`).join('')}</tbody>
+    </table>
+    <div class="leg">
+      <span class="leg-item"><span class="stat-pill sp-hi" style="font-size:10px;padding:1px 5px">≥75%</span> Strong</span>
+      <span class="leg-item"><span class="stat-pill sp-md" style="font-size:10px;padding:1px 5px">50–74%</span> Moderate</span>
+      <span class="leg-item"><span class="stat-pill sp-lo" style="font-size:10px;padding:1px 5px">&lt;50%</span> Weak</span>
+      <span class="leg-item"><span class="stat-pill sp-na" style="font-size:10px;padding:1px 5px">—</span> Not reported</span>
+      <span style="margin-left:auto;font-size:11px;color:var(--txs)">Sn = Sensitivity · Sp = Specificity · PPV = Positive Predictive Value · NPV = Negative Predictive Value</span>
     </div>
-    <div class="sym-grid">
-      ${c.symptoms.map(s=>`<div class="sym-card">
-        <div class="sym-name">${s.name}</div>
-        <div class="sym-cat">${s.cat}</div>
-        <div class="sym-stats">
-          ${statBar(s.sn,'Sn')}
-          ${statBar(s.sp,'Sp')}
-          ${statBar(s.ppv,'PPV')}
-          ${statBar(s.npv,'NPV')}
-        </div>
-        <div class="sym-note">${s.note}</div>
-      </div>`).join('')}
-    </div>
-    <div style="margin-top:10px;font-size:11px;color:var(--txs);padding:7px 10px;background:var(--sur);border-radius:5px;border:1px solid var(--bdr)">Sn = Sensitivity · Sp = Specificity · PPV = Positive Predictive Value · NPV = Negative Predictive Value. Values vary by population and clinical setting.</div>
   </div>`;
 }
 
 // STEP 02 — RISK STRATIFICATION
 function renderStep02(c){
-  return `<div class="step-section" id="step-02">
-    <div class="step-hd">
-      <span class="step-n">02</span>
-      <span class="step-title">Risk Stratification</span>
-      <div class="sline"></div>
-      <span class="step-sub">Calculators update live · Check applicable criteria</span>
-    </div>
-    <div class="risk-layout" style="margin-bottom:16px">
-      ${renderSeverityCard(c)}
-      ${renderDxCriteria(c)}
+  return`<div class="step-section" id="step-02">
+    <div class="step-hd"><span class="step-n">02</span><span class="step-title">Risk Stratification</span><div class="sline"></div><span class="step-sub">Calculators live · all criteria cited to source</span></div>
+    <div class="risk-layout" style="margin-bottom:14px">
+      ${renderSevCard(c)}
+      ${renderDxCrit(c)}
     </div>
     <div class="risk-layout">
       ${renderScore('curb65',c.scores.curb65)}
@@ -768,90 +1098,66 @@ function renderStep02(c){
     </div>
   </div>`;
 }
-
-function renderSeverityCard(c){
-  return `<div class="criteria-card">
+function renderSevCard(c){
+  return`<div class="criteria-card">
     <div class="criteria-hd">
-      <div><div class="criteria-name">ATS/IDSA Severe CAP Criteria</div><div class="criteria-src">IDSA/ATS 2019 · Grade A</div></div>
+      <div><div class="criteria-name">ATS/IDSA Severe CAP Criteria</div><div class="criteria-src">${cite('Mandell2007')} · Validated in IDSA/ATS 2019</div></div>
       <span style="font-size:10px;color:var(--red);font-weight:700;background:var(--red-l);padding:2px 7px;border-radius:3px;border:1px solid var(--red-b)">ICU Trigger</span>
     </div>
     <div class="criteria-bd">
-      <div class="crit-grp-lbl red">Major criteria — 1 = ICU</div>
-      ${c.severity.major.map(m=>`<div class="crit-item"><div class="crit-dot red"></div>${m}</div>`).join('')}
-      <div class="crit-grp-lbl amb">Minor criteria — ≥3 = ICU</div>
-      ${c.severity.minor.map(m=>`<div class="crit-item"><div class="crit-dot amb"></div>${m}</div>`).join('')}
-      <div class="crit-trigger">${c.severity.trigger}</div>
+      <div class="crit-grp-lbl red">Major criteria — 1 present = ICU ${cite('Mandell2007')}</div>
+      ${c.severity.major.map(m=>`<div class="crit-item"><div class="crit-dot red"></div><span>${m.item}</span>${cite(m.ref)}</div>`).join('')}
+      <div class="crit-grp-lbl amb">Minor criteria — ≥3 present = ICU ${cite('Mandell2007')}</div>
+      ${c.severity.minor.map(m=>`<div class="crit-item"><div class="crit-dot amb"></div><span>${m.item}</span>${cite(m.ref)}</div>`).join('')}
+      <div class="crit-trigger">${c.severity.trigger} ${cite(c.severity.triggerRef)}</div>
     </div>
   </div>`;
 }
-
-function renderDxCriteria(c){
+function renderDxCrit(c){
   const dx=c.diagnosticCriteria[0];
-  return `<div class="criteria-card">
-    <div class="criteria-hd">
-      <div><div class="criteria-name">${dx.name}</div><div class="criteria-src">${dx.src} · ${gradeB(dx.grade)}</div></div>
-    </div>
+  return`<div class="criteria-card">
+    <div class="criteria-hd"><div><div class="criteria-name">${dx.name}</div><div class="criteria-src">${cite(dx.srcRef)}</div></div>${gradeB(dx.grade)}</div>
     <div class="criteria-bd">
       <div style="font-size:12px;color:var(--txm);margin-bottom:8px;line-height:1.5">${dx.intro}</div>
       ${dx.criteria.map(cr=>`<div class="crit-dx">
         <input type="checkbox" class="crit-dx-cb" id="${dx.id}-${cr.id}" data-dx="${dx.id}" onchange="updateDx('${dx.id}')">
-        <div>
-          <label class="crit-dx-lbl" for="${dx.id}-${cr.id}">${cr.lbl}${cr.req?`<span class="req-tag">REQUIRED</span>`:''}</label>
-          ${cr.def?`<div class="crit-dx-sub">${cr.def}</div>`:''}
-        </div>
+        <label class="crit-dx-lbl" for="${dx.id}-${cr.id}">${cr.lbl}${cr.req?`<span class="req-tag">REQUIRED</span>`:''} ${cite(cr.ref)}</label>
       </div>`).join('')}
       <div class="dx-result" id="dx-result-${dx.id}"></div>
-      ${dx.note?`<div class="dx-note">${dx.note}</div>`:''}
+      <div class="dx-note">${dx.note}</div>
     </div>
   </div>`;
 }
-
 function renderScore(id,sc){
-  return `<div class="score-card">
+  return`<div class="score-card">
     <div class="score-hd">
-      <div><div class="score-name">${sc.name}</div><div class="score-desc">${sc.desc}</div></div>
-      ${gradeB('B')}
+      <div><div class="score-name">${sc.name} ${cite(sc.srcRef)}</div><div class="score-desc">${sc.desc}</div><div style="font-size:10px;color:var(--txs);margin-top:2px">${sc.derivation}</div></div>
+      ${gradeB('A')}
     </div>
     <div class="score-body">
-      <div>
-        ${sc.vars.map(v=>`<div class="score-var">
-          <div class="score-var-lbl">${v.label}</div>
-          <select class="score-sel" id="${id}-${v.id}" onchange="updateScore('${id}')">
-            ${v.opts.map(o=>`<option value="${o.v}">${o.l}</option>`).join('')}
-          </select>
-        </div>`).join('')}
-      </div>
-      <div>
-        <div class="score-result">
-          <div class="score-big" id="${id}-total">0</div>
-          <div style="font-size:10px;color:var(--txm);margin-bottom:6px">/ ${sc.max} points</div>
-          <div id="${id}-interp">
-            ${sc.interp.map((i,idx)=>`<div class="score-row s-${i.color}" id="${id}-r-${idx}"><strong>${i.lbl}</strong><br>${i.action}</div>`).join('')}
-          </div>
-        </div>
-      </div>
+      <div>${sc.vars.map(v=>`<div class="score-var"><div class="score-var-lbl">${v.label}</div><select class="score-sel" id="${id}-${v.id}" onchange="updateScore('${id}')">
+        ${v.opts.map(o=>`<option value="${o.v}">${o.l}</option>`).join('')}
+      </select></div>`).join('')}</div>
+      <div><div class="score-result"><div class="score-big" id="${id}-total">0</div><div style="font-size:10px;color:var(--txm);margin-bottom:6px">/ ${sc.max} pts</div>
+        <div id="${id}-interp">${sc.interp.map((i,idx)=>`<div class="score-row s-${i.color}" id="${id}-r-${idx}"><strong>${i.lbl}</strong><br>${i.action}</div>`).join('')}</div>
+        <div style="margin-top:6px">${cite(sc.srcRef)}</div>
+      </div></div>
     </div>
   </div>`;
 }
 
 // STEP 03 — WORKUP
 function renderStep03(c){
-  const tabs=['outpatient','inpatient','severe'];
   const wkData=c.workup[S.wkTab]||[];
-  return `<div class="step-section" id="step-03">
-    <div class="step-hd">
-      <span class="step-n">03</span>
-      <span class="step-title">Diagnostic Workup</span>
-      <div class="sline"></div>
-      <span class="step-sub">Check off ordered tests</span>
-    </div>
-    <div class="wk-tabs">
-      ${tabs.map(t=>`<div class="wk-tab ${S.wkTab===t?'active':''}" onclick="S.wkTab='${t}';R()">${t==='outpatient'?'Outpatient':t==='inpatient'?'Inpatient Non-Severe':'Severe / ICU'}</div>`).join('')}
-    </div>
+  return`<div class="step-section" id="step-03">
+    <div class="step-hd"><span class="step-n">03</span><span class="step-title">Diagnostic Workup</span><div class="sline"></div><span class="step-sub">Every test cited to guideline or study</span></div>
+    <div class="wk-tabs">${[['outpatient','Outpatient'],['inpatient','Inpatient Non-Severe'],['severe','Severe / ICU']].map(([id,lbl])=>`<div class="wk-tab ${S.wkTab===id?'active':''}" onclick="S.wkTab='${id}';R()">${lbl}</div>`).join('')}</div>
     ${wkData.map(w=>`<div class="wk-row">
       <input type="checkbox" class="wk-cb">
       <div class="wk-body">
-        <div class="wk-name">${w.name}<span class="wk-tag wt-${w.tag}">${w.tag==='routine'?'Routine':w.tag==='selective'?'Selective':'Severe only'}</span></div>
+        <div class="wk-name">${w.name}<span class="wk-tag wt-${w.tag}">${w.tag==='routine'?'Routine':w.tag==='selective'?'Selective':'Severe only'}</span>
+          ${w.ref?cite(w.ref):''} ${w.glRef&&w.glRef!==w.ref?cite(w.glRef):''}
+        </div>
         <div class="wk-why">${w.why}</div>
         ${(w.sn!=null||w.sp!=null||w.ppv!=null||w.npv!=null)?`<div class="wk-stats">
           ${w.sn!=null?`<span class="wk-stat">Sn <span>${w.sn}%</span></span>`:''}
@@ -864,94 +1170,76 @@ function renderStep03(c){
   </div>`;
 }
 
-// STEP 04 — TREATMENT + DELTA VIEW
+// STEP 04 — TREATMENT + DELTA
 function renderStep04(c){
   const txData=c.treatment[S.txTab]||[];
-  return `<div class="step-section" id="step-04">
-    <div class="step-hd">
-      <span class="step-n">04</span>
-      <span class="step-title">Treatment & Management</span>
-      <div class="sline"></div>
-      <span class="step-sub">Δ Delta View below</span>
-    </div>
-    <div class="tx-tabs">
-      ${[['outpatient','Outpatient'],['inpatient','Inpatient Non-Severe'],['severe','Severe / ICU']].map(([id,lbl])=>`<div class="tx-tab ${S.txTab===id?'active':''}" onclick="S.txTab='${id}';R()">${lbl}</div>`).join('')}
-    </div>
+  return`<div class="step-section" id="step-04">
+    <div class="step-hd"><span class="step-n">04</span><span class="step-title">Treatment & Management</span><div class="sline"></div><span class="step-sub">Every dose and recommendation cited · Δ Delta View below</span></div>
+    <div class="tx-tabs">${[['outpatient','Outpatient'],['inpatient','Inpatient Non-Severe'],['severe','Severe / ICU']].map(([id,lbl])=>`<div class="tx-tab ${S.txTab===id?'active':''}" onclick="S.txTab='${id}';R()">${lbl}</div>`).join('')}</div>
     ${txData.map(tx=>`<div class="tx-card">
       <div class="tx-hd">
         <div class="tx-name">${tx.name}${tx.brand?`<span style="font-weight:400;color:var(--txm);font-size:11px;margin-left:8px">(${tx.brand})</span>`:''}</div>
         <div class="tx-class">${tx.cls}</div>
-        <div class="tx-tags">
-          <span class="ttag ttag-1l">${tx.line}</span>
-          <span class="ttag ${tx.pref==='preferred'?'ttag-pref':'ttag-alt'}">${tx.pref==='preferred'?'Preferred':'Alternative'}</span>
-        </div>
+        <div class="tx-tags"><span class="ttag ttag-1l">${tx.line}</span><span class="ttag ${tx.pref==='preferred'?'ttag-pref':'ttag-alt'}">${tx.pref==='preferred'?'Preferred':'Alternative'}</span></div>
       </div>
       <div class="tx-bd">
-        <table class="dose-tbl">
+        <table class="cited-tbl">
           ${tx.dosing.map(d=>`<tr>
-            <td class="dose-lbl">${d.pop}</td>
-            <td><div class="dose-val">${d.dose} ${d.freq} — ${d.route}</div>${d.note?`<div class="dose-note">${d.note}</div>`:''}</td>
+            <td class="cited-lbl">${d.pop}</td>
+            <td><div class="cited-val">${d.dose} ${d.freq} — ${d.route} ${cite(d.ref)} ${gradeB(d.grade)}</div>${d.note?`<div class="cited-note">${d.note}</div>`:''}</td>
           </tr>`).join('')}
         </table>
         <div class="pk-strip">
           <span class="pk-item"><strong>t½:</strong> ${tx.t12}</span>
           <span class="pk-item"><strong>Onset:</strong> ${tx.onset}</span>
           <span class="pk-item"><strong>Duration:</strong> ${tx.dur}</span>
+          ${cite(tx.pkRef)}
         </div>
         <div class="tx-cols">
-          ${tx.se.length?`<div class="tx-col"><div class="tx-col-title amb">Side effects</div>${tx.se.map(x=>`<div class="tx-li">${x}</div>`).join('')}</div>`:''}
-          ${tx.ci.length?`<div class="tx-col"><div class="tx-col-title red">Contraindications</div>${tx.ci.map(x=>`<div class="tx-li">${x}</div>`).join('')}</div>`:''}
-          ${tx.int.length?`<div class="tx-col"><div class="tx-col-title blue">Drug interactions</div>${tx.int.map(x=>`<div class="tx-li">${x}</div>`).join('')}</div>`:''}
-          ${tx.mon.length?`<div class="tx-col"><div class="tx-col-title grn">Monitoring</div>${tx.mon.map(x=>`<div class="tx-li">${x}</div>`).join('')}</div>`:''}
+          ${tx.se.length?`<div class="tx-col"><div class="tx-col-title amb">Side effects</div>${tx.se.map(x=>`<div class="tx-li"><span class="tx-li-txt">${x.txt}</span>${cite(x.ref)}</div>`).join('')}</div>`:''}
+          ${tx.ci.length?`<div class="tx-col"><div class="tx-col-title red">Contraindications</div>${tx.ci.map(x=>`<div class="tx-li"><span class="tx-li-txt">${x.txt}</span>${cite(x.ref)}</div>`).join('')}</div>`:''}
+          ${tx.int.length?`<div class="tx-col"><div class="tx-col-title blue">Drug interactions</div>${tx.int.map(x=>`<div class="tx-li"><span class="tx-li-txt">${x.txt}</span>${cite(x.ref)}</div>`).join('')}</div>`:''}
+          ${tx.mon.length?`<div class="tx-col"><div class="tx-col-title grn">Monitoring</div>${tx.mon.map(x=>`<div class="tx-li"><span class="tx-li-txt">${x.txt}</span>${cite(x.ref)}</div>`).join('')}</div>`:''}
         </div>
         <div class="ev-section">
           <div class="ev-lbl">Supporting evidence</div>
           ${tx.evidence.map(ev=>`<div class="ev-row">
-            <button class="ev-trial-btn" onclick='openStudy("${ev.trial}")'>${ev.trial}</button>
-            ${gradeB(ev.grade)}
-            ${applyBadge(ev.trial)}
-            <span style="font-size:11px;color:var(--txm)">${ev.type}${ev.n?`, n=${ev.n.toLocaleString()}`:''} · ${ev.journal} ${ev.year}</span>
+            <button class="ev-trial-btn" onclick='openStudy("${ev.refKey}")'>${ev.trial}</button>
+            ${gradeB(ev.grade)} ${applyBadge(ev.refKey)}
+            <span style="font-size:11px;color:var(--txm)">${REFS[ev.refKey]?.n?`n=${REFS[ev.refKey].n.toLocaleString()} · `:''} ${REFS[ev.refKey]?.design||''}</span>
             <div class="ev-key">⚑ ${ev.key}</div>
+            <div style="width:100%;font-size:11px;color:var(--txm);margin-top:2px"><strong>Inclusion:</strong> ${ev.inclusion} | <strong>Exclusion:</strong> ${ev.exclusion}</div>
           </div>`).join('')}
         </div>
       </div>
     </div>`).join('')}
-
     ${renderDeltaBlock(c)}
   </div>`;
 }
-
 function renderDeltaBlock(c){
-  return `<div class="delta-block">
-    <div class="delta-hd">
-      <div class="delta-hd-title">Δ Delta View — Evidence vs Current Guideline</div>
-      <span class="delta-pill-new">IDSA/ATS 2019 vs 2024</span>
-    </div>
-    <div class="delta-intro">What the latest evidence says vs what the 2019 IDSA/ATS guidelines recommend — and whether it changes what you should order today.</div>
-    <div class="delta-row-hd">
-      <span>Topic</span><span>Guideline says</span><span>New evidence</span><span>Practical interpretation</span><span>Studies</span>
-    </div>
-    ${c.delta.map(d=>`<div class="delta-row">
-      <div class="delta-topic">${d.topic}</div>
-      <div class="delta-gl">${d.guideline}</div>
-      <div>${relPill(d.relationship)}<div style="font-size:11px;color:#4A4540;margin-top:3px;line-height:1.5">${d.evidence}</div></div>
-      <div><div style="font-size:12px;color:var(--tx);line-height:1.5;margin-bottom:3px">${d.practical}</div>${actionTag(d.action)}</div>
-      <div>${d.studies.map(s=>`<button class="delta-study-btn" onclick='openStudy("${s}")'>${s.length>20?s.slice(0,20)+'…':s}</button>`).join('<br>')}</div>
-    </div>`).join('')}
+  return`<div class="delta-block">
+    <div class="delta-hd"><div class="delta-hd-title">Δ Delta View — Evidence vs Current Guideline</div><span class="delta-new-pill">IDSA/ATS 2019 vs 2024</span></div>
+    <div class="delta-intro">What the latest evidence says vs what the 2019 IDSA/ATS guidelines recommend — and whether it changes your management today. Every row cites its source.</div>
+    <div class="delta-wrap"><table class="delta-tbl">
+      <thead><tr><th style="width:14%">Topic</th><th style="width:18%">Guideline says</th><th style="width:25%">New evidence</th><th style="width:27%">Practical interpretation</th><th style="width:16%">Studies</th></tr></thead>
+      <tbody>${c.delta.map(d=>`<tr>
+        <td><div class="delta-topic">${d.topic}</div>${cite(d.glRef)}</td>
+        <td><div class="delta-gl">${d.guideline}</div></td>
+        <td>${relPill(d.relationship)}<div style="font-size:11px;color:#4A4540;margin-top:3px;line-height:1.5">${d.evidence}</div></td>
+        <td><div style="font-size:12px;color:var(--tx);line-height:1.5;margin-bottom:3px">${d.practical}</div>${actionTag(d.action)}</td>
+        <td>${d.studies.map((s,i)=>`<button class="delta-study-btn" onclick='openStudy("${d.studyRefs[i]}")'>${s}</button>`).join('')}</td>
+      </tr>`).join('')}</tbody>
+    </table></div>
   </div>`;
 }
 
-// STEP 05 — SPECIAL CONSIDERATIONS
+// STEP 05 — SPECIAL
 function renderStep05(c){
-  return `<div class="step-section" id="step-05">
-    <div class="step-hd">
-      <span class="step-n">05</span>
-      <span class="step-title">Special Considerations</span>
-      <div class="sline"></div>
-    </div>
+  return`<div class="step-section" id="step-05">
+    <div class="step-hd"><span class="step-n">05</span><span class="step-title">Special Considerations</span><div class="sline"></div></div>
     ${c.special.map((sp,i)=>`<div class="acc-item ${S.accordions[i]?'open':''}" onclick="S.accordions[${i}]=!S.accordions[${i}];R()">
       <div class="acc-trigger">
-        <span>${sp.label}<span class="sp-grade">Grade ${sp.grade}</span></span>
+        <span>${sp.label} ${gradeB(sp.grade)} ${cite(sp.ref)}</span>
         <span class="acc-arrow">▶</span>
       </div>
       <div class="acc-body">${sp.content}</div>
@@ -961,13 +1249,12 @@ function renderStep05(c){
 
 // STEP 06 — FOLLOW UP
 function renderStep06(c){
-  return `<div class="step-section" id="step-06">
-    <div class="step-hd">
-      <span class="step-n">06</span>
-      <span class="step-title">Follow-up & Prevention</span>
-      <div class="sline"></div>
-    </div>
-    ${c.followup.map((f,i)=>`<div class="fu-item"><div class="fu-n">${i+1}</div><div style="line-height:1.5">${f}</div></div>`).join('')}
+  return`<div class="step-section" id="step-06">
+    <div class="step-hd"><span class="step-n">06</span><span class="step-title">Follow-up & Prevention</span><div class="sline"></div></div>
+    ${c.followup.map((f,i)=>`<div class="fu-item">
+      <div class="fu-n">${i+1}</div>
+      <div class="fu-content">${f.txt} ${cite(f.ref)} ${f.ref2?cite(f.ref2):''} ${gradeB(f.grade)}</div>
+    </div>`).join('')}
   </div>`;
 }
 
@@ -975,37 +1262,36 @@ function renderStep06(c){
 // MODALS
 // ─────────────────────────────────────────────────────────────
 function renderModal(){
-  if(!S.modal) return '';
-  if(S.modal==='patient') return renderPtModal();
-  if(S.modal.type==='study') return renderStudyModal(S.modal.key);
-  return '';
+  if(!S.modal)return'';
+  if(S.modal==='patient')return renderPtModal();
+  if(S.modal.type==='study')return renderStudyModal(S.modal.key);
+  return'';
 }
-
 function renderPtModal(){
   const p=S.patient||{};
-  return `<div class="modal-bg" onclick="if(event.target===this)closeModal()">
+  return`<div class="modal-bg" onclick="if(event.target===this)closeModal()">
     <div class="modal">
       <div class="modal-hd"><div class="modal-title">Patient Profile</div><button class="modal-x" onclick="closeModal()">×</button></div>
       <div class="modal-bd">
-        <p style="font-size:12px;color:var(--txm);margin-bottom:13px;line-height:1.5">Enter patient details to check study applicability and see personalized recommendations.</p>
+        <p style="font-size:12px;color:var(--txm);margin-bottom:13px;line-height:1.5">Enter patient details to check study applicability across all recommendations.</p>
         <div class="form-grid">
-          <div class="form-r"><label class="form-lbl">Age</label><input class="form-inp" type="number" id="pt-age" value="${p.age||''}" placeholder="years"></div>
+          <div class="form-r"><label class="form-lbl">Age (years)</label><input class="form-inp" type="number" id="pt-age" value="${p.age||''}" placeholder="years"></div>
           <div class="form-r"><label class="form-lbl">Sex</label><select class="form-sel" id="pt-sex"><option value="M" ${p.sex==='M'?'selected':''}>Male</option><option value="F" ${p.sex==='F'?'selected':''}>Female</option></select></div>
           <div class="form-r"><label class="form-lbl">CrCl (mL/min)</label><input class="form-inp" type="number" id="pt-crcl" value="${p.crcl||''}" placeholder="optional"></div>
-          <div class="form-r"><label class="form-lbl">Setting</label><select class="form-sel" id="pt-setting">
+          <div class="form-r"><label class="form-lbl">Clinical setting</label><select class="form-sel" id="pt-setting">
             <option ${(p.setting||'')==='Outpatient'?'selected':''}>Outpatient</option>
             <option ${(p.setting||'')==='Inpatient Non-Severe'?'selected':''}>Inpatient Non-Severe</option>
             <option ${(p.setting||'')==='ICU / Severe'?'selected':''}>ICU / Severe</option>
           </select></div>
         </div>
         <div class="form-r"><label class="form-lbl">O₂ requirement</label><select class="form-sel" id="pt-o2">
-          <option value="">Room air / low-flow NC</option>
+          <option value="">Room air / low-flow nasal cannula</option>
           <option value="high-flow" ${p.o2==='high-flow'?'selected':''}>High-flow O₂ (>6L/min)</option>
           <option value="HFNC or MV" ${p.o2==='HFNC or MV'?'selected':''}>HFNC or mechanical ventilation</option>
         </select></div>
         <div class="form-r"><label class="form-lbl">Key factors</label>
           <div class="cmb-grid">
-            ${[['immunocomp','Immunocompromised'],['pcn_allergy','PCN allergy'],['qtc','QTc >500ms'],['ckd','CKD'],['structural_lung','Structural lung dz'],['prior_mrsa','Prior MRSA'],['pregnant','Pregnant'],['sot','SOT recipient']].map(([k,l])=>`<label class="cmb-item"><input type="checkbox" id="pt-${k}" ${p[k]?'checked':''}> ${l}</label>`).join('')}
+            ${[['immunocomp','Immunocompromised'],['pcn_allergy','PCN allergy'],['qtc','QTc >500ms'],['ckd','CKD (CrCl <50)'],['structural_lung','Structural lung disease'],['prior_mrsa','Prior MRSA isolation'],['pregnant','Pregnant'],['sot','Solid organ transplant']].map(([k,l])=>`<label class="cmb-item"><input type="checkbox" id="pt-${k}" ${p[k]?'checked':''}> ${l}</label>`).join('')}
           </div>
         </div>
         <button class="save-btn" onclick="savePatient()">Save & Apply</button>
@@ -1014,38 +1300,34 @@ function renderPtModal(){
     </div>
   </div>`;
 }
-
 function renderStudyModal(key){
-  const sd=CAP_DATA.studies[key];
-  if(!sd) return '';
+  const r=REFS[key];if(!r)return'';
   const app=patientApply(key);
-  return `<div class="modal-bg" onclick="if(event.target===this)closeModal()">
+  const gc={'A':'pa-yes','B':'pa-unk','C':'pa-unk'};
+  return`<div class="modal-bg" onclick="if(event.target===this)closeModal()">
     <div class="modal">
-      <div class="modal-hd"><div class="modal-title">${sd.title}</div><button class="modal-x" onclick="closeModal()">×</button></div>
+      <div class="modal-hd"><div class="modal-title">${r.title}</div><button class="modal-x" onclick="closeModal()">×</button></div>
       <div class="modal-bd">
-        <div class="m-r"><div class="m-l">Authors</div><div class="m-v">${sd.authors||'—'}</div></div>
-        <div class="m-r"><div class="m-l">Journal / Year</div><div class="m-v">${sd.journal}, ${sd.year}</div></div>
-        <div class="m-r"><div class="m-l">Design</div><div class="m-v">${sd.design||'—'}</div></div>
-        ${sd.n?`<div class="m-r"><div class="m-l">Participants</div><div class="m-v" style="font-family:var(--mono);font-weight:700;color:var(--acc);font-size:15px">${sd.n.toLocaleString()} patients</div></div>`:''}
-        ${sd.setting?`<div class="m-r"><div class="m-l">Setting</div><div class="m-v">${sd.setting}</div></div>`:''}
+        <div class="m-r"><div class="m-l">Authors</div><div class="m-v">${r.authors}</div></div>
+        <div class="m-r"><div class="m-l">Journal / Year</div><div class="m-v">${r.journal}, ${r.year}</div></div>
+        <div class="m-r"><div class="m-l">Design</div><div class="m-v">${r.design}</div></div>
+        ${r.n?`<div class="m-r"><div class="m-l">Participants</div><div class="m-v" style="font-family:var(--mono);font-weight:700;color:var(--acc);font-size:15px">${r.n.toLocaleString()} patients</div></div>`:''}
+        ${r.setting?`<div class="m-r"><div class="m-l">Setting</div><div class="m-v">${r.setting}</div></div>`:''}
         <div class="m-div"></div>
-        <div class="m-r"><div class="m-l">Inclusion</div><div class="m-v">${sd.inclusion||'—'}</div></div>
-        <div class="m-r"><div class="m-l">Exclusion</div><div class="m-v">${sd.exclusion||'None specified'}</div></div>
-        ${sd.intervention?`<div class="m-div"></div>
-          <div class="m-r"><div class="m-l">Intervention</div><div class="m-v">${sd.intervention}</div></div>
-          <div class="m-r"><div class="m-l">Comparator</div><div class="m-v">${sd.comparator}</div></div>
-          <div class="m-r"><div class="m-l">Primary outcome</div><div class="m-v">${sd.primary||'—'}</div></div>
-          <div class="m-r"><div class="m-l">Result</div><div class="m-v" style="font-weight:600;color:var(--tx)">${sd.result||'See publication'}</div></div>
-          ${sd.harms?`<div class="m-r"><div class="m-l">Harms</div><div class="m-v">${sd.harms}</div></div>`:''}`:''}
+        <div class="m-r"><div class="m-l">Inclusion</div><div class="m-v">${r.inclusion||'—'}</div></div>
+        <div class="m-r"><div class="m-l">Exclusion</div><div class="m-v">${r.exclusion||'None specified'}</div></div>
+        ${r.primary?`<div class="m-div"></div>
+          <div class="m-r"><div class="m-l">Primary outcome</div><div class="m-v">${r.primary}</div></div>
+          <div class="m-r"><div class="m-l">Result</div><div class="m-v" style="font-weight:600;color:var(--tx)">${r.result||'See publication'}</div></div>
+          ${r.harms?`<div class="m-r"><div class="m-l">Harms reported</div><div class="m-v">${r.harms}</div></div>`:''}`:''}
         <div class="m-div"></div>
-        <div class="m-r"><div class="m-l">Guideline alignment</div><div class="m-v" style="color:var(--txm)">${sd.alignment||'—'}</div></div>
-        ${gradeB(sd.grade)}
-        <div class="m-key">⚑ Key takeaway: ${sd.key}</div>
+        ${gradeB(r.grade)}&nbsp;<span style="font-size:11px;color:var(--txm)">Evidence grade</span>
+        <div class="m-key">⚑ Key takeaway: ${r.key}</div>
         <div class="pt-apply ${app==='yes'?'pa-yes':app==='no'?'pa-no':'pa-unk'}">
-          ${!S.patient?'Enter a patient profile to check if this study applies to your patient.':
+          ${!S.patient?'+ Add patient profile to check if this study applies to your patient.':
             app==='yes'?'✓ Patient appears to meet inclusion criteria. This study is likely applicable.':
             app==='no'?'✗ Patient may meet an exclusion criterion. Review carefully before applying.':
-            '? Unable to fully assess — review inclusion/exclusion criteria manually.'}
+            '? Review inclusion/exclusion manually for this patient.'}
         </div>
       </div>
     </div>
@@ -1059,37 +1341,31 @@ function openDisease(id){S.view='disease';S.txTab='inpatient';S.wkTab='inpatient
 function openPtModal(){S.modal='patient';R();}
 function closeModal(){S.modal=null;R();}
 function openStudy(key){S.modal={type:'study',key};R();}
-function scrollToStep(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});}
-
 function updateScore(id){
-  const sc=CAP_DATA.scores[id];
-  let total=0;
+  const sc=CAP_DATA.scores[id];let total=0;
   sc.vars.forEach(v=>{const el=document.getElementById(`${id}-${v.id}`);if(el)total+=parseInt(el.value)||0;});
-  const el=document.getElementById(`${id}-total`);
-  if(el)el.textContent=total;
+  const el=document.getElementById(`${id}-total`);if(el)el.textContent=total;
   sc.interp.forEach((i,idx)=>{
-    const row=document.getElementById(`${id}-r-${idx}`);
-    if(!row)return;
+    const row=document.getElementById(`${id}-r-${idx}`);if(!row)return;
     const match=total>=i.range[0]&&total<=i.range[1];
     row.className=`score-row s-${i.color}${match?' active':''}`;
   });
 }
-
 function updateDx(dxId){
   const dx=CAP_DATA.diagnosticCriteria.find(d=>d.id===dxId);
   const cbs=document.querySelectorAll(`[data-dx="${dxId}"]`);
   const checked=[...cbs].filter(cb=>cb.checked).length;
-  const majorChecked=[...cbs].filter(cb=>cb.checked&&cb.id.endsWith('-mv')||cb.id.endsWith('-sepshk')).length;
+  const majorIds=['atssev-mv','atssev-sepshk'];
+  const majorChecked=[...cbs].filter(cb=>cb.checked&&majorIds.includes(cb.id)).length;
   const minorChecked=checked-majorChecked;
-  let status='',msg='';
-  if(majorChecked>=1){status='met';msg='✓ Meets SEVERE CAP criteria (major criterion) — ICU admission indicated';}
-  else if(minorChecked>=3){status='met';msg=`✓ Meets SEVERE CAP criteria (${minorChecked} minor criteria ≥3 threshold) — ICU admission indicated`;}
-  else if(checked>0){status='partial';msg=`${minorChecked}/3 minor criteria — ${3-minorChecked} more needed for ICU threshold (or 1 major)`;}
-  else{status='notmet';msg='No criteria checked — check applicable findings above';}
+  let status,msg;
+  if(majorChecked>=1){status='met';msg='✓ SEVERE CAP — major criterion present: ICU admission indicated';}
+  else if(minorChecked>=3){status='met';msg=`✓ SEVERE CAP — ${minorChecked} minor criteria met (threshold ≥3): ICU admission indicated`;}
+  else if(checked>0){status='partial';msg=`${minorChecked}/3 minor criteria checked — ${3-minorChecked} more needed for ICU threshold (or 1 major)`;}
+  else{status='notmet';msg='No criteria checked — check applicable findings above'}
   const el=document.getElementById(`dx-result-${dxId}`);
   if(el){el.className=`dx-result show ${status}`;el.textContent=msg;}
 }
-
 function savePatient(){
   const age=parseInt(document.getElementById('pt-age').value)||null;
   const sex=document.getElementById('pt-sex').value;
@@ -1106,7 +1382,6 @@ function savePatient(){
 }
 
 R();
-loadEvidence();
 </script>
 </body>
 </html>

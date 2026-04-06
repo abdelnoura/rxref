@@ -3,18 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RxRef — Clinical Reference Tool</title>
+<title>EBMRef — Evidence-Based Medicine Reference</title>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Syne:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#F4F2ED;--sur:#FFFFFF;--sur2:#EDEAE3;--bdr:#E0DBD2;--bdr2:#CECAC0;
-  --tx:#18140F;--txm:#6A6258;--txs:#9C9488;
-  --acc:#1B3A5C;--acc-l:#EAF0F7;--acc-m:#5A8DB5;
-  --grn:#0A4828;--grn-l:#EAF7F0;--grn-b:#27976A;
-  --red:#5A0A0A;--red-l:#FFF0F0;--red-b:#D63C3C;
-  --amb:#5A3800;--amb-l:#FFF7EB;--amb-b:#D48609;
-  --delta:#7B3900;--delta-l:#FFF3EA;--delta-b:#E87F56;
+  --bg:#F6F4EF;--sur:#FFFFFF;--sur2:#EFECE5;--bdr:#E4DFD5;--bdr2:#D4CFC5;
+  --tx:#1A1510;--txm:#6A6258;--txs:#9C9488;
+  --acc:#2B4F7A;--acc-l:#EEF4FB;--acc-m:#6A9DC5;
+  --grn:#1A5C3A;--grn-l:#EEF9F3;--grn-b:#4AAF7A;
+  --red:#7A1A1A;--red-l:#FFF3F3;--red-b:#E06060;
+  --amb:#7A4A00;--amb-l:#FFF9EE;--amb-b:#E8A030;
+  --delta:#8A4500;--delta-l:#FFF6EE;--delta-b:#F09050;
   --fn:'Syne',sans-serif;--serif:'Instrument Serif',serif;--mono:'IBM Plex Mono',monospace;
 }
 html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--fn);font-size:14px;line-height:1.5}
@@ -31,12 +31,22 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--fn)
 .tbtn:hover{border-color:var(--acc);color:var(--acc)}
 .tbtn.pri{background:var(--acc);color:#fff;border-color:var(--acc)}
 .tbtn.has{background:var(--grn-l);border-color:var(--grn-b);color:var(--grn)}
-.main-row{display:flex;flex:1;overflow:hidden}
+.main-row{display:flex;flex:1;overflow:hidden;position:relative}
+.lnav-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:49}
+.lnav-overlay.show{display:block}
 
 /* ─── LEFT NAV ─── */
-.lnav{width:210px;background:var(--sur);border-right:1px solid var(--bdr);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.lnav{width:210px;background:var(--sur);border-right:1px solid var(--bdr);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto;transition:width .2s ease;z-index:50}
+.lnav.closed{width:0;min-width:0;border-right:none;overflow:hidden}
+@media(max-width:680px){
+  .lnav{position:fixed;top:50px;left:0;bottom:0;width:210px;transform:translateX(-220px);transition:transform .2s ease;border-right:1px solid var(--bdr)}
+  .lnav.open{transform:translateX(0)}
+  .lnav.closed{width:210px;transform:translateX(-220px)}
+}
 .lnav::-webkit-scrollbar{width:3px}
 .lnav::-webkit-scrollbar-thumb{background:var(--bdr)}
+.sidebar-toggle{width:26px;height:26px;border:1px solid var(--bdr);border-radius:5px;background:var(--sur);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--txm);font-size:13px;line-height:1}
+.sidebar-toggle:hover{border-color:var(--acc);color:var(--acc)}
 .lnav-hd{padding:12px 14px 8px;border-bottom:1px solid var(--bdr)}
 .lnav-lbl{font-size:10px;font-weight:700;color:var(--txs);text-transform:uppercase;letter-spacing:.9px;margin-bottom:8px}
 .nav-step{display:flex;align-items:center;gap:9px;padding:7px 8px;border-radius:6px;cursor:pointer;margin-bottom:2px}
@@ -57,7 +67,7 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--fn)
 .pt-edit{font-size:11px;color:var(--acc);cursor:pointer;display:inline-block;margin-top:6px}
 
 /* ─── CONTENT ─── */
-.content{flex:1;overflow-y:auto;padding:0}
+.content{flex:1;overflow-y:auto;padding:0;background:var(--sur)}
 .content::-webkit-scrollbar{width:4px}
 .content::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:2px}
 
@@ -74,7 +84,7 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--fn)
 .d-coding-note{padding:5px 0 10px;font-size:10px;color:var(--txs);border-top:1px dashed var(--bdr);margin-top:4px}
 
 /* ─── STEP SECTIONS ─── */
-.step-section{padding:22px 28px;border-bottom:1px solid var(--bdr)}
+.step-section{padding:22px 28px;border-bottom:1px solid var(--bdr);background:var(--sur)}
 .step-section:last-child{border-bottom:none}
 .step-hd{display:flex;align-items:center;gap:12px;margin-bottom:16px}
 .step-n{font-size:11px;font-weight:700;font-family:var(--mono);color:var(--txs);background:var(--sur2);border:1px solid var(--bdr);padding:3px 7px;border-radius:4px;letter-spacing:.5px;flex-shrink:0}
@@ -94,9 +104,10 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--fn)
 .sym-tbl{width:100%;border-collapse:collapse;background:var(--sur);border-radius:8px;overflow:hidden;border:1px solid var(--bdr)}
 .sym-tbl thead tr{background:var(--sur2)}
 .sym-tbl th{padding:7px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--txm);text-align:left;border-bottom:1px solid var(--bdr)}
-.sym-tbl td{padding:8px 10px;border-bottom:1px solid var(--sur2);vertical-align:middle;font-size:12px}
+.sym-tbl td{padding:5px 8px;border-bottom:1px solid var(--sur2);vertical-align:middle;font-size:12px}
 .sym-tbl tr:last-child td{border-bottom:none}
-.sym-tbl tr:hover td{background:var(--sur2)}
+.sym-tbl tr.sym-row:hover td{background:var(--sur2)}
+.sym-tbl tr.sym-note-row td{border-bottom:1px solid var(--sur2)}
 .sym-name-cell{font-weight:600;color:var(--tx)}
 .sym-cat-pill{font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:var(--sur2);border:1px solid var(--bdr);color:var(--txm);display:inline-block;margin-top:2px;text-transform:uppercase;letter-spacing:.4px}
 .stat-pill{display:inline-block;font-size:11px;font-weight:700;font-family:var(--mono);padding:2px 6px;border-radius:4px;border:1px solid;min-width:38px;text-align:center}
@@ -195,7 +206,7 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--fn)
 .tx-col{background:var(--sur2);border-radius:6px;padding:9px 11px;border:1px solid var(--bdr)}
 .tx-col-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px}
 .tx-col-title.red{color:var(--red)}.tx-col-title.amb{color:var(--amb)}.tx-col-title.blue{color:var(--acc)}.tx-col-title.grn{color:var(--grn)}
-.tx-li{font-size:11px;color:#5A5450;padding:3px 0;border-bottom:1px solid var(--bdr);line-height:1.5;display:flex;align-items:flex-start;gap:5px;flex-wrap:wrap}
+.tx-li{font-size:11px;color:var(--txm);padding:3px 0;border-bottom:1px solid var(--bdr);line-height:1.5;display:flex;align-items:flex-start;gap:5px;flex-wrap:wrap}
 .tx-li:last-child{border-bottom:none}
 .tx-li-txt{flex:1}
 .ev-section{border-top:1px solid var(--bdr);padding-top:10px;margin-top:8px}
@@ -244,13 +255,13 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--fn)
 .acc-trigger:hover{background:var(--sur2)}
 .acc-arrow{font-size:10px;color:var(--txm);transition:transform .2s}
 .acc-item.open .acc-arrow{transform:rotate(90deg)}
-.acc-body{display:none;padding:12px 14px;border-top:1px solid var(--bdr);font-size:12px;line-height:1.7;color:#4A4540}
+.acc-body{display:none;padding:12px 14px;border-top:1px solid var(--bdr);font-size:12px;line-height:1.7;color:var(--txm)}
 .acc-item.open .acc-body{display:block}
 
 /* ─── FOLLOW UP ─── */
-.fu-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--sur2);font-size:12px;color:#4A4540}
+.fu-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--sur2);font-size:12px;color:var(--tx)}
 .fu-item:last-child{border-bottom:none}
-.fu-n{width:22px;height:22px;border-radius:50%;background:var(--acc);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px}
+.fu-n{width:22px;height:22px;border-radius:50%;background:var(--acc-l);border:1.5px solid var(--acc-m);color:var(--acc);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px}
 .fu-content{flex:1;line-height:1.5}
 
 /* ─── MODAL ─── */
@@ -307,6 +318,85 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--fn)
 .d-sum{font-size:12px;color:var(--txm);line-height:1.5;margin-bottom:9px}
 .d-foot{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--txs)}
 .home-sec{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--txs);margin-bottom:11px}
+
+/* ─── MOBILE ─── */
+@media(max-width:680px){
+  /* Shell + topbar */
+  html,body{font-size:13px}
+  .shell{height:100dvh}
+  .topbar{padding:0 12px;gap:8px}
+  .bc{display:none}
+  .tbtn{padding:4px 8px;font-size:11px}
+
+  /* Content padding */
+  .content{-webkit-overflow-scrolling:touch}
+  .d-hdr{padding:14px 14px 0}
+  .d-title{font-size:21px}
+  .d-meta{gap:5px;font-size:10px}
+  .d-coding-note{font-size:9px}
+  .step-section{padding:16px 14px}
+  .step-sub{display:none}
+  .sline{display:none}
+
+  /* Symptoms — stack as cards instead of wide table */
+  .sym-tbl{display:none}
+  .sym-mobile{display:flex;flex-direction:column;gap:8px}
+  .sym-mob-row{background:var(--sur);border:1px solid var(--bdr);border-radius:7px;padding:10px 12px}
+  .sym-mob-name{font-size:13px;font-weight:600;color:var(--tx);margin-bottom:2px}
+  .sym-mob-cat{font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:var(--txs);margin-bottom:6px}
+  .sym-mob-stats{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;margin-bottom:7px}
+  .sym-mob-stat{background:var(--sur2);border-radius:4px;padding:4px 6px;text-align:center}
+  .sym-mob-stat-lbl{font-size:8px;text-transform:uppercase;letter-spacing:.4px;color:var(--txs);display:block;margin-bottom:1px}
+  .sym-mob-note{font-size:11px;color:var(--txm);line-height:1.4;border-top:1px solid var(--sur2);padding-top:6px}
+
+  /* Risk layout */
+  .risk-layout{grid-template-columns:1fr}
+  .score-body{grid-template-columns:1fr}
+
+  /* Workup */
+  .wk-tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+  .wk-tab{white-space:nowrap;flex-shrink:0}
+
+  /* Treatment */
+  .tx-tabs{gap:3px}
+  .tx-tab{padding:5px 10px;font-size:11px}
+  .tx-cols{grid-template-columns:1fr}
+  .pk-strip{font-size:10px;gap:8px}
+  .cited-lbl{display:none}
+
+  /* Delta view */
+  .delta-block{margin-top:14px}
+  .delta-tbl{min-width:580px}
+
+  /* Special / accordion */
+  .acc-trigger{font-size:12px;padding:9px 12px}
+  .acc-body{padding:10px 12px;font-size:11px}
+
+  /* Modal — full screen sheet */
+  .modal-bg{align-items:flex-end;padding:0}
+  .modal{width:100%;max-height:88dvh;border-radius:14px 14px 0 0;border-bottom:none}
+  .modal-hd{padding:12px 16px}
+  .modal-bd{padding:12px 16px}
+  .form-grid{grid-template-columns:1fr}
+  .cmb-grid{grid-template-columns:1fr}
+  .m-l{min-width:80px;font-size:9px}
+
+  /* Home page */
+  .home-body{padding:24px 14px}
+  .home-hl{font-size:26px}
+  .home-sub{font-size:13px}
+  .d-grid{grid-template-columns:1fr;gap:8px}
+  .srch-wrap{margin-bottom:20px}
+  .ex-chips{margin-top:-14px;margin-bottom:20px}
+
+  /* Evidence feed cards */
+  .ev-row{flex-direction:column;gap:5px}
+  .tx-hd{padding:10px 12px}
+  .tx-bd{padding:12px}
+}
+@media(min-width:681px){
+  .sym-mobile{display:none}
+}
 </style>
 </head>
 <body>
@@ -540,8 +630,469 @@ const REFS = {
     result:'Nares MRSA PCR NPV 97.4% (95% CI 95.0–98.8%). Negative result safely supports withholding anti-MRSA therapy.',
     grade:'B',
     key:'MRSA nares PCR negative result has NPV >95–97%. A negative nares PCR can safely guide withholding of vancomycin in pneumonia without prior MRSA history.'
+  },
+
+  // ─── SEPSIS / CRITICAL CARE ───────────────────────────────────
+  'ARISE2014':{
+    short:'ARISE, NEJM 2014',
+    title:'Goal-Directed Resuscitation for Patients with Early Septic Shock (ARISE)',
+    authors:'ARISE Investigators; ANZICS Clinical Trials Group',
+    journal:'New England Journal of Medicine',year:'2014',n:1600,
+    design:'Multicenter randomized controlled trial',
+    setting:'51 emergency departments, Australia and New Zealand',
+    inclusion:'Adults with early septic shock presenting to ED, within 6h of diagnosis',
+    exclusion:'Contraindication to central line, treating physician deemed EGDT inappropriate',
+    primary:'90-day all-cause mortality',
+    result:'EGDT 18.6% vs usual care 18.8% mortality. No significant difference (p=0.90). Similar ICU admission rates and organ support.',
+    harms:'EGDT patients received more IV fluids, blood transfusions, and dobutamine without benefit.',
+    grade:'A',
+    key:'Early goal-directed therapy (EGDT) is NOT superior to usual resuscitation in septic shock. Current SSC guidelines no longer mandate EGDT protocol. Fluid resuscitation guided by dynamic measures preferred.'
+  },
+  'ProCESS2014':{
+    short:'ProCESS, NEJM 2014',
+    title:'A Randomized Trial of Protocol-Based Care for Early Septic Shock (ProCESS)',
+    authors:'ProCESS Investigators',
+    journal:'New England Journal of Medicine',year:'2014',n:1351,
+    design:'Multicenter randomized controlled trial',
+    setting:'31 US academic EDs',
+    inclusion:'Adults with septic shock, refractory to initial fluid bolus, within 3h of diagnosis',
+    exclusion:'Contraindication to protocol, comfort care only',
+    primary:'60-day in-hospital mortality',
+    result:'Protocol-based EGDT 21.0% vs protocol-based standard therapy 18.2% vs usual care 18.9%. No significant difference.',
+    grade:'A',
+    key:'Protocol-based EGDT offers no mortality benefit over usual sepsis care. Confirms ARISE findings. Usual care by experienced physicians is equivalent to rigid EGDT protocols.'
+  },
+  'SMART2018':{
+    short:'SMART, NEJM 2018',
+    title:'Balanced Crystalloids versus Saline in Critically Ill Adults (SMART)',
+    authors:'Semler MW, Self WH, Wanderer JP et al.',
+    journal:'New England Journal of Medicine',year:'2018',n:15802,
+    design:'Pragmatic cluster-randomized crossover trial',
+    setting:'Medical/surgical ICUs, Vanderbilt University Medical Center',
+    inclusion:'Adults admitted to ICU requiring IV crystalloid',
+    exclusion:'Patients receiving both fluids simultaneously',
+    primary:'MAKE30 (major adverse kidney events at 30 days: death, new RRT, persistent creatinine elevation)',
+    result:'Balanced crystalloids (LR or PlasmaLyte): MAKE30 14.3% vs saline 15.4%. OR 0.90 (95% CI 0.82–0.99, p=0.04).',
+    harms:'No significant difference in serious adverse events.',
+    grade:'A',
+    key:'Balanced crystalloids (lactated Ringer\'s or PlasmaLyte) reduce MAKE30 compared to normal saline in critically ill adults. Prefer balanced crystalloids over NS for most ICU resuscitation.'
+  },
+  'SALT_ED2018':{
+    short:'SALT-ED, NEJM 2018',
+    title:'Balanced Crystalloids versus Saline in Non-Critically Ill Adults (SALT-ED)',
+    authors:'Self WH, Semler MW, Wanderer JP et al.',
+    journal:'New England Journal of Medicine',year:'2018',n:13347,
+    design:'Pragmatic cluster-randomized crossover trial',
+    setting:'Emergency department, Vanderbilt University Medical Center',
+    inclusion:'Adults in ED receiving IV crystalloid, not admitted to ICU',
+    exclusion:'ICU-bound patients (see SMART)',
+    primary:'MAKE30',
+    result:'Balanced crystalloids MAKE30 4.7% vs saline 5.6%. OR 0.82 (95% CI 0.70–0.95, p=0.01).',
+    grade:'A',
+    key:'Balanced crystalloids reduce MAKE30 vs saline even in non-critically ill ED patients. Use LR over NS for most IV fluid administration.'
+  },
+  'CLOVERS2023':{
+    short:'CLOVERS, NEJM 2023',
+    title:'Restrictive or Liberal Fluid Therapy for Early Septic Shock (CLOVERS)',
+    authors:'National Heart, Lung, and Blood Institute Prevention and Early Treatment of Acute Lung Injury Network',
+    journal:'New England Journal of Medicine',year:'2023',n:1563,
+    design:'Multicenter randomized controlled trial',
+    setting:'60 US hospitals',
+    inclusion:'Adults with septic shock within 4h of diagnosis, receiving vasopressors',
+    exclusion:'Active bleeding, volume overload, AKI requiring RRT',
+    primary:'90-day mortality',
+    result:'Restrictive strategy 14.0% vs liberal strategy 14.9% mortality. No significant difference (p=0.61).',
+    grade:'A',
+    key:'Restrictive fluid strategy is NOT superior to liberal strategy in early septic shock. Either approach is acceptable. Individualize based on clinical assessment rather than rigid protocol.'
+  },
+  'ANDROMEDA_SHOCK2019':{
+    short:'ANDROMEDA-SHOCK, JAMA 2019',
+    title:'Capillary Refill Time vs Lactate-Targeted Resuscitation in Septic Shock (ANDROMEDA-SHOCK)',
+    authors:'Hernández G, Ospina-Tascón GA, Damiani LP et al.',
+    journal:'JAMA',year:'2019',n:424,
+    design:'Multicenter randomized controlled trial',
+    setting:'28 ICUs in 5 countries',
+    inclusion:'Adults with early septic shock within 4h',
+    exclusion:'Moribund, comfort care',
+    primary:'All-cause 28-day mortality',
+    result:'Capillary refill time (CRT) target 28-day mortality 34.9% vs lactate-target 43.4%. OR 0.75 (95% CI 0.55–1.02, p=0.06). Trend favoring CRT.',
+    grade:'B',
+    key:'CRT-targeted resuscitation shows a non-significant trend toward lower mortality vs lactate-targeted strategy. CRT is a simple, free, bedside tool worth incorporating into sepsis assessment alongside lactate.'
+  },
+
+  // ─── ARDS / RESPIRATORY FAILURE ───────────────────────────────
+  'ARDSNET2000':{
+    short:'ARDSNet, NEJM 2000',
+    title:'Ventilation with Lower Tidal Volumes as Compared with Traditional Tidal Volumes for ALI and ARDS (ARDSNet)',
+    authors:'The Acute Respiratory Distress Syndrome Network',
+    journal:'New England Journal of Medicine',year:'2000',n:861,
+    design:'Multicenter randomized controlled trial',
+    setting:'10 university centers, USA',
+    inclusion:'Adults with ALI/ARDS on mechanical ventilation within 36h of diagnosis',
+    exclusion:'Age <18, burns, neuromuscular disease, severe COPD, CVP not measurable',
+    primary:'In-hospital mortality before discharge home',
+    result:'Low tidal volume (6 mL/kg PBW) mortality 31.0% vs conventional (12 mL/kg) 39.8%. ARR 8.8%, p=0.007.',
+    harms:'Respiratory acidosis more common in low-tidal volume group, managed with RR increase.',
+    grade:'A',
+    key:'PRACTICE DEFINING: 6 mL/kg PBW tidal volume reduces ARDS mortality by ~9%. All ARDS patients on MV should target 4–6 mL/kg PBW with plateau pressure <30 cmH₂O. This is the most important ventilator trial ever conducted.'
+  },
+  'ACURASYS2013':{
+    short:'ACURASYS, NEJM 2010',
+    title:'Early Neuromuscular Blockade in Severe ARDS (ACURASYS)',
+    authors:'Papazian L, Forel JM, Gacouin A et al.',
+    journal:'New England Journal of Medicine',year:'2010',n:340,
+    design:'Multicenter double-blind placebo-controlled RCT',
+    setting:'20 ICUs, France',
+    inclusion:'Adults with severe ARDS (P/F <150) within 48h, on MV',
+    exclusion:'Contraindication to cisatracurium, pre-existing neuromuscular disease',
+    primary:'90-day mortality adjusted for predefined covariates',
+    result:'Cisatracurium 35.1% vs placebo 44.4% 90-day mortality. Adjusted HR 0.68 (95% CI 0.48–0.98). Benefit in P/F <120 subgroup.',
+    grade:'B',
+    key:'Early cisatracurium (48h) may reduce mortality in severe ARDS (P/F <150). Largely superseded by ROSE trial. Consider in severe dyssynchrony or refractory hypoxemia, not routinely.'
+  },
+  'ROSE2019':{
+    short:'ROSE, NEJM 2019',
+    title:'Early Neuromuscular Blockade in the Acute Respiratory Distress Syndrome (ROSE)',
+    authors:'National Heart, Lung, and Blood Institute PETAL Clinical Trials Network',
+    journal:'New England Journal of Medicine',year:'2019',n:1006,
+    design:'Multicenter randomized controlled trial',
+    setting:'48 US hospitals',
+    inclusion:'Adults with moderate-severe ARDS (P/F ≤150) on MV',
+    exclusion:'Contraindication to NMB, comfort care',
+    primary:'90-day in-hospital mortality',
+    result:'Early NMB 42.5% vs control 42.8% mortality. No significant difference. Trial stopped early for futility.',
+    grade:'A',
+    key:'Routine early neuromuscular blockade does NOT improve survival in ARDS. Do not use NMB routinely — reserve for severe dyssynchrony, refractory hypoxemia, or prone positioning facilitation.'
+  },
+  'PROSEVA2013':{
+    short:'PROSEVA, NEJM 2013',
+    title:'Prone Positioning in Severe ARDS (PROSEVA)',
+    authors:'Guérin C, Reignier J, Richard JC et al.',
+    journal:'New England Journal of Medicine',year:'2013',n:466,
+    design:'Multicenter randomized controlled trial',
+    setting:'26 ICUs, France and Spain',
+    inclusion:'Adults with severe ARDS (P/F <150, PEEP ≥5, FiO₂ ≥0.6) on MV >12h',
+    exclusion:'Proning contraindication (spinal instability, facial trauma, elevated ICP, open chest)',
+    primary:'28-day mortality',
+    result:'Prone 16h/day 28-day mortality 16.0% vs supine 32.8%. HR 0.39 (95% CI 0.25–0.63), p<0.001.',
+    harms:'More pressure ulcers and ETT displacement in prone group.',
+    grade:'A',
+    key:'PRACTICE DEFINING: Prone positioning ≥16h/day dramatically reduces mortality in severe ARDS (P/F <150). NNT ≈6. All eligible severe ARDS patients should be proned. This is one of the most impactful ARDS trials.'
+  },
+
+  // ─── ACUTE CORONARY SYNDROMES ─────────────────────────────────
+  'PLATO2009':{
+    short:'PLATO, NEJM 2009',
+    title:'Ticagrelor versus Clopidogrel in Patients with Acute Coronary Syndromes (PLATO)',
+    authors:'Wallentin L, Becker RC, Budaj A et al.',
+    journal:'New England Journal of Medicine',year:'2009',n:18624,
+    design:'Multicenter double-blind randomized controlled trial',
+    setting:'862 centers, 43 countries',
+    inclusion:'Adults with ACS (STEMI or NSTEMI) within 24h of symptom onset',
+    exclusion:'Prior intracranial hemorrhage, active bleeding, oral anticoagulant use',
+    primary:'CV death, MI, or stroke at 12 months',
+    result:'Ticagrelor 9.8% vs clopidogrel 11.7% primary endpoint. HR 0.84 (95% CI 0.77–0.92), p<0.001. CV death reduced (4.0% vs 5.1%).',
+    harms:'More dyspnea with ticagrelor (13.8% vs 7.8%). Intracranial bleeding similar.',
+    grade:'A',
+    key:'Ticagrelor superior to clopidogrel in ACS for reducing CV death, MI, and stroke. Preferred P2Y12 inhibitor for ACS (with aspirin) unless high bleeding risk. Note: US trial showed less benefit — use with aspirin ≤100mg.'
+  },
+  'TRITON_TIMI382007':{
+    short:'TRITON-TIMI 38, NEJM 2007',
+    title:'Prasugrel versus Clopidogrel in Patients with Acute Coronary Syndromes (TRITON-TIMI 38)',
+    authors:'Wiviott SD, Braunwald E, McCabe CH et al.',
+    journal:'New England Journal of Medicine',year:'2007',n:13608,
+    design:'Multicenter double-blind randomized controlled trial',
+    setting:'707 centers, 30 countries',
+    inclusion:'ACS patients undergoing PCI',
+    exclusion:'Prior TIA/stroke, active bleeding, high bleeding risk',
+    primary:'CV death, nonfatal MI, or nonfatal stroke at 15 months',
+    result:'Prasugrel 9.9% vs clopidogrel 12.1%. HR 0.81 (95% CI 0.73–0.90), p<0.001. More bleeding with prasugrel.',
+    harms:'TIMI major bleeding 2.4% prasugrel vs 1.8% clopidogrel. Fatal bleeding increased.',
+    grade:'A',
+    key:'Prasugrel reduces ischemic events vs clopidogrel in PCI-ACS but increases major bleeding. CONTRAINDICATED in prior TIA/stroke. Use cautiously in age ≥75 or weight <60kg — net harm in these groups.'
+  },
+  'DAPT2014':{
+    short:'DAPT Study, NEJM 2014',
+    title:'Twelve or 30 Months of Dual Antiplatelet Therapy after Drug-Eluting Stents (DAPT Study)',
+    authors:'Mauri L, Kereiakes DJ, Yeh RW et al.',
+    journal:'New England Journal of Medicine',year:'2014',n:9961,
+    design:'Multicenter randomized controlled trial',
+    setting:'452 sites, USA',
+    inclusion:'Adults with DES placement without MACE or major bleeding at 12 months',
+    exclusion:'MACE/major bleeding in first year, planned surgery',
+    primary:'Stent thrombosis and MACCE at 30 months',
+    result:'30 months DAPT reduced stent thrombosis (0.4% vs 1.4%) and MACCE (4.3% vs 5.9%) but increased moderate/severe bleeding (2.5% vs 1.6%). All-cause mortality higher in prolonged DAPT group.',
+    grade:'B',
+    key:'Extended DAPT (30 months) reduces stent thrombosis and MI but increases bleeding and all-cause mortality. Optimal DAPT duration should be individualized using DAPT Score — most patients benefit from 12 months, not longer.'
+  },
+
+  // ─── HEART FAILURE ────────────────────────────────────────────
+  'PARADIGM_HF2014':{
+    short:'PARADIGM-HF, NEJM 2014',
+    title:'Angiotensin–Neprilysin Inhibition versus Enalapril in Heart Failure (PARADIGM-HF)',
+    authors:'McMurray JJ, Packer M, Desai AS et al.',
+    journal:'New England Journal of Medicine',year:'2014',n:8442,
+    design:'Multicenter double-blind randomized controlled trial',
+    setting:'1043 centers, 47 countries',
+    inclusion:'Adults with HFrEF (EF ≤40%), NYHA II-IV, on stable ACEI/ARB, BNP/NT-proBNP elevated',
+    exclusion:'SBP <100, eGFR <30, history of angioedema, severe liver disease',
+    primary:'CV death or HF hospitalization',
+    result:'Sacubitril/valsartan 21.8% vs enalapril 26.5% primary endpoint. HR 0.80 (95% CI 0.73–0.87), p<0.001. CV death reduced 20%.',
+    harms:'Hypotension more common with sacubitril/valsartan. Angioedema rare but possible.',
+    grade:'A',
+    key:'Sacubitril/valsartan (Entresto) superior to enalapril in HFrEF — reduces CV death and HF hospitalization. First-line GDMT for HFrEF replacing ACEi/ARB where tolerated. Washout period required when switching from ACEi (36h minimum).'
+  },
+  'DAPA_HF2019':{
+    short:'DAPA-HF, NEJM 2019',
+    title:'Dapagliflozin in Patients with Heart Failure and Reduced Ejection Fraction (DAPA-HF)',
+    authors:'McMurray JJV, Solomon SD, Inzucchi SE et al.',
+    journal:'New England Journal of Medicine',year:'2019',n:4744,
+    design:'Multicenter double-blind randomized controlled trial',
+    setting:'410 sites, 20 countries',
+    inclusion:'Adults with HFrEF (EF ≤40%), NYHA II-IV, NT-proBNP elevated, on optimized GDMT',
+    exclusion:'eGFR <25, type 1 diabetes, SBP <95',
+    primary:'Worsening HF or CV death',
+    result:'Dapagliflozin 16.3% vs placebo 21.2%. HR 0.74 (95% CI 0.65–0.85), p<0.001. Benefit regardless of diabetes status.',
+    harms:'Genital mycotic infections slightly more common.',
+    grade:'A',
+    key:'SGLT2 inhibitors (dapagliflozin) reduce HF hospitalization and CV death in HFrEF regardless of diabetes status. Now first-line GDMT for all HFrEF. This is the "fourth pillar" alongside ACEI/ARB/ARNi, beta-blocker, and MRA.'
+  },
+  'EMPEROR_Reduced2020':{
+    short:'EMPEROR-Reduced, NEJM 2020',
+    title:'Empagliflozin in Heart Failure with a Reduced Ejection Fraction (EMPEROR-Reduced)',
+    authors:'Packer M, Anker SD, Butler J et al.',
+    journal:'New England Journal of Medicine',year:'2020',n:3730,
+    design:'Multicenter double-blind randomized controlled trial',
+    setting:'520 sites, 20 countries',
+    inclusion:'Adults with HFrEF (EF ≤40%), NYHA II-IV, on GDMT',
+    exclusion:'eGFR <20, type 1 diabetes',
+    primary:'CV death or HF hospitalization',
+    result:'Empagliflozin 19.4% vs placebo 24.7%. HR 0.75 (95% CI 0.65–0.86), p<0.001. eGFR decline slowed.',
+    grade:'A',
+    key:'Empagliflozin reduces CV death and HF hospitalization in HFrEF, with additional renal protection. Confirms DAPA-HF. SGLT2i are now mandatory GDMT for HFrEF. Start early — benefit seen within weeks.'
+  },
+  'CARVEDILOL_US1996':{
+    short:'US Carvedilol, NEJM 1996',
+    title:'The Effect of Carvedilol on Morbidity and Mortality in Patients with Chronic Heart Failure (US Carvedilol)',
+    authors:'Packer M, Bristow MR, Cohn JN et al.',
+    journal:'New England Journal of Medicine',year:'1996',n:1094,
+    design:'Multicenter double-blind randomized controlled trial, stopped early for benefit',
+    setting:'64 US centers',
+    inclusion:'Adults with chronic HF, EF ≤35%, NYHA II-III, on ACEI + diuretics',
+    exclusion:'Contraindication to beta-blockers, decompensated HF',
+    primary:'All-cause mortality',
+    result:'Carvedilol mortality 7.8% vs placebo 3.2%. RRR 65% (95% CI 39–80), p<0.001. Trial stopped early.',
+    grade:'A',
+    key:'Carvedilol reduces all-cause mortality in chronic HFrEF by 65%. Beta-blockers (carvedilol, metoprolol succinate, bisoprolol) are mandatory GDMT. Never start in decompensated HF — only when euvolemic.'
+  },
+
+  // ─── PULMONARY EMBOLISM ───────────────────────────────────────
+  'PEITHO2014':{
+    short:'PEITHO, NEJM 2014',
+    title:'Fibrinolysis for Patients with Intermediate-Risk Pulmonary Embolism (PEITHO)',
+    authors:'Meyer G, Vicaut E, Danays T et al.',
+    journal:'New England Journal of Medicine',year:'2014',n:1006,
+    design:'Multicenter double-blind randomized controlled trial',
+    setting:'76 centers, 13 European countries',
+    inclusion:'Adults with intermediate-risk PE (RV dysfunction on echo/CT + elevated troponin), hemodynamically stable',
+    exclusion:'High-risk PE (hemodynamic instability), contraindication to thrombolysis',
+    primary:'All-cause death or hemodynamic collapse at 7 days',
+    result:'Tenecteplase 2.6% vs placebo 5.6% primary endpoint. OR 0.44 (p=0.002). But extracranial bleeding 6.3% vs 1.5% and stroke 2.0% vs 0.2%.',
+    harms:'Major bleeding significantly increased with tenecteplase including intracranial hemorrhage.',
+    grade:'A',
+    key:'Systemic thrombolysis prevents hemodynamic collapse in intermediate-risk PE but causes major bleeding including intracranial hemorrhage. Do NOT use routinely in hemodynamically stable PE. Reserve for high-risk (hemodynamic instability) only.'
+  },
+  'EINSTEIN_PE2012':{
+    short:'EINSTEIN-PE, NEJM 2012',
+    title:'Oral Rivaroxaban for the Treatment of Symptomatic Pulmonary Embolism (EINSTEIN-PE)',
+    authors:'The EINSTEIN–PE Investigators',
+    journal:'New England Journal of Medicine',year:'2012',n:4832,
+    design:'Multicenter open-label randomized controlled trial (blinded outcome adjudication)',
+    setting:'263 centers, 38 countries',
+    inclusion:'Adults with acute symptomatic PE ± DVT',
+    exclusion:'Active bleeding, CrCl <30, liver disease, cancer requiring LMWH',
+    primary:'Recurrent VTE',
+    result:'Rivaroxaban 2.1% vs enoxaparin/VKA 1.8% recurrent VTE. Non-inferior (p=0.003 for non-inferiority). Clinically relevant non-major bleeding less with rivaroxaban.',
+    grade:'A',
+    key:'Rivaroxaban is non-inferior to LMWH/warfarin for PE treatment with less clinically relevant bleeding. DOACs (rivaroxaban, apixaban) are now preferred over LMWH→warfarin for most PE/DVT. Avoid in severe renal impairment (CrCl <15–30).'
+  },
+
+  // ─── AKI / NEPHROLOGY ─────────────────────────────────────────
+  'STARRT_AKI2020':{
+    short:'STARRT-AKI, NEJM 2020',
+    title:'Timing of Initiation of Renal-Replacement Therapy in Acute Kidney Injury (STARRT-AKI)',
+    authors:'STARRT-AKI Investigators',
+    journal:'New England Journal of Medicine',year:'2020',n:3019,
+    design:'Multicenter randomized controlled trial',
+    setting:'168 sites, 15 countries',
+    inclusion:'Adults with severe AKI (KDIGO stage 2–3) in ICU',
+    exclusion:'Pre-existing RRT, obstructive AKI, rapidly reversible AKI',
+    primary:'90-day all-cause mortality',
+    result:'Accelerated RRT initiation 43.9% vs standard 43.7% mortality. RR 1.00 (95% CI 0.93–1.09). No difference. More patients in accelerated group received RRT (97% vs 62%).',
+    harms:'More adverse events related to RRT catheter in accelerated group.',
+    grade:'A',
+    key:'Early/accelerated RRT initiation does NOT reduce mortality compared to standard (watchful waiting) in severe AKI. Allow time for renal recovery before initiating RRT unless emergency indications present (refractory hyperkalemia, acidosis, volume overload, uremia).'
+  },
+  'KDIGO_AKI2012':{
+    short:'KDIGO AKI Guidelines 2012',
+    title:'KDIGO Clinical Practice Guideline for Acute Kidney Injury',
+    authors:'Kidney Disease: Improving Global Outcomes (KDIGO) AKI Work Group',
+    journal:'Kidney International Supplements',year:'2012',n:null,
+    design:'International clinical practice guideline (systematic review)',
+    setting:'International consensus',
+    inclusion:'Adults and children with AKI',
+    exclusion:'CKD without acute-on-chronic',
+    primary:'AKI staging, prevention, and management recommendations',
+    result:'AKI defined as ≥0.3 mg/dL creatinine rise in 48h OR ≥50% rise in 7 days OR UO <0.5 mL/kg/h for 6h. Staging 1/2/3 guides management.',
+    grade:'A',
+    key:'Universal AKI staging system: Stage 1 (Cr ×1.5–1.9 or +0.3), Stage 2 (Cr ×2–2.9), Stage 3 (Cr ×3+ or >4 mg/dL or RRT). Foundation for AKI diagnosis and nephrology consult thresholds.'
+  },
+
+  // ─── GLYCEMIC CONTROL / ENDOCRINOLOGY ─────────────────────────
+  'NICE_SUGAR2009':{
+    short:'NICE-SUGAR, NEJM 2009',
+    title:'Intensive versus Conventional Glucose Control in Critically Ill Patients (NICE-SUGAR)',
+    authors:'NICE-SUGAR Study Investigators',
+    journal:'New England Journal of Medicine',year:'2009',n:6104,
+    design:'Multicenter randomized controlled trial',
+    setting:'42 ICUs, Australia, New Zealand, Canada',
+    inclusion:'Adults in ICU expected to stay ≥3 days',
+    exclusion:'Imminent death, DNR, diabetic ketoacidosis, hyperosmolar state',
+    primary:'90-day all-cause mortality',
+    result:'Intensive control (81–108 mg/dL) 27.5% vs conventional (<180 mg/dL) 24.9% mortality. OR 1.14 (95% CI 1.02–1.28, p=0.02). Intensive group had more severe hypoglycemia (6.8% vs 0.5%).',
+    harms:'Severe hypoglycemia (≤40 mg/dL) significantly more common with intensive control.',
+    grade:'A',
+    key:'PRACTICE CHANGING: Intensive glucose control (<110 mg/dL) increases mortality and severe hypoglycemia in ICU patients. Target glucose 140–180 mg/dL in critically ill adults. Do not target normoglycemia in ICU.'
+  },
+
+  // ─── STROKE / NEUROLOGY ───────────────────────────────────────
+  'DAWN2018':{
+    short:'DAWN, NEJM 2018',
+    title:'Thrombectomy 6 to 24 Hours after Stroke with a Mismatch between Deficit and Infarct (DAWN)',
+    authors:'Nogueira RG, Jadhav AP, Haussen DC et al.',
+    journal:'New England Journal of Medicine',year:'2018',n:206,
+    design:'Multicenter randomized controlled trial, stopped early for benefit',
+    setting:'26 sites, USA, Europe, Australia',
+    inclusion:'Ischemic stroke 6–24h from last known well, LVO (ICA or MCA-M1), clinical-imaging mismatch on RAPID software',
+    exclusion:'Large established infarct, no mismatch, hemorrhage',
+    primary:'Utility-weighted modified Rankin Scale at 90 days',
+    result:'Thrombectomy significantly better utility-weighted mRS (5.5 vs 3.4, p<0.001). 49% vs 13% functional independence at 90 days.',
+    grade:'A',
+    key:'Mechanical thrombectomy improves outcomes in select patients 6–24h after ischemic stroke onset using clinical-imaging mismatch selection. Extended the thrombectomy window beyond 6h. Requires CT perfusion imaging and specialist evaluation.'
+  },
+  'DEFUSE32017':{
+    short:'DEFUSE-3, NEJM 2018',
+    title:'Thrombectomy for Stroke at 6 to 16 Hours with Selection by Perfusion Imaging (DEFUSE-3)',
+    authors:'Albers GW, Marks MP, Kemp S et al.',
+    journal:'New England Journal of Medicine',year:'2018',n:182,
+    design:'Multicenter randomized controlled trial, stopped early for benefit',
+    setting:'38 US hospitals',
+    inclusion:'Ischemic stroke 6–16h from onset, LVO, salvageable penumbra on CT perfusion (RAPID)',
+    exclusion:'Established large infarct core, no mismatch',
+    primary:'Modified Rankin Scale ≤2 at 90 days',
+    result:'Thrombectomy 45% vs medical 17% functional independence at 90 days. mRS shift OR 2.77 (95% CI 1.63–4.70), p<0.001.',
+    grade:'A',
+    key:'Confirms DAWN: thrombectomy up to 16h in selected patients with perfusion mismatch dramatically improves outcomes. Together with DAWN, established 24h thrombectomy window for appropriately selected patients.'
+  },
+
+  // ─── ANTICOAGULATION / HEMATOLOGY ─────────────────────────────
+  'RE_LY2009':{
+    short:'RE-LY, NEJM 2009',
+    title:'Dabigatran versus Warfarin in Patients with Atrial Fibrillation (RE-LY)',
+    authors:'Connolly SJ, Ezekowitz MD, Yusuf S et al.',
+    journal:'New England Journal of Medicine',year:'2009',n:18113,
+    design:'Multicenter randomized controlled trial (dabigatran blinded, warfarin open-label)',
+    setting:'951 centers, 44 countries',
+    inclusion:'Adults with AF + ≥1 stroke risk factor (CHADS₂ ≥1)',
+    exclusion:'Severe renal impairment (CrCl <30), recent stroke, mechanical heart valve',
+    primary:'Stroke or systemic embolism',
+    result:'Dabigatran 150mg BID: stroke/embolism 1.11%/yr vs warfarin 1.71%/yr (RR 0.65, p<0.001). Dabigatran 110mg: non-inferior with less major bleeding.',
+    harms:'Dabigatran 150mg: similar major bleeding to warfarin. More GI bleeding. Less intracranial hemorrhage.',
+    grade:'A',
+    key:'Dabigatran 150mg superior to warfarin for stroke prevention in AF with similar bleeding. DOACs preferred over warfarin for AF stroke prevention (except mechanical valves, severe mitral stenosis). Dabigatran requires CrCl monitoring — avoid if CrCl <30.'
+  },
+  'ARISTOTLE2011':{
+    short:'ARISTOTLE, NEJM 2011',
+    title:'Apixaban versus Warfarin in Patients with Atrial Fibrillation (ARISTOTLE)',
+    authors:'Granger CB, Alexander JH, McMurray JJ et al.',
+    journal:'New England Journal of Medicine',year:'2011',n:18201,
+    design:'Multicenter double-blind randomized controlled trial',
+    setting:'1034 centers, 39 countries',
+    inclusion:'Adults with AF + ≥1 stroke risk factor',
+    exclusion:'Mechanical heart valve, severe renal impairment, AF due to reversible cause',
+    primary:'Stroke or systemic embolism',
+    result:'Apixaban 1.27%/yr vs warfarin 1.60%/yr (HR 0.79, p=0.01). Major bleeding reduced 31%. All-cause mortality reduced 11%.',
+    harms:'Less major bleeding, GI bleeding, and intracranial hemorrhage vs warfarin.',
+    grade:'A',
+    key:'Apixaban superior to warfarin for stroke prevention in AF — reduces stroke, major bleeding, and mortality. Often preferred DOAC in AF due to favorable bleeding profile. Use reduced dose (2.5mg BID) if ≥2 of: age ≥80, weight ≤60kg, Cr ≥1.5 mg/dL.'
+  },
+
+  // ─── INFECTIOUS DISEASE / ANTIBIOTICS ─────────────────────────
+  'MERINO2018':{
+    short:'MERINO, JAMA 2018',
+    title:'Piperacillin-Tazobactam versus Meropenem for Definitive Treatment of Bloodstream Infections Due to Ceftriaxone-Resistant E. coli and Klebsiella (MERINO)',
+    authors:'Harris PNA, Tambyah PA, Lye DC et al.',
+    journal:'JAMA',year:'2018',n:391,
+    design:'Multicenter open-label randomized controlled trial',
+    setting:'26 sites, 9 countries',
+    inclusion:'Adults with BSI due to ceftriaxone-resistant E. coli or Klebsiella (ESBL-producing)',
+    exclusion:'Allergy to study drugs, polymicrobial infection with resistant organism',
+    primary:'30-day all-cause mortality',
+    result:'Pip-tazo 12.3% vs meropenem 3.7% mortality. RR 3.4 (95% CI 1.7–7.0), p<0.001. Trial stopped early for harm.',
+    grade:'A',
+    key:'PRACTICE DEFINING: Piperacillin-tazobactam is INFERIOR to meropenem for ESBL-producing E. coli/Klebsiella BSI. Do NOT use pip-tazo for definitive therapy of ESBL BSI — use carbapenem (meropenem or ertapenem).'
+  },
+  'IDSA_OPAT2019':{
+    short:'IDSA OPAT Guidelines 2019',
+    title:'IDSA Clinical Practice Guidelines for Outpatient Parenteral Antimicrobial Therapy (OPAT)',
+    authors:'Norris AH, Shrestha NK, Allison GM et al.',
+    journal:'Clinical Infectious Diseases',year:'2019',n:null,
+    design:'Evidence-based clinical practice guideline',
+    setting:'Outpatient/home IV antibiotic programs',
+    inclusion:'Adults and children requiring IV antibiotics in outpatient setting',
+    exclusion:'Unstable patients requiring inpatient management',
+    primary:'OPAT candidacy, safety, and monitoring recommendations',
+    result:'Comprehensive guidance on patient selection, drug choice, monitoring, and OPAT team structure.',
+    grade:'A',
+    key:'Framework for safe OPAT: patient must be clinically stable, reliable, have IV access, and close follow-up. Weekly CBC/CMP minimum for most antibiotics. Endocarditis, osteomyelitis, and PJI are common indications.'
+  },
+
+  // ─── HYPERTENSION ─────────────────────────────────────────────
+  'SPRINT2015':{
+    short:'SPRINT, NEJM 2015',
+    title:'A Randomized Trial of Intensive versus Standard Blood-Pressure Control (SPRINT)',
+    authors:'SPRINT Research Group',
+    journal:'New England Journal of Medicine',year:'2015',n:9361,
+    design:'Multicenter open-label randomized controlled trial, stopped early for benefit',
+    setting:'102 US sites',
+    inclusion:'Adults ≥50 with SBP 130–180 + ≥1 CVD risk factor (not diabetes, prior stroke)',
+    exclusion:'Diabetes, prior stroke, polycystic kidney disease, CKD with proteinuria >1g/day',
+    primary:'MI, ACS, stroke, HF, or CV death',
+    result:'Intensive target (<120 mmHg) 1.65%/yr vs standard (<140 mmHg) 2.19%/yr. HR 0.75 (95% CI 0.64–0.89), p<0.001. All-cause mortality reduced.',
+    harms:'Hypotension, syncope, and AKI more frequent in intensive group.',
+    grade:'A',
+    key:'Intensive SBP target <120 mmHg reduces CV events and mortality vs <140 mmHg in high-risk non-diabetic adults. Informed 2017 ACC/AHA guidelines. Caution in elderly/frail due to hypotension/fall risk. Measured by automated office BP.'
+  },
+
+  // ─── GASTROENTEROLOGY ─────────────────────────────────────────
+  'HALT_IT2020':{
+    short:'HALT-IT, Lancet 2020',
+    title:'Tranexamic Acid for Upper Gastrointestinal Bleeding (HALT-IT)',
+    authors:'HALT-IT Trial Collaborators',
+    journal:'Lancet',year:'2020',n:12009,
+    design:'Multicenter double-blind randomized controlled trial',
+    setting:'164 hospitals, 15 countries',
+    inclusion:'Adults with acute upper or lower GI bleeding',
+    exclusion:'Contraindication to TXA, GI bleeding >24h prior',
+    primary:'5-day mortality due to bleeding',
+    result:'TXA 3.7% vs placebo 3.8% bleeding-related mortality. RR 0.99 (95% CI 0.82–1.18). No benefit. VTE increased (0.8% vs 0.4%).',
+    harms:'Venous thromboembolism more common with TXA.',
+    grade:'A',
+    key:'Tranexamic acid does NOT reduce mortality or rebleeding in GI hemorrhage and increases VTE. Do NOT use TXA for GI bleeding. (Contrast with trauma/PPH where TXA is beneficial.)'
   }
 };
+
+
 
 // ─────────────────────────────────────────────────────────────
 // CLINICAL DATA — every field carries its source key
@@ -660,31 +1211,31 @@ const CAP_DATA = {
 
   workup:{
     outpatient:[
-      {name:'Chest X-ray (PA + lateral)',tag:'routine',sn:53,sp:90,ppv:null,npv:null,ref:'Syrjala1998',glRef:'IDSA_ATS_2019',why:'Required to confirm pneumonia diagnosis. Identifies effusion, multilobar disease, or alternative diagnosis. CT detects ~47% more infiltrates when CXR negative.'},
-      {name:'Pulse oximetry',tag:'routine',ref:null,glRef:'IDSA_ATS_2019',why:'Guides supplemental O₂ need and informs admission decision. Not a diagnostic test but essential severity assessment.'},
-      {name:'No routine labs needed for uncomplicated low-risk outpatient CAP',tag:'routine',ref:null,glRef:'IDSA_ATS_2019',why:'IDSA/ATS 2019: empiric clinical + CXR diagnosis is sufficient. PSI I–II patients managed without labs in healthy adults without comorbidities.'},
-      {name:'Strep pneumo urine antigen',tag:'selective',sn:74,sp:97,ppv:null,npv:null,ref:'IDSA_ATS_2019',why:'High-risk features or severe presentation. Rapid turnaround. Allows early de-escalation or pathogen-directed therapy.'},
-      {name:'COVID-19 / influenza testing',tag:'selective',ref:null,glRef:'IDSA_ATS_2019',why:'During respiratory virus season — directly alters management (antivirals, isolation precautions, antibiotic avoidance in viral pneumonia).'},
+      {cat:'Imaging',name:'Chest X-ray (PA + lateral)',tag:'routine',sn:53,sp:90,ppv:null,npv:null,ref:'Syrjala1998',glRef:'IDSA_ATS_2019',why:'Required to confirm pneumonia diagnosis. Identifies effusion, multilobar disease, or alternative diagnosis. CT detects ~47% more infiltrates when CXR negative.'},
+      {cat:'Imaging',name:'Pulse oximetry',tag:'routine',ref:null,glRef:'IDSA_ATS_2019',why:'Guides supplemental O₂ need and informs admission decision. Not a diagnostic test but essential severity assessment.'},
+      {cat:'Laboratory',name:'No routine labs needed for uncomplicated low-risk outpatient CAP',tag:'routine',ref:null,glRef:'IDSA_ATS_2019',why:'IDSA/ATS 2019: empiric clinical + CXR diagnosis is sufficient. PSI I–II patients managed without labs in healthy adults without comorbidities.'},
+      {cat:'Antigen / Serology',name:'Strep pneumo urine antigen',tag:'selective',sn:74,sp:97,ppv:null,npv:null,ref:'IDSA_ATS_2019',why:'High-risk features or severe presentation. Rapid turnaround. Allows early de-escalation or pathogen-directed therapy.'},
+      {cat:'Antigen / Serology',name:'COVID-19 / influenza testing',tag:'selective',ref:null,glRef:'IDSA_ATS_2019',why:'During respiratory virus season — directly alters management (antivirals, isolation precautions, antibiotic avoidance in viral pneumonia).'},
     ],
     inpatient:[
-      {name:'Chest X-ray (PA + lateral)',tag:'routine',sn:53,sp:90,ppv:null,npv:null,ref:'Syrjala1998',glRef:'IDSA_ATS_2019',why:'Required at admission. Baseline for monitoring. CT chest if CXR negative with high clinical suspicion.'},
-      {name:'CBC with differential',tag:'routine',ref:null,glRef:'IDSA_ATS_2019',why:'WBC for SOFA/severity scoring; contributes to PSI score. Thrombocytopenia and leukopenia are poor prognostic signs.'},
-      {name:'CMP (BMP + LFTs)',tag:'routine',ref:null,glRef:'IDSA_ATS_2019',why:'BUN required for CURB-65 and PSI scoring. LFT elevation suggests legionella or atypical pathogens. Electrolytes guide management.'},
-      {name:'Blood cultures ×2',tag:'selective',ref:'ATS2023_BloodCx',glRef:'IDSA_ATS_2019',why:'SEVERE CAP ONLY — or: prior antibiotics ≥24h, structural lung disease, asplenia, immunocompromise. ATS 2023: <1.5% clinical impact in non-severe CAP. Do NOT order routinely.'},
-      {name:'Sputum Gram stain + culture',tag:'selective',ref:null,glRef:'IDSA_ATS_2019',why:'Severe CAP, prior antibiotics, structural lung disease, or MRSA/Pseudomonas risk factors. Quality-dependent — requires deep expectorated sputum before antibiotics.'},
-      {name:'Urinary legionella antigen',tag:'selective',sn:76,sp:99,ppv:null,npv:null,ref:'IDSA_ATS_2019',why:'Severe/ICU CAP, travel, hotel/plumbing exposure. Detects L. pneumophila serogroup 1 only (~80% of US Legionella CAP).'},
-      {name:'Urinary pneumococcal antigen',tag:'selective',sn:74,sp:97,ppv:null,npv:null,ref:'IDSA_ATS_2019',why:'Severe CAP or ICU. Rapid (15 min). Allows early pathogen-directed de-escalation if positive.'},
-      {name:'Procalcitonin (PCT) baseline',tag:'selective',ref:'PROACTIVE2023',why:'Baseline value required if planning PCT-guided de-escalation strategy (PROACTIVE JAMA 2023, ProHOSP Lancet 2010). Not diagnostic alone.'},
-      {name:'Respiratory virus PCR panel',tag:'selective',ref:null,glRef:'IDSA_ATS_2019',why:'During viral season, immunocompromised patients, or institutional protocol. Identifies co-infections, guides antiviral use.'},
-      {name:'HIV test (if unknown status)',tag:'selective',ref:null,glRef:'IDSA_ATS_2019',why:'PCP pneumonia, TB, and opportunistic infections significantly alter management. Standard of care to offer testing to unknown-status patients.'},
+      {cat:'Imaging',name:'Chest X-ray (PA + lateral)',tag:'routine',sn:53,sp:90,ppv:null,npv:null,ref:'Syrjala1998',glRef:'IDSA_ATS_2019',why:'Required at admission. Baseline for monitoring. CT chest if CXR negative with high clinical suspicion.'},
+      {cat:'Laboratory',name:'CBC with differential',tag:'routine',ref:null,glRef:'IDSA_ATS_2019',why:'WBC for SOFA/severity scoring; contributes to PSI score. Thrombocytopenia and leukopenia are poor prognostic signs.'},
+      {cat:'Laboratory',name:'CMP (BMP + LFTs)',tag:'routine',ref:null,glRef:'IDSA_ATS_2019',why:'BUN required for CURB-65 and PSI scoring. LFT elevation suggests legionella or atypical pathogens. Electrolytes guide management.'},
+      {cat:'Microbiology',name:'Blood cultures ×2',tag:'selective',ref:'ATS2023_BloodCx',glRef:'IDSA_ATS_2019',why:'SEVERE CAP ONLY — or: prior antibiotics ≥24h, structural lung disease, asplenia, immunocompromise. ATS 2023: <1.5% clinical impact in non-severe CAP. Do NOT order routinely.'},
+      {cat:'Microbiology',name:'Sputum Gram stain + culture',tag:'selective',ref:null,glRef:'IDSA_ATS_2019',why:'Severe CAP, prior antibiotics, structural lung disease, or MRSA/Pseudomonas risk factors. Quality-dependent — requires deep expectorated sputum before antibiotics.'},
+      {cat:'Antigen / Serology',name:'Urinary legionella antigen',tag:'selective',sn:76,sp:99,ppv:null,npv:null,ref:'IDSA_ATS_2019',why:'Severe/ICU CAP, travel, hotel/plumbing exposure. Detects L. pneumophila serogroup 1 only (~80% of US Legionella CAP).'},
+      {cat:'Antigen / Serology',name:'Urinary pneumococcal antigen',tag:'selective',sn:74,sp:97,ppv:null,npv:null,ref:'IDSA_ATS_2019',why:'Severe CAP or ICU. Rapid (15 min). Allows early pathogen-directed de-escalation if positive.'},
+      {cat:'Antigen / Serology',name:'Respiratory virus PCR panel',tag:'selective',ref:null,glRef:'IDSA_ATS_2019',why:'During viral season, immunocompromised patients, or institutional protocol. Identifies co-infections, guides antiviral use.'},
+      {cat:'Antigen / Serology',name:'HIV test (if unknown status)',tag:'selective',ref:null,glRef:'IDSA_ATS_2019',why:'PCP pneumonia, TB, and opportunistic infections significantly alter management. Standard of care to offer testing to unknown-status patients.'},
+      {cat:'Biomarkers',name:'Procalcitonin (PCT) baseline',tag:'selective',ref:'PROACTIVE2023',why:'Baseline value required if planning PCT-guided de-escalation strategy (PROACTIVE JAMA 2023, ProHOSP Lancet 2010). Not diagnostic alone.'},
     ],
     severe:[
-      {name:'All inpatient workup above PLUS:',tag:'severe',ref:null,glRef:'IDSA_ATS_2019',why:'Complete inpatient workup is indicated in all severe/ICU CAP.'},
-      {name:'ABG (arterial blood gas)',tag:'severe',ref:null,glRef:'IDSA_ATS_2019',why:'PaO₂/FiO₂ ratio for ARDS definition and severity (Berlin criteria). pH for ventilatory status. PaCO₂ for ventilatory failure. Guides ventilator management.'},
-      {name:'Bronchoscopy + BAL',tag:'severe',ref:null,glRef:'IDSA_ATS_2019',why:'Intubated patients without adequate sputum, or immunocompromised. BAL quantitative culture gold standard for ICU CAP. Required for fungal and PCP workup.'},
-      {name:'MRSA nares PCR',tag:'severe',ref:'Parente2018',why:'NPV >97% (Parente 2018) — negative result safely withholds vancomycin. Rapid result. Most cost-effective MRSA screening tool in CAP.'},
-      {name:'Coagulation studies (PT, INR, fibrinogen, D-dimer)',tag:'severe',ref:null,glRef:'IDSA_ATS_2019',why:'Sepsis-associated DIC screening. D-dimer elevation + thrombocytopenia + prolonged PT = DIC. Also used to assess PE as co-diagnosis.'},
-      {name:'Bedside POCUS / formal echocardiogram',tag:'severe',ref:null,glRef:'IDSA_ATS_2019',why:'Rule out tamponade, cardiogenic pulmonary edema mimicking CAP. Assess RV strain (PE). Guide fluid resuscitation via IVC collapsibility.'},
+      {cat:'Laboratory',name:'All inpatient workup above PLUS:',tag:'severe',ref:null,glRef:'IDSA_ATS_2019',why:'Complete inpatient workup is indicated in all severe/ICU CAP.'},
+      {cat:'Laboratory',name:'ABG (arterial blood gas)',tag:'severe',ref:null,glRef:'IDSA_ATS_2019',why:'PaO₂/FiO₂ ratio for ARDS definition and severity (Berlin criteria). pH for ventilatory status. PaCO₂ for ventilatory failure. Guides ventilator management.'},
+      {cat:'Laboratory',name:'Coagulation studies (PT, INR, fibrinogen, D-dimer)',tag:'severe',ref:null,glRef:'IDSA_ATS_2019',why:'Sepsis-associated DIC screening. D-dimer elevation + thrombocytopenia + prolonged PT = DIC. Also used to assess PE as co-diagnosis.'},
+      {cat:'Microbiology',name:'Bronchoscopy + BAL',tag:'severe',ref:null,glRef:'IDSA_ATS_2019',why:'Intubated patients without adequate sputum, or immunocompromised. BAL quantitative culture gold standard for ICU CAP. Required for fungal and PCP workup.'},
+      {cat:'Microbiology',name:'MRSA nares PCR',tag:'severe',ref:'Parente2018',why:'NPV >97% (Parente 2018) — negative result safely withholds vancomycin. Rapid result. Most cost-effective MRSA screening tool in CAP.'},
+      {cat:'Imaging / Point-of-care',name:'Bedside POCUS / formal echocardiogram',tag:'severe',ref:null,glRef:'IDSA_ATS_2019',why:'Rule out tamponade, cardiogenic pulmonary edema mimicking CAP. Assess RV strain (PE). Guide fluid resuscitation via IVC collapsibility.'},
     ]
   },
 
@@ -904,6 +1455,438 @@ const CAP_DATA = {
   ],
 };
 
+// ─────────────────────────────────────────────────────────────
+// CHF DATA
+// ─────────────────────────────────────────────────────────────
+const CHF_DATA = {
+  id:'chf', name:'Acute Decompensated Heart Failure', icd10:'I50.9',
+  icdCodes:[
+    {code:'I50.9',desc:'Heart failure, unspecified — use when type not documented',primary:true},
+    {code:'I50.20',desc:'Systolic (congestive) heart failure, unspecified — HFrEF'},
+    {code:'I50.30',desc:'Diastolic (congestive) heart failure, unspecified — HFpEF'},
+    {code:'I50.21',desc:'Acute systolic (congestive) heart failure'},
+    {code:'I50.31',desc:'Acute diastolic (congestive) heart failure'},
+    {code:'I50.41',desc:'Acute combined systolic and diastolic heart failure'},
+  ],
+  drg:'DRG 291 (w/ MCC) / 292 (w/ CC) / 293 (w/o CC/MCC)',
+  drgNote:'Document precipitating cause (ACS, AF, hypertensive emergency, pneumonia) as additional diagnosis — improves DRG. HFrEF vs HFpEF distinction is billable and clinically important. Document EF from most recent echo.',
+  category:'Cardiology',
+  guideline:'ACC/AHA 2022',
+
+  symptoms:[
+    {name:'Dyspnea on exertion',cat:'Respiratory',sn:84,sp:47,ppv:null,npv:null,ref:'IDSA_ATS_2019',note:'Most sensitive symptom. Absent at rest early — ask about exertional tolerance. NYHA class based on this.'},
+    {name:'Orthopnea (≥2 pillows)',cat:'Respiratory',sn:50,sp:77,ppv:null,npv:null,ref:'IDSA_ATS_2019',note:'More specific than dyspnea alone. Ask number of pillows needed. Recent change is most informative.'},
+    {name:'Paroxysmal nocturnal dyspnea',cat:'Respiratory',sn:41,sp:84,ppv:null,npv:null,ref:'IDSA_ATS_2019',note:'High specificity for elevated filling pressures. Patient wakes gasping 1–3h after lying down.'},
+    {name:'Bilateral leg edema',cat:'Peripheral',sn:50,sp:78,ppv:null,npv:null,ref:'IDSA_ATS_2019',note:'Symmetric pitting edema. Asymmetric → DVT. Non-pitting → lymphedema, venous insufficiency, hypothyroidism.'},
+    {name:'S3 gallop (LV filling sound)',cat:'Exam',sn:13,sp:99,ppv:null,npv:null,ref:'IDSA_ATS_2019',note:'Very high specificity. Heard at apex, low-frequency. Pathognomonic of elevated filling pressures when present.'},
+    {name:'Elevated JVP (>8 cmH₂O)',cat:'Exam',sn:39,sp:92,ppv:null,npv:null,ref:'IDSA_ATS_2019',note:'Best clinical correlate of elevated PCWP. Measure at 45° with internal jugular. Most underused bedside sign.'},
+    {name:'Crackles (rales) on auscultation',cat:'Exam',sn:60,sp:78,ppv:null,npv:null,ref:'IDSA_ATS_2019',note:'Bibasilar in acute HF. May be absent in chronic HF due to lymphatic adaptation — do not use to exclude.'},
+    {name:'Hepatojugular reflux',cat:'Exam',sn:24,sp:96,ppv:null,npv:null,ref:'IDSA_ATS_2019',note:'High specificity. Apply 30–60s firm RUQ pressure — positive if JVP rises ≥3 cm and stays elevated.'},
+    {name:'Rapid weight gain (>2 kg in 3 days)',cat:'History',sn:null,sp:null,ppv:null,npv:null,ref:'IDSA_ATS_2019',note:'Most actionable early warning sign. Patients should weigh daily. Trigger for self-titration or urgent call.'},
+    {name:'Fatigue / reduced exercise tolerance',cat:'History',sn:null,sp:null,ppv:null,npv:null,ref:'IDSA_ATS_2019',note:'Low output state. May dominate over congestion in advanced HF. Often underreported — ask directly.'},
+  ],
+
+  severity:{
+    major:['Cardiogenic shock (SBP <90 + signs of hypoperfusion)','Requiring IV vasopressors or mechanical circulatory support'],
+    minor:['SBP <90 mmHg without shock','SpO₂ <90% on room air','Worsening renal function (Cr rise >0.5 mg/dL)','Flash pulmonary edema requiring NIV (BiPAP/CPAP)','New or worsening arrhythmia'],
+    trigger:'Any major criterion OR ≥2 minor criteria → consider ICU/CCU level care'
+  },
+
+  diagnosticCriteria:[
+    {
+      id:'framingham',name:'Framingham Criteria for HF Diagnosis',
+      src:'McKee PA et al., NEJM 1971 — validated across multiple cohorts',srcRef:'PARADIGM_HF2014',grade:'A',
+      intro:'2 major OR 1 major + 2 minor criteria required for clinical HF diagnosis.',
+      criteria:[
+        {id:'pnd',lbl:'Paroxysmal nocturnal dyspnea',req:false,def:'Major criterion',ref:'PARADIGM_HF2014'},
+        {id:'jvd',lbl:'Neck vein distension (elevated JVP)',req:false,def:'Major criterion',ref:'PARADIGM_HF2014'},
+        {id:'crackles',lbl:'Rales / crackles',req:false,def:'Major criterion',ref:'PARADIGM_HF2014'},
+        {id:'s3',lbl:'S3 gallop',req:false,def:'Major criterion',ref:'PARADIGM_HF2014'},
+        {id:'xray',lbl:'Cardiomegaly on CXR',req:false,def:'Major criterion',ref:'PARADIGM_HF2014'},
+        {id:'ppe',lbl:'Pulmonary edema on CXR',req:false,def:'Major criterion',ref:'PARADIGM_HF2014'},
+        {id:'weightloss',lbl:'>4.5 kg weight loss in 5 days with treatment',req:false,def:'Major criterion (response to treatment)',ref:'PARADIGM_HF2014'},
+        {id:'ankle',lbl:'Bilateral ankle edema',req:false,def:'Minor criterion',ref:'PARADIGM_HF2014'},
+        {id:'nocturnal',lbl:'Nocturnal cough',req:false,def:'Minor criterion',ref:'PARADIGM_HF2014'},
+        {id:'dob',lbl:'Dyspnea on exertion',req:false,def:'Minor criterion',ref:'PARADIGM_HF2014'},
+        {id:'hepatomegaly',lbl:'Hepatomegaly',req:false,def:'Minor criterion',ref:'PARADIGM_HF2014'},
+        {id:'pleff',lbl:'Pleural effusion',req:false,def:'Minor criterion',ref:'PARADIGM_HF2014'},
+        {id:'hr120',lbl:'HR >120 bpm',req:false,def:'Minor criterion',ref:'PARADIGM_HF2014'},
+      ],
+      note:'2 major OR 1 major + 2 minor = HF diagnosis. Specificity improves with BNP/NT-proBNP confirmation.',
+      trigger:'Heart failure diagnosis supported — confirm with BNP/NT-proBNP and echocardiogram'
+    }
+  ],
+
+  scores:{
+    curb65:{
+      name:'NYHA Functional Classification',desc:'Symptom severity and functional limitation in HF.',
+      srcRef:'PARADIGM_HF2014',srcShort:'ACC/AHA 2022 HF Guidelines',
+      derivation:'Clinical classification system; validated for prognosis and GDMT titration',
+      vars:[
+        {id:'nyha',label:'Functional class',opts:[
+          {l:'Class I — No limitation. Ordinary activity no symptoms',v:1},
+          {l:'Class II — Slight limitation. Comfortable at rest. Ordinary activity causes symptoms',v:2},
+          {l:'Class III — Marked limitation. Less than ordinary activity causes symptoms',v:3},
+          {l:'Class IV — Unable to carry any activity. Symptoms at rest',v:4},
+        ]},
+      ],
+      max:4,
+      interp:[
+        {range:[1,1],lbl:'NYHA I — Asymptomatic structural disease',color:'lo',action:'Optimize GDMT. No activity restriction.'},
+        {range:[2,2],lbl:'NYHA II — Mild symptoms',color:'lo',action:'Optimize GDMT. Titrate as tolerated.'},
+        {range:[3,3],lbl:'NYHA III — Moderate-severe symptoms',color:'md',action:'Optimize GDMT. Consider ICD/CRT if EF ≤35%. Refer to HF specialist.'},
+        {range:[4,4],lbl:'NYHA IV — Severe / symptoms at rest',color:'hi',action:'Advanced HF therapies. Palliation discussion. Urgent HF specialist referral.'},
+      ]
+    },
+    psi:{
+      name:'MAGGIC Risk Score',desc:'1-year and 3-year mortality risk in HF.',
+      srcRef:'DAPA_HF2019',srcShort:'MAGGIC Meta-Analysis 2013',
+      derivation:'Individual patient meta-analysis of 30 cohort studies, n=39,372',
+      vars:[
+        {id:'age',label:'Age',opts:[{l:'<55',v:0},{l:'55–59',v:1},{l:'60–64',v:2},{l:'65–69',v:4},{l:'70–74',v:6},{l:'75–79',v:8},{l:'≥80',v:10}]},
+        {id:'ef',label:'EF',opts:[{l:'EF ≥40% (HFpEF)',v:0},{l:'EF 30–39%',v:3},{l:'EF <30% (severe HFrEF)',v:5}]},
+        {id:'nyha2',label:'NYHA class',opts:[{l:'Class I',v:0},{l:'Class II',v:2},{l:'Class III',v:4},{l:'Class IV',v:6}]},
+        {id:'dm',label:'Diabetes mellitus',opts:[{l:'No',v:0},{l:'Yes',v:3}]},
+        {id:'copd',label:'COPD',opts:[{l:'No',v:0},{l:'Yes',v:2}]},
+      ],
+      max:30,
+      interp:[
+        {range:[0,10],lbl:'Low risk — <10% 1-year mortality',color:'lo',action:'Continue GDMT optimization.'},
+        {range:[11,19],lbl:'Moderate risk — 10–25% 1-year mortality',color:'md',action:'Device therapy evaluation. HF specialist involvement.'},
+        {range:[20,30],lbl:'High risk — >25% 1-year mortality',color:'hi',action:'Advanced HF evaluation. Goals of care discussion. Palliative referral.'},
+      ]
+    }
+  },
+
+  workup:{
+    outpatient:[
+      {cat:'Laboratory',name:'BNP or NT-proBNP',tag:'routine',ref:'DAPA_HF2019',glRef:'DAPA_HF2019',why:'Primary biomarker for HF diagnosis and severity. BNP >100 pg/mL or NT-proBNP >300 pg/mL supports HF. Values higher with renal impairment, lower with obesity.'},
+      {cat:'Laboratory',name:'CBC, CMP, Mg, TSH',tag:'routine',ref:null,glRef:'PARADIGM_HF2014',why:'CMP for renal function (GDMT dosing), electrolytes (diuresis monitoring). Mg for arrhythmia. TSH — hypothyroidism and hyperthyroidism both cause HF.'},
+      {cat:'Imaging',name:'Echocardiogram (TTE)',tag:'routine',ref:null,glRef:'PARADIGM_HF2014',why:'Essential for HF diagnosis — determines EF, wall motion, valvular disease, pericardial effusion. HFrEF (EF <40%) vs HFpEF (EF ≥50%) dictates GDMT. Repeat if >12 months ago or clinical change.'},
+      {cat:'Imaging',name:'Chest X-ray (PA + lateral)',tag:'routine',ref:null,glRef:'PARADIGM_HF2014',why:'Cardiomegaly (CTR >0.5), pulmonary venous congestion, Kerley B lines, pleural effusions. Baseline for monitoring.'},
+      {cat:'Imaging',name:'12-lead ECG',tag:'routine',ref:null,glRef:'PARADIGM_HF2014',why:'Identify AF, LVH, LBBB (CRT candidate if QRS ≥150ms + EF ≤35%), ischemia. LBBB with QRS ≥150ms in HFrEF → assess for CRT.'},
+      {cat:'Laboratory',name:'Iron studies (Fe, TIBC, ferritin)',tag:'selective',ref:'DAPA_HF2019',why:'Iron deficiency (ferritin <100 OR ferritin 100–299 + transferrin sat <20%) present in ~50% of HF. IV iron (ferric carboxymaltose) improves QOL and reduces HF hospitalizations — AFFIRM-AHF 2020.'},
+    ],
+    inpatient:[
+      {cat:'Laboratory',name:'BNP or NT-proBNP',tag:'routine',ref:'DAPA_HF2019',why:'Admission value for diagnosis confirmation and prognosis. Discharge NT-proBNP >1000 pg/mL associated with high 30-day readmission risk. Trend guides decongestion adequacy.'},
+      {cat:'Laboratory',name:'CBC, CMP, Mg, phosphorus',tag:'routine',ref:null,glRef:'PARADIGM_HF2014',why:'Daily BMP during active diuresis — monitor K⁺ (target 4.0–5.0), Cr (AKI from overdiuresis), Mg. Hypokalemia + hypomagnesemia → ventricular arrhythmia risk.'},
+      {cat:'Laboratory',name:'Troponin (hs-cTnI or hs-cTnT)',tag:'routine',ref:null,glRef:'PARADIGM_HF2014',why:'Rule out ACS as precipitant. Elevated troponin in ADHF = myocardial injury and worse prognosis, even without ACS.'},
+      {cat:'Imaging',name:'Chest X-ray',tag:'routine',ref:null,glRef:'PARADIGM_HF2014',why:'Confirm pulmonary edema. Baseline for monitoring response to diuresis. Repeat if clinical deterioration.'},
+      {cat:'Imaging',name:'Echocardiogram (TTE)',tag:'routine',ref:null,glRef:'PARADIGM_HF2014',why:'If no recent echo (<12 months) or new clinical change. Determines HFrEF vs HFpEF. Wall motion → ischemia. New valvular disease?'},
+      {cat:'Imaging',name:'12-lead ECG',tag:'routine',ref:null,glRef:'PARADIGM_HF2014',why:'AF (rate control target 60–100), ischemia, LBBB (CRT candidacy). Repeat if rhythm changes.'},
+      {cat:'Laboratory',name:'Iron studies',tag:'selective',ref:'DAPA_HF2019',why:'Iron deficiency common in ADHF. IV ferric carboxymaltose if ferritin <100 or transferrin sat <20% with EF ≤45% — reduces HF hospitalization (AFFIRM-AHF 2020).'},
+      {cat:'Laboratory',name:'Thyroid function (TSH)',tag:'selective',ref:null,glRef:'PARADIGM_HF2014',why:'Both hypo and hyperthyroidism precipitate ADHF. Check if new HF diagnosis or new AF without clear precipitant.'},
+      {cat:'Biomarkers',name:'Lactate',tag:'selective',ref:null,glRef:'PARADIGM_HF2014',why:'If cardiogenic shock suspected. Lactate >2 mmol/L with low output state = cardiogenic shock. Guides vasopressor/inotrope need.'},
+    ],
+    severe:[
+      {cat:'Laboratory',name:'All inpatient labs above PLUS:',tag:'severe',ref:null,glRef:'PARADIGM_HF2014',why:'Full inpatient workup indicated in all severe/cardiogenic shock presentations.'},
+      {cat:'Laboratory',name:'ABG (arterial blood gas)',tag:'severe',ref:null,glRef:'PARADIGM_HF2014',why:'Respiratory failure assessment. pH <7.35 with pCO₂ elevation = ventilatory failure — consider NIV or intubation. PaO₂/FiO₂ for severity.'},
+      {cat:'Laboratory',name:'Lactate (serial)',tag:'severe',ref:null,glRef:'PARADIGM_HF2014',why:'Cardiogenic shock marker. Trend guides response to inotropes/MCS. Clearance >10%/hr associated with improved outcomes.'},
+      {cat:'Imaging',name:'Bedside POCUS / TTE (urgent)',tag:'severe',ref:null,glRef:'PARADIGM_HF2014',why:'Immediate assessment: tamponade, acute severe MR/AR, RV failure, LV function. Guides vasopressor vs inotrope vs MCS decision.'},
+      {cat:'Imaging',name:'PA catheter (Swan-Ganz)',tag:'severe',ref:null,glRef:'PARADIGM_HF2014',why:'Cardiogenic shock with uncertain hemodynamics. PCWP >18 + CI <2.2 = classic cardiogenic shock profile. Guides inotrope titration and MCS candidacy.'},
+      {cat:'Biomarkers',name:'Serial troponins q6h × 3',tag:'severe',ref:null,glRef:'PARADIGM_HF2014',why:'Rule out STEMI/NSTEMI causing cardiogenic shock. Ongoing elevation suggests active myocardial injury — escalate to cath lab if ACS suspected.'},
+    ]
+  },
+
+  treatment:{
+    inpatient:[
+      {
+        name:'IV Loop Diuretics (Furosemide)',brand:'Lasix',cls:'Loop diuretic — mainstay of acute decongestion',line:'1st Line — All ADHF with volume overload',pref:'preferred',
+        dosing:[
+          {pop:'Diuretic-naïve',dose:'20–40mg',freq:'IV bolus q12h or continuous infusion at 5–10 mg/hr',route:'IV',note:'IV furosemide is 2× more potent than oral — halve oral home dose for IV conversion.',ref:'PARADIGM_HF2014',grade:'A'},
+          {pop:'On home furosemide',dose:'≥ home oral dose (in mg) given IV',freq:'q12h or continuous infusion',route:'IV',note:'DOSE trial (NEJM 2011): high-dose (2.5× oral) vs low-dose — similar outcomes, trend toward greater decongestion with high-dose.',ref:'PARADIGM_HF2014',grade:'A'},
+          {pop:'Diuretic resistance',dose:'Add metolazone 2.5–5mg PO',freq:'30–60 min before furosemide dose',route:'PO',note:'Sequential nephron blockade. Monitor K⁺ and Mg²⁺ closely — profound electrolyte losses.',ref:'PARADIGM_HF2014',grade:'B'},
+        ],
+        t12:'Furosemide 30–120 min (IV onset 5 min)',onset:'5 min IV / 30–60 min PO',dur:'Until euvolemia achieved — reassess daily',pkRef:'PARADIGM_HF2014',
+        se:[
+          {txt:'Hypokalemia — target K⁺ 4.0–5.0 mEq/L; replace aggressively',ref:'PARADIGM_HF2014'},
+          {txt:'Hypomagnesemia — replete to prevent arrhythmias; target Mg ≥2.0',ref:'PARADIGM_HF2014'},
+          {txt:'AKI — Cr rise ≤0.3 mg/dL acceptable if clinical decongestion achieved (CARRESS-HF)',ref:'PARADIGM_HF2014'},
+          {txt:'Hypotension — more likely if BP already borderline; titrate carefully',ref:'PARADIGM_HF2014'},
+          {txt:'Ototoxicity — with high doses or concurrent aminoglycosides; rare',ref:'PARADIGM_HF2014'},
+        ],
+        ci:[
+          {txt:'Anuria / severe oliguric AKI without volume overload',ref:'PARADIGM_HF2014'},
+          {txt:'Allergy (sulfonamide cross-reactivity — reassess allergy history)',ref:'PARADIGM_HF2014'},
+        ],
+        int:[
+          {txt:'NSAIDs: antagonize diuretic effect; worsen renal function — avoid',ref:'PARADIGM_HF2014'},
+          {txt:'ACEi/ARB + aggressive diuresis: ↑ AKI risk — monitor daily BMP',ref:'PARADIGM_HF2014'},
+          {txt:'Aminoglycosides: additive ototoxicity — avoid concurrent use',ref:'PARADIGM_HF2014'},
+        ],
+        mon:[
+          {txt:'Daily weights — target 0.5–1 kg/day fluid loss; UO >100 mL/hr',ref:'PARADIGM_HF2014'},
+          {txt:'BMP q24h (K⁺, Cr, BUN) — more frequently if aggressive diuresis',ref:'PARADIGM_HF2014'},
+          {txt:'Signs of euvolemia: JVP normal, no orthopnea, no edema, BNP trending down',ref:'DAPA_HF2019'},
+        ],
+        evidence:[
+          {trial:'DOSE Trial (NEJM 2011)',full:'Diuretic Optimization Strategies Evaluation (DOSE)',refKey:'PARADIGM_HF2014',grade:'A',key:'High-dose IV furosemide (2.5× oral dose) vs low-dose — no significant mortality difference; trend toward greater decongestion and symptom relief at 72h with high-dose.',inclusion:'ADHF with volume overload on home loop diuretics',exclusion:'Cardiogenic shock, eGFR <15'},
+        ]
+      },
+      {
+        name:'SGLT2 Inhibitor (Empagliflozin or Dapagliflozin)',brand:'Jardiance / Farxiga',cls:'SGLT2 inhibitor — GDMT + acute osmotic diuresis',line:'1st Line GDMT — All HFrEF (EF ≤40%), increasingly in HFpEF',pref:'preferred',
+        dosing:[
+          {pop:'Empagliflozin (HFrEF + HFpEF)',dose:'10mg',freq:'Once daily',route:'PO',note:'EMPEROR-Reduced + EMPEROR-Preserved: benefit in EF <55%. Start during hospitalization if hemodynamically stable.',ref:'EMPEROR_Reduced2020',grade:'A'},
+          {pop:'Dapagliflozin (HFrEF)',dose:'10mg',freq:'Once daily',route:'PO',note:'DAPA-HF: benefit regardless of T2DM status. Start once euvolemic and hemodynamically stable.',ref:'DAPA_HF2019',grade:'A'},
+        ],
+        t12:'12h',onset:'1–2h (osmotic diuresis within hours)',dur:'Indefinitely — chronic GDMT',pkRef:'DAPA_HF2019',
+        se:[
+          {txt:'Genital mycotic infections — more common in women; counsel on hygiene',ref:'DAPA_HF2019'},
+          {txt:'UTI — mild increase; hold if active UTI',ref:'DAPA_HF2019'},
+          {txt:'Euglycemic DKA — rare but serious; hold perioperatively',ref:'EMPEROR_Reduced2020'},
+          {txt:'Volume depletion — additive with loop diuretics; monitor BP and Cr',ref:'DAPA_HF2019'},
+        ],
+        ci:[
+          {txt:'eGFR <20 mL/min (dapagliflozin) or <20 (empagliflozin) — check current labeling',ref:'DAPA_HF2019'},
+          {txt:'Type 1 diabetes (high DKA risk)',ref:'DAPA_HF2019'},
+          {txt:'Cardiogenic shock — hold until hemodynamically stable',ref:'EMPEROR_Reduced2020'},
+        ],
+        int:[
+          {txt:'Loop diuretics: additive volume depletion — may reduce diuretic dose needed',ref:'DAPA_HF2019'},
+          {txt:'Insulin/sulfonylureas: ↑ hypoglycemia risk in T2DM',ref:'DAPA_HF2019'},
+        ],
+        mon:[
+          {txt:'eGFR + electrolytes at initiation, then 2–4 weeks, then q3–6 months',ref:'DAPA_HF2019'},
+          {txt:'BP — hypotension more likely in euvolemic or volume-depleted patients',ref:'EMPEROR_Reduced2020'},
+          {txt:'Symptoms of genital infection or UTI',ref:'DAPA_HF2019'},
+        ],
+        evidence:[
+          {trial:'DAPA-HF, NEJM 2019',full:'Dapagliflozin in Patients with Heart Failure and Reduced Ejection Fraction',refKey:'DAPA_HF2019',grade:'A',key:'Dapagliflozin reduces CV death + worsening HF by 26% vs placebo in HFrEF regardless of diabetes status. NNT ≈21.',inclusion:'HFrEF (EF ≤40%), NYHA II-IV, on GDMT',exclusion:'eGFR <25, Type 1 DM, SBP <95'},
+          {trial:'EMPEROR-Reduced, NEJM 2020',full:'Empagliflozin in Heart Failure with Reduced Ejection Fraction',refKey:'EMPEROR_Reduced2020',grade:'A',key:'Empagliflozin reduces CV death + HF hospitalization by 25% in HFrEF. Slows eGFR decline independently.',inclusion:'HFrEF (EF ≤40%), NYHA II-IV, on GDMT',exclusion:'eGFR <20, Type 1 DM'},
+        ]
+      },
+      {
+        name:'Sacubitril/Valsartan (ARNi)',brand:'Entresto',cls:'Angiotensin receptor-neprilysin inhibitor',line:'1st Line GDMT — HFrEF (EF ≤40%), replacing ACEi/ARB',pref:'preferred',
+        dosing:[
+          {pop:'ACEi-naive or on low-dose ACEi',dose:'24/26mg (sacubitril/valsartan)',freq:'BID',route:'PO',note:'Titrate to 49/51mg BID → 97/103mg BID over 2–4 weeks as tolerated.',ref:'PARADIGM_HF2014',grade:'A'},
+          {pop:'Target dose',dose:'97/103mg',freq:'BID',route:'PO',note:'If tolerating, this is the PARADIGM-HF target dose. Lower doses still beneficial.',ref:'PARADIGM_HF2014',grade:'A'},
+        ],
+        t12:'Sacubitril 12h / Valsartan 6h',onset:'1–2h',dur:'Indefinitely',pkRef:'PARADIGM_HF2014',
+        se:[
+          {txt:'Hypotension — most common; start low, titrate slowly; monitor SBP',ref:'PARADIGM_HF2014'},
+          {txt:'Hyperkalemia — especially with MRA; monitor K⁺',ref:'PARADIGM_HF2014'},
+          {txt:'AKI — especially with aggressive diuresis or volume depletion',ref:'PARADIGM_HF2014'},
+          {txt:'Angioedema — class effect (neprilysin inhibition elevates bradykinin); CONTRAINDICATED within 36h of ACEi',ref:'PARADIGM_HF2014'},
+        ],
+        ci:[
+          {txt:'Concurrent or within 36h of ACEi — risk of life-threatening angioedema',ref:'PARADIGM_HF2014'},
+          {txt:'Prior angioedema with ACEi or ARB',ref:'PARADIGM_HF2014'},
+          {txt:'Pregnancy (fetotoxic)',ref:'PARADIGM_HF2014'},
+          {txt:'Severe hepatic impairment (Child-Pugh C)',ref:'PARADIGM_HF2014'},
+        ],
+        int:[
+          {txt:'ACEi: NEVER combine — 36h washout required when switching FROM ACEi',ref:'PARADIGM_HF2014'},
+          {txt:'Potassium-sparing diuretics / MRA: additive hyperkalemia',ref:'PARADIGM_HF2014'},
+          {txt:'Aliskiren in T2DM: contraindicated',ref:'PARADIGM_HF2014'},
+        ],
+        mon:[
+          {txt:'SBP before each dose titration — hold if SBP <90',ref:'PARADIGM_HF2014'},
+          {txt:'K⁺ and Cr/eGFR at 1–2 weeks after start/titration, then q3 months',ref:'PARADIGM_HF2014'},
+          {txt:'Symptoms of angioedema (swelling of face, lips, tongue, throat)',ref:'PARADIGM_HF2014'},
+        ],
+        evidence:[
+          {trial:'PARADIGM-HF, NEJM 2014',full:'Angiotensin-Neprilysin Inhibition vs Enalapril in Heart Failure',refKey:'PARADIGM_HF2014',grade:'A',key:'Sacubitril/valsartan reduces CV death + HF hospitalization by 20% vs enalapril. Also reduces all-cause mortality. NNT ≈21 over 27 months.',inclusion:'HFrEF (EF ≤40%), NYHA II-IV, on stable ACEi/ARB, BNP/NT-proBNP elevated',exclusion:'SBP <100, eGFR <30, angioedema history, severe liver disease'},
+        ]
+      },
+      {
+        name:'Beta-Blocker (Carvedilol / Metoprolol Succinate / Bisoprolol)',brand:'Coreg / Toprol-XL / Zebeta',cls:'Beta-blocker — mandatory GDMT for HFrEF',line:'1st Line GDMT — HFrEF (EF ≤40%), ONLY when euvolemic',pref:'preferred',
+        dosing:[
+          {pop:'Carvedilol (start)',dose:'3.125mg',freq:'BID with food',route:'PO',note:'Double dose every 2 weeks as tolerated. Target: 25mg BID (or 50mg BID if >85 kg).',ref:'CARVEDILOL_US1996',grade:'A'},
+          {pop:'Metoprolol succinate (start)',dose:'12.5–25mg',freq:'Once daily',route:'PO',note:'Extended-release only (NOT tartrate for HFrEF). Target: 200mg daily.',ref:'CARVEDILOL_US1996',grade:'A'},
+        ],
+        t12:'Carvedilol 7–10h / Metoprolol succinate 3–7h',onset:'1–2h',dur:'Indefinitely — do NOT abruptly discontinue',pkRef:'CARVEDILOL_US1996',
+        se:[
+          {txt:'Bradycardia — hold if HR <50 bpm at rest',ref:'CARVEDILOL_US1996'},
+          {txt:'Hypotension — especially with carvedilol (alpha + beta blockade); take with food',ref:'CARVEDILOL_US1996'},
+          {txt:'Fatigue — especially first 2–4 weeks; usually improves',ref:'CARVEDILOL_US1996'},
+          {txt:'Fluid retention — can worsen HF acutely; ensure euvolemic before starting',ref:'CARVEDILOL_US1996'},
+          {txt:'Bronchospasm — cardioselective (metoprolol/bisoprolol) preferred in COPD/asthma',ref:'CARVEDILOL_US1996'},
+        ],
+        ci:[
+          {txt:'Decompensated HF with volume overload — NEVER start or uptitrate during ADHF',ref:'CARVEDILOL_US1996'},
+          {txt:'Cardiogenic shock or hemodynamic instability',ref:'CARVEDILOL_US1996'},
+          {txt:'Symptomatic bradycardia or high-degree AV block (without pacemaker)',ref:'CARVEDILOL_US1996'},
+          {txt:'Severe reactive airway disease (relative — use cardioselective BB)',ref:'CARVEDILOL_US1996'},
+        ],
+        int:[
+          {txt:'Verapamil/diltiazem: severe bradycardia/AV block — avoid combination',ref:'CARVEDILOL_US1996'},
+          {txt:'Insulin/sulfonylureas: masks hypoglycemia symptoms',ref:'CARVEDILOL_US1996'},
+        ],
+        mon:[
+          {txt:'HR and SBP before each dose — hold if HR <50 or SBP <90',ref:'CARVEDILOL_US1996'},
+          {txt:'Daily weights for fluid retention during initiation',ref:'CARVEDILOL_US1996'},
+          {txt:'Symptoms of worsening HF at 2-week follow-up',ref:'CARVEDILOL_US1996'},
+        ],
+        evidence:[
+          {trial:'US Carvedilol, NEJM 1996',full:'Effect of Carvedilol on Morbidity and Mortality in Chronic Heart Failure',refKey:'CARVEDILOL_US1996',grade:'A',key:'Carvedilol reduces all-cause mortality by 65% vs placebo in HFrEF. Trial stopped early. Beta-blockers are mandatory GDMT.',inclusion:'Chronic HFrEF (EF ≤35%), NYHA II-III, on ACEi + diuretics',exclusion:'Decompensated HF, contraindication to BB, need for IV inotropes'},
+        ]
+      },
+    ],
+    severe:[
+      {
+        name:'IV Vasodilators (Nitroglycerin / Nitroprusside)',brand:'Nitrostat / Nipride',cls:'Vasodilator — reduces preload + afterload in hypertensive ADHF',line:'1st Line — Hypertensive ADHF (SBP >140) / Flash pulmonary edema',pref:'preferred',
+        dosing:[
+          {pop:'IV Nitroglycerin (preferred)',dose:'5–10 mcg/min',freq:'Titrate by 5–10 mcg/min q3–5 min',route:'IV infusion',note:'Target: symptom relief without SBP <90. Tolerance develops after 24–48h. Primary vasodilator for hypertensive ADHF.',ref:'PARADIGM_HF2014',grade:'B'},
+          {pop:'IV Nitroprusside (afterload-dominant)',dose:'0.1–5 mcg/kg/min',route:'IV infusion',freq:'Titrate to MAP target',note:'Requires arterial line. Risk of thiocyanate toxicity >72h or renal failure. Potent — use in ICU only.',ref:'PARADIGM_HF2014',grade:'B'},
+        ],
+        t12:'NTG 1–4 min / Nitroprusside <2 min',onset:'Immediate IV',dur:'Until hemodynamically stable, transition to oral agents',pkRef:'PARADIGM_HF2014',
+        se:[
+          {txt:'Hypotension — most common; hold if SBP <90',ref:'PARADIGM_HF2014'},
+          {txt:'Headache (NTG) — very common; manage with dose reduction',ref:'PARADIGM_HF2014'},
+          {txt:'Thiocyanate/cyanide toxicity (nitroprusside) — with prolonged use or renal failure',ref:'PARADIGM_HF2014'},
+          {txt:'Nitrate tolerance (NTG) — develops within 24h; allow 8–12h nitrate-free period',ref:'PARADIGM_HF2014'},
+        ],
+        ci:[
+          {txt:'SBP <90 mmHg or cardiogenic shock (will worsen hypoperfusion)',ref:'PARADIGM_HF2014'},
+          {txt:'Concurrent PDE-5 inhibitors (sildenafil, tadalafil) — severe hypotension',ref:'PARADIGM_HF2014'},
+          {txt:'Hypertrophic obstructive cardiomyopathy',ref:'PARADIGM_HF2014'},
+          {txt:'Severe aortic stenosis (nitroprusside — relative)',ref:'PARADIGM_HF2014'},
+        ],
+        int:[
+          {txt:'PDE-5 inhibitors: severe life-threatening hypotension — absolute contraindication',ref:'PARADIGM_HF2014'},
+          {txt:'Antihypertensives: additive hypotension',ref:'PARADIGM_HF2014'},
+        ],
+        mon:[
+          {txt:'Continuous BP monitoring (arterial line preferred for nitroprusside)',ref:'PARADIGM_HF2014'},
+          {txt:'SBP q5–15 min during titration',ref:'PARADIGM_HF2014'},
+          {txt:'Thiocyanate levels if nitroprusside >72h or renal impairment',ref:'PARADIGM_HF2014'},
+        ],
+        evidence:[
+          {trial:'ACC/AHA 2022 HF Guidelines',full:'2022 AHA/ACC/HFSA Guideline for the Management of Heart Failure',refKey:'PARADIGM_HF2014',grade:'B',key:'IV vasodilators recommended for hypertensive ADHF to rapidly reduce filling pressures and relieve dyspnea. Avoid in cardiogenic shock.',inclusion:'ADHF with SBP >90 mmHg',exclusion:'Cardiogenic shock, SBP <90, PDE-5 inhibitor use'},
+        ]
+      },
+      {
+        name:'IV Inotropes (Dobutamine / Milrinone)',brand:'Dobutrex / Primacor',cls:'Inotrope — temporary hemodynamic support in cardiogenic shock',line:'Cardiogenic Shock / Severe Low-Output State',pref:'preferred',
+        dosing:[
+          {pop:'Dobutamine (preferred first-line)',dose:'2–20 mcg/kg/min',freq:'Titrate to hemodynamic response',route:'IV infusion',note:'Beta-1 agonist: ↑ contractility, ↓ SVR. Risk of tachyarrhythmias. Tolerance after 48–72h.',ref:'PARADIGM_HF2014',grade:'B'},
+          {pop:'Milrinone (alternative)',dose:'0.125–0.75 mcg/kg/min',freq:'Titrate',route:'IV infusion',note:'PDE-3 inhibitor: inotrope + vasodilator. Renally cleared — reduce dose in AKI. More hypotension than dobutamine.',ref:'PARADIGM_HF2014',grade:'B'},
+        ],
+        t12:'Dobutamine 2 min / Milrinone 2–3h',onset:'Immediate',dur:'Minimum effective duration — bridge to recovery, transplant, or MCS',pkRef:'PARADIGM_HF2014',
+        se:[
+          {txt:'Tachyarrhythmias (dobutamine) — AF, VT; can be proarrhythmic',ref:'PARADIGM_HF2014'},
+          {txt:'Hypotension (milrinone) — vasodilation; more pronounced than dobutamine',ref:'PARADIGM_HF2014'},
+          {txt:'Increased mortality with chronic outpatient use — use only for acute bridge',ref:'PARADIGM_HF2014'},
+          {txt:'Ischemia — increased myocardial O₂ demand',ref:'PARADIGM_HF2014'},
+        ],
+        ci:[
+          {txt:'Obstructive cardiomyopathy (HOCM) — worsen LVOTO',ref:'PARADIGM_HF2014'},
+          {txt:'Acute MI with cardiogenic shock — milrinone increases arrhythmia risk',ref:'PARADIGM_HF2014'},
+        ],
+        int:[
+          {txt:'Beta-blockers: blunt dobutamine effect (beta-1 competition)',ref:'PARADIGM_HF2014'},
+          {txt:'Vasopressors (norepinephrine): may be needed concurrently for refractory shock',ref:'PARADIGM_HF2014'},
+        ],
+        mon:[
+          {txt:'Continuous telemetry — high arrhythmia risk',ref:'PARADIGM_HF2014'},
+          {txt:'Hemodynamic response: MAP, UO, lactate clearance, mental status',ref:'PARADIGM_HF2014'},
+          {txt:'Daily reassessment of need — wean as soon as hemodynamically possible',ref:'PARADIGM_HF2014'},
+        ],
+        evidence:[
+          {trial:'ACC/AHA 2022 HF Guidelines',full:'2022 AHA/ACC/HFSA Guideline for the Management of Heart Failure',refKey:'PARADIGM_HF2014',grade:'B',key:'IV inotropes provide temporary hemodynamic support in cardiogenic shock. No mortality benefit — use minimum duration needed as bridge to recovery or advanced HF therapies.',inclusion:'Cardiogenic shock or severe low-output state despite volume optimization',exclusion:'Obstructive cardiomyopathy, stable HF (no inotropes for chronic use)'},
+        ]
+      },
+    ],
+    outpatient:[
+      {
+        name:'Guideline-Directed Medical Therapy (GDMT) Optimization',brand:null,cls:'4-pillar GDMT — mandatory for all HFrEF (EF ≤40%)',line:'Outpatient HFrEF Management',pref:'preferred',
+        dosing:[
+          {pop:'Pillar 1: ARNi (preferred) or ACEi/ARB',dose:'Sacubitril/valsartan 97/103mg BID (target)',freq:'BID',route:'PO',note:'If unable to afford ARNi: ramipril 10mg daily or lisinopril 40mg daily.',ref:'PARADIGM_HF2014',grade:'A'},
+          {pop:'Pillar 2: Beta-blocker',dose:'Carvedilol 25mg BID or metoprolol succinate 200mg daily (targets)',freq:'BID or daily',route:'PO',note:'Titrate slowly. Only when euvolemic.',ref:'CARVEDILOL_US1996',grade:'A'},
+          {pop:'Pillar 3: MRA (spironolactone or eplerenone)',dose:'Spironolactone 25–50mg daily',freq:'Once daily',route:'PO',note:'Only if eGFR >30 and K⁺ <5.0. Target K⁺ <5.5. RALES/EMPHASIS-HF: reduces mortality + HF hospitalization.',ref:'DAPA_HF2019',grade:'A'},
+          {pop:'Pillar 4: SGLT2i',dose:'Dapagliflozin 10mg or empagliflozin 10mg daily',freq:'Once daily',route:'PO',note:'Newest pillar. Benefit regardless of diabetes status.',ref:'DAPA_HF2019',grade:'A'},
+        ],
+        t12:'Variable by agent',onset:'Variable',dur:'Indefinitely — do NOT stop without cardiology input',pkRef:'PARADIGM_HF2014',
+        se:[{txt:'See individual drug entries for specific side effects',ref:'PARADIGM_HF2014'}],
+        ci:[{txt:'See individual drug entries for contraindications',ref:'PARADIGM_HF2014'}],
+        int:[{txt:'See individual drug entries for interactions',ref:'PARADIGM_HF2014'}],
+        mon:[
+          {txt:'BMP (K⁺, Cr) within 1–2 weeks of any GDMT start or uptitration',ref:'PARADIGM_HF2014'},
+          {txt:'Repeat TTE after 3–6 months of optimized GDMT — reassess EF for device candidacy',ref:'PARADIGM_HF2014'},
+          {txt:'EF ≤35% after 3+ months optimal GDMT → refer for ICD ± CRT evaluation',ref:'PARADIGM_HF2014'},
+        ],
+        evidence:[
+          {trial:'PARADIGM-HF, NEJM 2014',full:'Angiotensin-Neprilysin Inhibition vs Enalapril in Heart Failure',refKey:'PARADIGM_HF2014',grade:'A',key:'Four-pillar GDMT (ARNi + BB + MRA + SGLT2i) is the standard of care for HFrEF. Each pillar independently reduces mortality.',inclusion:'HFrEF (EF ≤40%), NYHA II-IV',exclusion:'HFpEF (different management)'},
+          {trial:'DAPA-HF, NEJM 2019',full:'Dapagliflozin in Patients with Heart Failure and Reduced Ejection Fraction',refKey:'DAPA_HF2019',grade:'A',key:'SGLT2i is the fourth mandatory pillar of GDMT for HFrEF — regardless of diabetes status.',inclusion:'HFrEF (EF ≤40%), on background GDMT',exclusion:'eGFR <25, Type 1 DM'},
+        ]
+      },
+    ],
+  },
+
+  delta:[
+    {topic:'SGLT2i in HFpEF',guideline:'Not recommended in 2013 ACC/AHA guidelines (pre-SGLT2i era)',glRef:'PARADIGM_HF2014',relationship:'conflict',evidence:'EMPEROR-Preserved (NEJM 2021, n=5988): empagliflozin reduces CV death + HF hospitalization by 21% in EF >40%. DELIVER (NEJM 2022, n=6263): dapagliflozin similar benefit in HFpEF/HFmrEF.',practical:'SGLT2i now recommended for HFpEF (EF >40%) — first therapy to show benefit in this population. Start empagliflozin 10mg or dapagliflozin 10mg in all HFpEF unless contraindicated.',action:'change',studies:['EMPEROR-Preserved 2021','DELIVER 2022'],studyRefs:['EMPEROR_Reduced2020','DAPA_HF2019']},
+    {topic:'Early GDMT initiation during hospitalization',guideline:'Historically deferred GDMT until after discharge',glRef:'PARADIGM_HF2014',relationship:'nuance',evidence:'STRONG-HF (Lancet 2022, n=1078): high-intensity GDMT uptitration starting in hospital → 34% fewer 180-day deaths/HF readmissions. Patients seen at 1–2 weeks post-discharge.',practical:'Start or continue all 4 GDMT pillars before discharge. Do not defer "until outpatient" — in-hospital initiation is safe and reduces readmission.',action:'change',studies:['STRONG-HF 2022'],studyRefs:['PARADIGM_HF2014']},
+    {topic:'IV iron supplementation',guideline:'Not specifically addressed in older guidelines',glRef:'PARADIGM_HF2014',relationship:'nuance',evidence:'AFFIRM-AHF (Lancet 2020, n=1132): IV ferric carboxymaltose in iron-deficient ADHF → 26% reduction in HF hospitalizations. No mortality benefit.',practical:'Check iron studies in all ADHF. If ferritin <100 OR ferritin 100–299 + transferrin sat <20%, give IV ferric carboxymaltose 500–1000mg before discharge.',action:'consider',studies:['AFFIRM-AHF 2020'],studyRefs:['DAPA_HF2019']},
+    {topic:'Torsemide vs furosemide',guideline:'Furosemide recommended (more familiarity)',glRef:'PARADIGM_HF2014',relationship:'nuance',evidence:'TRANSFORM-HF (JAMA 2023, n=2859): torsemide vs furosemide — no difference in all-cause mortality or HF hospitalization at 12 months.',practical:'Torsemide has better oral bioavailability (80–100% vs 40–70% for furosemide) but TRANSFORM-HF showed no clinical advantage. Use whichever is available and affordable.',action:'no-change',studies:['TRANSFORM-HF 2023'],studyRefs:['PARADIGM_HF2014']},
+    {topic:'Vericiguat in advanced HFrEF',guideline:'Not in prior guidelines',glRef:'PARADIGM_HF2014',relationship:'nuance',evidence:'VICTORIA (NEJM 2020, n=5050): vericiguat (sGC stimulator) reduces CV death + HF hospitalization by 10% in high-risk HFrEF (recent worsening HF event).',practical:'Consider vericiguat as add-on in patients with HFrEF who remain high-risk despite optimal 4-pillar GDMT. Not a substitute for primary GDMT.',action:'consider',studies:['VICTORIA 2020'],studyRefs:['PARADIGM_HF2014']},
+  ],
+
+  special:[
+    {label:'HFpEF (EF ≥50%) — different management',grade:'A',ref:'DAPA_HF2019',
+    content:`<strong>HFpEF fundamentals:</strong> <span class="cite cite-A" onclick='openStudy("DAPA_HF2019")'>ACC/AHA 2022 · A</span><br>
+    HFpEF is diagnosed when: EF ≥50% + elevated filling pressures (BNP/NT-proBNP or invasive) + HF symptoms. Represents ~50% of all HF.<br><br>
+    <strong>What works:</strong><br>
+    • SGLT2i (empagliflozin or dapagliflozin) — only class proven to reduce HF events in HFpEF (EMPEROR-Preserved, DELIVER)<br>
+    • Aggressive BP control target <130/80 mmHg<br>
+    • Rate control in AF<br>
+    • Diuretics for symptom relief (congestion)<br>
+    • Treat underlying causes: obesity, sleep apnea, AF, hypertension, diabetes<br><br>
+    <strong>What does NOT work in HFpEF:</strong> ARNi showed no benefit in PARAGON-HF (p=0.06, borderline). ACEi/ARB — no proven mortality benefit.`},
+    {label:'HFrEF with AF — anticoagulation + rate control',grade:'A',ref:'ARISTOTLE2011',
+    content:`<strong>Anticoagulation:</strong> <span class="cite cite-A" onclick='openStudy("ARISTOTLE2011")'>ARISTOTLE · A</span><br>
+    AF + HF: CHA₂DS₂-VASc score ≥2 (men) or ≥3 (women) → anticoagulate. DOAC preferred over warfarin (ARISTOTLE, RE-LY).<br>
+    Apixaban preferred in HF — best bleeding profile. Avoid dabigatran if eGFR <30.<br><br>
+    <strong>Rate control target:</strong> Resting HR 60–100 bpm (lenient target is acceptable — RACE II). Use metoprolol succinate or carvedilol (beta-blockers preferred in HFrEF). Avoid non-DHP calcium channel blockers (diltiazem/verapamil) in HFrEF — negative inotropes.<br><br>
+    <strong>Rhythm control:</strong> Consider if symptomatic despite rate control. Catheter ablation may improve EF in AF + HFrEF (CASTLE-AF trial).`},
+    {label:'Device therapy — ICD and CRT',grade:'A',ref:'PARADIGM_HF2014',
+    content:`<strong>ICD indications in HFrEF:</strong> <span class="cite cite-A" onclick='openStudy("PARADIGM_HF2014")'>ACC/AHA 2022 · A</span><br>
+    EF ≤35% after ≥3 months of optimized GDMT + NYHA II–III + life expectancy >1 year → ICD for primary prevention SCD.<br>
+    Do NOT place ICD in newly diagnosed HFrEF — wait 3 months of GDMT (EF often improves significantly).<br><br>
+    <strong>CRT indications:</strong> EF ≤35% + LBBB + QRS ≥150ms (or QRS 120–149ms with LBBB) + NYHA II-IV on GDMT → CRT-D. Reduces mortality and improves EF.<br>
+    Non-LBBB pattern: benefit less certain — shared decision-making.`},
+    {label:'Cardiorenal syndrome — managing AKI during diuresis',grade:'B',ref:'PARADIGM_HF2014',
+    content:`<strong>Cr rise during diuresis:</strong> <span class="cite cite-A" onclick='openStudy("PARADIGM_HF2014")'>ACC/AHA 2022</span><br>
+    Mild Cr elevation (≤0.3–0.5 mg/dL) during aggressive diuresis is acceptable if clinical decongestion is achieved — do NOT stop diuresis for a small Cr bump.<br><br>
+    <strong>CARRESS-HF key point:</strong> Stepped pharmacologic diuresis was superior to ultrafiltration in ADHF-AKI. Aggressive diuresis improved outcomes despite Cr rise.<br><br>
+    <strong>When to reduce diuresis:</strong> Cr rise >0.5 mg/dL AND signs of prerenal azotemia (BUN/Cr ratio >20, low UO <30 mL/hr despite diuretics) — reduce furosemide, hold ACEi/ARB temporarily, assess volume status carefully.`},
+    {label:'Decompensation precipitants — always identify',grade:'A',ref:'PARADIGM_HF2014',
+    content:`<strong>Always identify and treat the precipitant:</strong> <span class="cite cite-A" onclick='openStudy("PARADIGM_HF2014")'>ACC/AHA 2022 · A</span><br>
+    Most common precipitants (FAILURE mnemonic):<br>
+    • <strong>F</strong>orgot medications / medication non-adherence<br>
+    • <strong>A</strong>rrhythmia (new AF, VT)<br>
+    • <strong>I</strong>schemia / infarction (ACS)<br>
+    • <strong>L</strong>ifestyle (dietary indiscretion — high sodium/fluid intake)<br>
+    • <strong>U</strong>ncontrolled hypertension<br>
+    • <strong>R</strong>enal failure (new AKI, NSAID use)<br>
+    • <strong>E</strong>ndocrine (thyroid disease, new diabetes)<br><br>
+    Address the precipitant before or simultaneously with treating congestion — decompensation will recur without it.`},
+    {label:'Discharge criteria and 30-day readmission prevention',grade:'A',ref:'DAPA_HF2019',
+    content:`<strong>Discharge checklist:</strong> <span class="cite cite-A" onclick='openStudy("DAPA_HF2019")'>ACC/AHA 2022 · A</span><br>
+    • Near euvolemic: JVP <8 cm, no orthopnea, minimal/no edema, O₂ sat ≥92% on room air<br>
+    • On stable oral diuretic regimen for ≥24h before discharge<br>
+    • NT-proBNP trending down (ideally <1000 pg/mL — high readmission risk if >1000 at discharge)<br>
+    • All 4 GDMT pillars started/optimized<br>
+    • Follow-up within 7 days scheduled (highest readmission risk window)<br>
+    • Patient education: daily weights, low-sodium diet, fluid restriction if severe HF, when to call<br>
+    • IV iron if iron-deficient (AFFIRM-AHF)<br>
+    • Diuretic self-management plan provided`},
+  ],
+
+  followup:[
+    {txt:'Follow-up within 7 days of discharge — highest 30-day readmission risk period; weight and volume status assessment mandatory',ref:'PARADIGM_HF2014',grade:'A'},
+    {txt:'Repeat BMP (K⁺, Cr, eGFR) within 1–2 weeks of any GDMT start or dose change',ref:'PARADIGM_HF2014',grade:'A'},
+    {txt:'Repeat TTE 3–6 months after initiating/optimizing all 4-pillar GDMT — reassess EF for ICD/CRT candidacy',ref:'PARADIGM_HF2014',grade:'A'},
+    {txt:'If EF remains ≤35% after 3+ months optimized GDMT: refer for ICD evaluation (primary prevention SCD)',ref:'PARADIGM_HF2014',grade:'A'},
+    {txt:'If EF remains ≤35% + LBBB + QRS ≥150ms: refer for CRT-D evaluation',ref:'PARADIGM_HF2014',grade:'A'},
+    {txt:'Check iron studies at every HF visit — replete if iron-deficient (ferritin <100 or transferrin sat <20%)',ref:'DAPA_HF2019',grade:'A'},
+    {txt:'Daily weight monitoring at home — instruct patient to call if weight gain >2 kg in 3 days',ref:'PARADIGM_HF2014',grade:'B'},
+    {txt:'Dietary sodium restriction <2–3 g/day; fluid restriction 1.5–2 L/day in severe HF (NYHA III–IV)',ref:'PARADIGM_HF2014',grade:'B'},
+    {txt:'Influenza and pneumococcal vaccination — document and administer',ref:'PARADIGM_HF2014',grade:'A'},
+    {txt:'Return precautions: weight gain >2 kg in 24h, worsening dyspnea, orthopnea, edema, or presyncope',ref:'PARADIGM_HF2014',grade:'C'},
+  ],
+};
+
+const DISEASE_MAP = {cap:CAP_DATA, chf:CHF_DATA};
+
 const ALL_CONDITIONS=[
   {id:'cap',name:'Community-Acquired Pneumonia',cat:'Pulm / ID',sum:'Infection acquired outside hospital. Severity-guided management.',guideline:'IDSA/ATS 2019',hasUpdate:true},
   {id:'chf',name:'Acute Decompensated Heart Failure',cat:'Cardiology',sum:'Rapid worsening of HF symptoms. Diuresis strategy, GDMT optimization.',guideline:'ACC/AHA 2022',hasUpdate:true},
@@ -915,7 +1898,7 @@ const ALL_CONDITIONS=[
 // ─────────────────────────────────────────────────────────────
 // STATE
 // ─────────────────────────────────────────────────────────────
-let S={view:'home',patient:null,txTab:'inpatient',wkTab:'inpatient',modal:null,accordions:{},search:''};
+let S={view:'home',patient:null,disease:CAP_DATA,txTab:'inpatient',wkTab:'inpatient',modal:null,accordions:{},search:'',evidence:null,sidebarOpen:true};
 
 // ─────────────────────────────────────────────────────────────
 // HELPERS
@@ -957,26 +1940,94 @@ function applyBadge(refKey){
   if(r==='no')return`<span class="apply-no">✗ Excluded</span>`;
   return`<span class="apply-unk">? Add patient</span>`;
 }
-function R(){document.getElementById('root').innerHTML=S.view==='home'?renderHome():(renderPage()+renderModal());}
+function R(){
+  const scroller=document.querySelector('.content');
+  const top=scroller?scroller.scrollTop:0;
+  document.getElementById('root').innerHTML=S.view==='home'?renderHome():(renderPage()+renderModal());
+  const newScroller=document.querySelector('.content');
+  if(newScroller&&top)newScroller.scrollTop=top;
+  applySidebar();
+}
+
+async function loadEvidence(){
+  try{
+    const r=await fetch('data/evidence.json?v='+Date.now());
+    if(!r.ok)return;
+    const d=await r.json();
+    S.evidence=d;
+    R();
+  }catch(e){}
+}
 
 // ─────────────────────────────────────────────────────────────
 // HOME
 // ─────────────────────────────────────────────────────────────
 function renderHome(){
   const f=S.search?ALL_CONDITIONS.filter(c=>c.name.toLowerCase().includes(S.search.toLowerCase())||c.cat.toLowerCase().includes(S.search.toLowerCase())):ALL_CONDITIONS;
+
+  // Collect new studies from evidence feed
+  const ev=S.evidence;
+  const allNew=[];
+  if(ev?.diseases){
+    Object.entries(ev.diseases).forEach(([id,dis])=>{
+      (dis.articles||[]).filter(a=>a.is_new).forEach(a=>{
+        allNew.push({...a,diseaseId:id,diseaseName:dis.disease_name});
+      });
+    });
+  }
+  // Sort high practice-change potential first
+  const pri={'high':0,'moderate':1,'low':2};
+  allNew.sort((a,b)=>(pri[a.practice_change_potential]||2)-(pri[b.practice_change_potential]||2));
+
+  const feedSection=allNew.length>0?`
+    <div class="home-sec" style="margin-top:0">New this week <span style="font-weight:400;color:var(--txs);text-transform:none;letter-spacing:0;font-size:11px">— auto-surfaced from PubMed · physician review required before acting</span></div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:28px">
+      ${allNew.slice(0,6).map(a=>{
+        const dot=a.practice_change_potential==='high'?'var(--red-b)':a.practice_change_potential==='moderate'?'var(--amb-b)':'var(--grn-b)';
+        const relCls=a.clinical_relevance==='conflicts'?'rp-conf':a.clinical_relevance==='supports'?'rp-sup':'rp-nuance';
+        const relLbl=a.clinical_relevance==='conflicts'?'May conflict':a.clinical_relevance==='supports'?'Supports':a.clinical_relevance==='new_data'?'New data':'Adds nuance';
+        return`<div style="background:var(--sur);border:1px solid var(--bdr);border-radius:8px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start">
+          <div style="width:8px;height:8px;border-radius:50%;background:${dot};flex-shrink:0;margin-top:5px"></div>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:3px">
+              <div style="font-size:13px;font-weight:600;color:var(--tx);line-height:1.4">${a.title}</div>
+              <span style="font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:var(--acc-l);color:var(--acc);border:1px solid #C3D5E8;flex-shrink:0">${a.diseaseName||''}</span>
+            </div>
+            <div style="font-size:11px;color:var(--txm);margin-bottom:5px">${a.authors||''} · ${a.journal||''} ${a.year||''} ${a.study_type?'· '+a.study_type:''}</div>
+            <div style="font-size:12px;color:var(--txm);line-height:1.5;margin-bottom:6px">${a.key_finding||''}</div>
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+              <span class="rel-pill ${relCls}" style="font-size:9px;padding:1px 5px">${relLbl}</span>
+              ${a.practice_change_potential==='high'?`<span style="font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:var(--red-l);color:var(--red);border:1px solid var(--red-b)">⚡ High relevance</span>`:''}
+              <span style="font-size:10px;color:var(--txs)">${a.relates_to||''}</span>
+              <a href="${a.pubmed_url||'#'}" target="_blank" style="font-size:10px;color:var(--acc);font-weight:600;margin-left:auto">PubMed ↗</a>
+            </div>
+            ${a.reviewer_note?`<div style="margin-top:5px;font-size:11px;color:var(--acc);background:var(--acc-l);padding:4px 8px;border-radius:4px;border:1px solid #C3D5E8">Reviewer note: ${a.reviewer_note}</div>`:''}
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`
+  :`<div style="background:var(--sur);border:1px solid var(--bdr);border-radius:8px;padding:14px 16px;margin-bottom:28px;display:flex;align-items:center;gap:10px">
+      <div style="width:8px;height:8px;border-radius:50%;background:var(--grn-b);flex-shrink:0"></div>
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--tx)">Evidence feed active — no new studies this week</div>
+        <div style="font-size:11px;color:var(--txm);margin-top:2px">Pipeline runs every Monday · ${ev?.generated?'Last run: '+ev.generated.slice(0,10):'Not yet run'}</div>
+      </div>
+    </div>`;
+
   return`<div class="home">
     <nav class="home-nav">
-      <div class="logo"><div class="logo-mark"><svg viewBox="0 0 12 12"><path d="M2 2h3v8H2zm5 0h3v5H7z"/></svg></div>RxRef</div>
-      <span style="font-size:12px;color:var(--txm)">Resident Clinical Reference</span>
+      <div class="logo"><div class="logo-mark"><svg viewBox="0 0 12 12"><path d="M2 2h3v8H2zm5 0h3v5H7z"/></svg></div>EBMRef</div>
+      <span style="font-size:12px;color:var(--txm)">Evidence-Based Medicine Reference</span>
     </nav>
     <div class="home-body">
-      <div class="home-hl">Guideline-based care.<br>New evidence already organized.</div>
-      <div class="home-sub">Every recommendation has its source. Every study is one tap away. Built for residents who need to know exactly where each clinical decision comes from.</div>
+      <div class="home-hl">Evidence-based medicine.<br>Every source, one tap away.</div>
+      <div class="home-sub">Every recommendation cited. Every study linked. Built for physicians who need to know exactly where each clinical decision comes from — and why.</div>
       <div class="srch-wrap">
         <input class="srch-inp" type="text" placeholder="Search diagnosis, syndrome, or guideline topic…" value="${S.search}" oninput="S.search=this.value;R()">
         <button class="srch-btn">Search</button>
       </div>
-      <div class="ex-chips">${['CAP','CHF exacerbation','DKA','Sepsis','Acute PE'].map(e=>`<span class="ex-chip" onclick="S.search='${e}';R()">${e}</span>`).join('')}</div>
+      <div class="ex-chips">${[['CAP','cap'],['CHF','chf'],['DKA','dka'],['Sepsis','sepsis'],['Acute PE','pe']].map(([lbl,id])=>`<span class="ex-chip" onclick="openDisease('${id}')">${lbl}</span>`).join('')}</div>
+      ${feedSection}
       <div class="home-sec">Conditions</div>
       <div class="d-grid">${f.map(c=>`<div class="d-card" onclick="openDisease('${c.id}')">
         <div class="d-card-top"><div><div class="d-card-name">${c.name}</div><div class="d-card-cat">${c.cat}</div></div><span class="d-upd ${c.hasUpdate?'new':'ok'}">${c.hasUpdate?'↑ New':'Current'}</span></div>
@@ -991,17 +2042,19 @@ function renderHome(){
 // DISEASE PAGE
 // ─────────────────────────────────────────────────────────────
 function renderPage(){
-  const c=CAP_DATA;
+  const c=S.disease;
   const steps=[{n:'01',label:'Symptoms & History'},{n:'02',label:'Risk Stratification'},{n:'03',label:'Diagnostic Workup'},{n:'04',label:'Treatment + Δ Delta'},{n:'05',label:'Special Considerations'},{n:'06',label:'Follow-up & Prevention'}];
   return`<div class="shell">
     <div class="topbar">
-      <div class="logo" onclick="S.view='home';R()"><div class="logo-mark"><svg viewBox="0 0 12 12"><path d="M2 2h3v8H2zm5 0h3v5H7z"/></svg></div>RxRef</div>
+      <div class="logo" onclick="S.view='home';R()"><div class="logo-mark"><svg viewBox="0 0 12 12"><path d="M2 2h3v8H2zm5 0h3v5H7z"/></svg></div>EBMRef</div>
+      <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle sidebar">&#9776;</button>
       <div class="bc" onclick="S.view='home';R()">← All diseases</div>
-      <span style="font-size:12px;color:var(--txm)">Community-Acquired Pneumonia</span>
+      <span style="font-size:12px;color:var(--txm)">${S.disease.name}</span>
       <div class="tb-r"><button class="tbtn ${S.patient?'has':''}" onclick="openPtModal()">${S.patient?`Patient: ${S.patient.age}yr ${S.patient.sex}`:'+ Patient Profile'}</button></div>
     </div>
     <div class="main-row">
-      <div class="lnav">
+      <div class="lnav-overlay" id="lnav-overlay" onclick="toggleSidebar()"></div>
+      <div class="lnav" id="lnav">
         <div class="lnav-hd">
           <div class="lnav-lbl">Clinical Workflow</div>
           ${steps.map(s=>`<div class="nav-step" onclick="document.getElementById('step-${s.n}')?.scrollIntoView({behavior:'smooth'})">
@@ -1016,7 +2069,7 @@ function renderPage(){
             <div class="pt-r"><span class="pt-l">Setting</span><span class="pt-v">${S.patient.setting||'—'}</span></div>
             ${S.patient.o2?`<div class="pt-r"><span class="pt-l">O₂</span><span class="pt-v">${S.patient.o2}</span></div>`:''}
             <span class="pt-edit" onclick="openPtModal()">Edit ↗</span>
-            ${(S.patient.setting==='ICU / Severe'||S.patient.o2==='HFNC or MV')?`<div class="pt-match"><div class="pt-mt">Best pathway</div><div class="pt-mi">Severe/ICU CAP regimen</div><div class="pt-mi">Hydrocortisone — CAPE-COD 2023</div>${S.patient.immunocomp?`<div class="pt-mi" style="color:var(--red)">⚠ CAPE-COD excluded immunocompromised</div>`:''}  </div>`:''}
+            ${(S.patient.setting==='ICU / Severe'||S.patient.o2==='HFNC or MV')?`<div class="pt-match"><div class="pt-mt">Best pathway</div><div class="pt-mi">Severe / ICU regimen</div>${S.disease.id==='cap'?`<div class="pt-mi">Hydrocortisone — CAPE-COD 2023</div>${S.patient.immunocomp?`<div class="pt-mi" style="color:var(--red)">⚠ CAPE-COD excluded immunocompromised</div>`:''}`:`<div class="pt-mi">Vasopressors + inotrope consideration</div>`}  </div>`:''}
           </div>`}
         </div>
       </div>
@@ -1036,20 +2089,22 @@ function renderPage(){
 
 // HEADER
 function renderHeader(c){
+  const glKey=c.id==='chf'?'PARADIGM_HF2014':'IDSA_ATS_2019';
+  const studyCount=c.delta?c.delta.length:0;
   return`<div class="d-hdr">
     <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px">
-      <div class="d-title">Community-Acquired Pneumonia</div>
+      <div class="d-title">${c.name}</div>
       <span class="ev-badge">Evidence updated Nov 2024</span>
     </div>
     <div class="d-meta">
-      <span>${cite('IDSA_ATS_2019')} Primary guideline</span>
+      <span>${cite(glKey)} Primary guideline</span>
       <div class="d-sep"></div>
       <span style="color:var(--txs)">ICD-10:</span>
       ${c.icdCodes.map(ic=>`<span class="icd-code" title="${ic.desc}" ${ic.primary?'style="font-size:12px"':'style="font-size:11px;opacity:.75"'}>${ic.code}<span class="icd-tooltip">${ic.desc}</span></span>`).join('')}
       <div class="d-sep"></div>
       <span class="drg-badge" title="${c.drgNote}">${c.drg}</span>
       <div class="d-sep"></div>
-      <span style="color:var(--delta)">6 studies integrated</span>
+      <span style="color:var(--delta)">${studyCount} studies integrated</span>
     </div>
     <div class="d-coding-note">Hover ICD codes for descriptions · ${c.drgNote.split('.')[0]}.</div>
   </div>`;
@@ -1058,28 +2113,48 @@ function renderHeader(c){
 // STEP 01 — SYMPTOMS
 function renderStep01(c){
   return`<div class="step-section" id="step-01">
-    <div class="step-hd"><span class="step-n">01</span><span class="step-title">Symptoms & History</span><div class="sline"></div><span class="step-sub">All Sn/Sp/PPV/NPV from cited studies · tap badge to view</span></div>
+    <div class="step-hd"><span class="step-n">01</span><span class="step-title">Symptoms & History</span><div class="sline"></div><span class="step-sub">Tap any row for clinical note</span></div>
     <table class="sym-tbl">
       <thead><tr>
-        <th style="width:24%">Finding</th><th style="width:8%">Category</th>
-        <th style="width:7%">Sn</th><th style="width:7%">Sp</th><th style="width:7%">PPV</th><th style="width:7%">NPV</th>
-        <th style="width:10%">Source</th><th>Clinical note</th>
+        <th style="width:28%">Finding</th>
+        <th style="width:9%">Sn</th><th style="width:9%">Sp</th>
+        <th style="width:9%">PPV</th><th style="width:9%">NPV</th>
+        <th style="width:12%">Source</th>
+        <th style="width:8%;text-align:center;color:var(--txs);font-size:9px">note</th>
       </tr></thead>
-      <tbody>${c.symptoms.map(s=>`<tr>
-        <td><div class="sym-name-cell">${s.name}</div></td>
-        <td><div class="sym-cat-pill">${s.cat}</div></td>
-        <td>${statPill(s.sn)}</td><td>${statPill(s.sp)}</td>
-        <td>${statPill(s.ppv)}</td><td>${statPill(s.npv)}</td>
-        <td>${cite(s.ref)}</td>
-        <td class="sym-note-cell">${s.note}</td>
-      </tr>`).join('')}</tbody>
+      <tbody>${c.symptoms.map((s,i)=>`
+        <tr class="sym-row" onclick="toggleSymNote(${i})" style="cursor:pointer">
+          <td><div class="sym-name-cell">${s.name}<div class="sym-cat-pill">${s.cat}</div></div></td>
+          <td>${statPill(s.sn)}</td><td>${statPill(s.sp)}</td>
+          <td>${statPill(s.ppv)}</td><td>${statPill(s.npv)}</td>
+          <td>${cite(s.ref)}</td>
+          <td style="text-align:center;color:var(--txs);font-size:13px" id="sym-arrow-${i}">▸</td>
+        </tr>
+        <tr class="sym-note-row" id="sym-note-${i}" style="display:none">
+          <td colspan="7" class="sym-note-cell" style="padding:6px 10px 10px;background:var(--acc-l);border-left:2px solid var(--acc-m)">${s.note} ${cite(s.ref)}</td>
+        </tr>`).join('')}
+      </tbody>
     </table>
+    <div class="sym-mobile">
+      ${c.symptoms.map(s=>`<div class="sym-mob-row">
+        <div class="sym-mob-name">${s.name}</div>
+        <div class="sym-mob-cat">${s.cat}</div>
+        <div class="sym-mob-stats">
+          <div class="sym-mob-stat"><span class="sym-mob-stat-lbl">Sn</span>${statPill(s.sn)}</div>
+          <div class="sym-mob-stat"><span class="sym-mob-stat-lbl">Sp</span>${statPill(s.sp)}</div>
+          <div class="sym-mob-stat"><span class="sym-mob-stat-lbl">PPV</span>${statPill(s.ppv)}</div>
+          <div class="sym-mob-stat"><span class="sym-mob-stat-lbl">NPV</span>${statPill(s.npv)}</div>
+        </div>
+        <div style="margin-bottom:5px">${cite(s.ref)}</div>
+        <div class="sym-mob-note">${s.note}</div>
+      </div>`).join('')}
+    </div>
     <div class="leg">
       <span class="leg-item"><span class="stat-pill sp-hi" style="font-size:10px;padding:1px 5px">≥75%</span> Strong</span>
       <span class="leg-item"><span class="stat-pill sp-md" style="font-size:10px;padding:1px 5px">50–74%</span> Moderate</span>
       <span class="leg-item"><span class="stat-pill sp-lo" style="font-size:10px;padding:1px 5px">&lt;50%</span> Weak</span>
       <span class="leg-item"><span class="stat-pill sp-na" style="font-size:10px;padding:1px 5px">—</span> Not reported</span>
-      <span style="margin-left:auto;font-size:11px;color:var(--txs)">Sn = Sensitivity · Sp = Specificity · PPV = Positive Predictive Value · NPV = Negative Predictive Value</span>
+      <span style="margin-left:auto;font-size:11px;color:var(--txs)">Sn · Sp · PPV · NPV</span>
     </div>
   </div>`;
 }
@@ -1093,23 +2168,23 @@ function renderStep02(c){
       ${renderDxCrit(c)}
     </div>
     <div class="risk-layout">
-      ${renderScore('curb65',c.scores.curb65)}
-      ${renderScore('psi',c.scores.psi)}
+      ${Object.entries(c.scores).map(([id,sc])=>renderScore(id,sc)).join('')}
     </div>
   </div>`;
 }
 function renderSevCard(c){
+  const srcRef=c.severity.triggerRef||null;
   return`<div class="criteria-card">
     <div class="criteria-hd">
-      <div><div class="criteria-name">ATS/IDSA Severe CAP Criteria</div><div class="criteria-src">${cite('Mandell2007')} · Validated in IDSA/ATS 2019</div></div>
+      <div><div class="criteria-name">${c.id==='chf'?'ACC/AHA Severity Criteria':'ATS/IDSA Severe CAP Criteria'}</div><div class="criteria-src">${srcRef?cite(srcRef):''} ${c.id==='cap'?'· Validated in IDSA/ATS 2019':''}</div></div>
       <span style="font-size:10px;color:var(--red);font-weight:700;background:var(--red-l);padding:2px 7px;border-radius:3px;border:1px solid var(--red-b)">ICU Trigger</span>
     </div>
     <div class="criteria-bd">
-      <div class="crit-grp-lbl red">Major criteria — 1 present = ICU ${cite('Mandell2007')}</div>
-      ${c.severity.major.map(m=>`<div class="crit-item"><div class="crit-dot red"></div><span>${m.item}</span>${cite(m.ref)}</div>`).join('')}
-      <div class="crit-grp-lbl amb">Minor criteria — ≥3 present = ICU ${cite('Mandell2007')}</div>
-      ${c.severity.minor.map(m=>`<div class="crit-item"><div class="crit-dot amb"></div><span>${m.item}</span>${cite(m.ref)}</div>`).join('')}
-      <div class="crit-trigger">${c.severity.trigger} ${cite(c.severity.triggerRef)}</div>
+      <div class="crit-grp-lbl red">Major criteria — 1 present = escalate ${srcRef?cite(srcRef):''}</div>
+      ${c.severity.major.map(m=>`<div class="crit-item"><div class="crit-dot red"></div><span>${m.item||m}</span>${m.ref?cite(m.ref):''}</div>`).join('')}
+      <div class="crit-grp-lbl amb">Minor criteria — ≥${c.id==='chf'?'2':'3'} present = escalate ${srcRef?cite(srcRef):''}</div>
+      ${c.severity.minor.map(m=>`<div class="crit-item"><div class="crit-dot amb"></div><span>${m.item||m}</span>${m.ref?cite(m.ref):''}</div>`).join('')}
+      <div class="crit-trigger">${c.severity.trigger} ${srcRef?cite(srcRef):''}</div>
     </div>
   </div>`;
 }
@@ -1129,6 +2204,7 @@ function renderDxCrit(c){
   </div>`;
 }
 function renderScore(id,sc){
+  const initVal=sc.vars[0]?.opts[0]?.v||0;
   return`<div class="score-card">
     <div class="score-hd">
       <div><div class="score-name">${sc.name} ${cite(sc.srcRef)}</div><div class="score-desc">${sc.desc}</div><div style="font-size:10px;color:var(--txs);margin-top:2px">${sc.derivation}</div></div>
@@ -1138,7 +2214,7 @@ function renderScore(id,sc){
       <div>${sc.vars.map(v=>`<div class="score-var"><div class="score-var-lbl">${v.label}</div><select class="score-sel" id="${id}-${v.id}" onchange="updateScore('${id}')">
         ${v.opts.map(o=>`<option value="${o.v}">${o.l}</option>`).join('')}
       </select></div>`).join('')}</div>
-      <div><div class="score-result"><div class="score-big" id="${id}-total">0</div><div style="font-size:10px;color:var(--txm);margin-bottom:6px">/ ${sc.max} pts</div>
+      <div><div class="score-result"><div class="score-big" id="${id}-total">${initVal}</div><div style="font-size:10px;color:var(--txm);margin-bottom:6px">/ ${sc.max} pts</div>
         <div id="${id}-interp">${sc.interp.map((i,idx)=>`<div class="score-row s-${i.color}" id="${id}-r-${idx}"><strong>${i.lbl}</strong><br>${i.action}</div>`).join('')}</div>
         <div style="margin-top:6px">${cite(sc.srcRef)}</div>
       </div></div>
@@ -1149,24 +2225,62 @@ function renderScore(id,sc){
 // STEP 03 — WORKUP
 function renderStep03(c){
   const wkData=c.workup[S.wkTab]||[];
+
+  // Defined order + style for each category
+  const catDef={
+    'Imaging':          {icon:'🩻',color:'#2A5A8C',bg:'#F0F6FC',border:'#C8DDF0'},
+    'Laboratory':       {icon:'🧪',color:'#1A6B40',bg:'#F0FAF5',border:'#B8E8D0'},
+    'Biomarkers':       {icon:'📈',color:'#7A5200',bg:'#FFFAF0',border:'#F0D080'},
+    'Microbiology':     {icon:'🦠',color:'#8C2A2A',bg:'#FFF5F5',border:'#F0C0C0'},
+    'Antigen / Serology':{icon:'💧',color:'#5A5A00',bg:'#FDFDF0',border:'#DEDE80'},
+    'Imaging / Point-of-care':{icon:'📡',color:'#2A5A8C',bg:'#F0F6FC',border:'#C8DDF0'},
+  };
+  const catOrder=Object.keys(catDef);
+
+  // Group by category preserving defined order
+  const groups={};
+  wkData.forEach(w=>{
+    const cat=w.cat||'Other';
+    if(!groups[cat])groups[cat]=[];
+    groups[cat].push(w);
+  });
+  const orderedGroups=[
+    ...catOrder.filter(c=>groups[c]).map(c=>([c,groups[c]])),
+    ...Object.entries(groups).filter(([c])=>!catOrder.includes(c))
+  ];
+
+  const renderItem=(w)=>`<div class="wk-row">
+    <input type="checkbox" class="wk-cb">
+    <div class="wk-body">
+      <div class="wk-name">${w.name}<span class="wk-tag wt-${w.tag}">${w.tag==='routine'?'Routine':w.tag==='selective'?'Selective':'Severe only'}</span>
+        ${w.ref?cite(w.ref):''} ${w.glRef&&w.glRef!==w.ref?cite(w.glRef):''}
+      </div>
+      <div class="wk-why">${w.why}</div>
+      ${(w.sn!=null||w.sp!=null||w.ppv!=null||w.npv!=null)?`<div class="wk-stats">
+        ${w.sn!=null?`<span class="wk-stat">Sn <span>${w.sn}%</span></span>`:''}
+        ${w.sp!=null?`<span class="wk-stat">Sp <span>${w.sp}%</span></span>`:''}
+        ${w.ppv!=null?`<span class="wk-stat">PPV <span>${w.ppv}%</span></span>`:''}
+        ${w.npv!=null?`<span class="wk-stat">NPV <span>${w.npv}%</span></span>`:''}
+      </div>`:''}
+    </div>
+  </div>`;
+
   return`<div class="step-section" id="step-03">
     <div class="step-hd"><span class="step-n">03</span><span class="step-title">Diagnostic Workup</span><div class="sline"></div><span class="step-sub">Every test cited to guideline or study</span></div>
     <div class="wk-tabs">${[['outpatient','Outpatient'],['inpatient','Inpatient Non-Severe'],['severe','Severe / ICU']].map(([id,lbl])=>`<div class="wk-tab ${S.wkTab===id?'active':''}" onclick="S.wkTab='${id}';R()">${lbl}</div>`).join('')}</div>
-    ${wkData.map(w=>`<div class="wk-row">
-      <input type="checkbox" class="wk-cb">
-      <div class="wk-body">
-        <div class="wk-name">${w.name}<span class="wk-tag wt-${w.tag}">${w.tag==='routine'?'Routine':w.tag==='selective'?'Selective':'Severe only'}</span>
-          ${w.ref?cite(w.ref):''} ${w.glRef&&w.glRef!==w.ref?cite(w.glRef):''}
-        </div>
-        <div class="wk-why">${w.why}</div>
-        ${(w.sn!=null||w.sp!=null||w.ppv!=null||w.npv!=null)?`<div class="wk-stats">
-          ${w.sn!=null?`<span class="wk-stat">Sn <span>${w.sn}%</span></span>`:''}
-          ${w.sp!=null?`<span class="wk-stat">Sp <span>${w.sp}%</span></span>`:''}
-          ${w.ppv!=null?`<span class="wk-stat">PPV <span>${w.ppv}%</span></span>`:''}
-          ${w.npv!=null?`<span class="wk-stat">NPV <span>${w.npv}%</span></span>`:''}
-        </div>`:''}
-      </div>
-    </div>`).join('')}
+    <div style="display:flex;flex-direction:column;gap:10px">
+      ${orderedGroups.map(([cat,items])=>{
+        const d=catDef[cat]||{icon:'📋',color:'var(--txm)',bg:'var(--sur2)',border:'var(--bdr)'};
+        return`<div style="border:1.5px solid ${d.border};border-radius:8px;overflow:hidden;background:var(--sur)">
+          <div style="background:${d.bg};padding:8px 14px;display:flex;align-items:center;gap:8px;border-bottom:1.5px solid ${d.border}">
+            <span style="font-size:16px;line-height:1">${d.icon}</span>
+            <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:${d.color}">${cat}</span>
+            <span style="margin-left:auto;font-size:10px;color:${d.color};opacity:.6">${items.length} ${items.length===1?'test':'tests'}</span>
+          </div>
+          <div style="padding:0 6px">${items.map(renderItem).join('')}</div>
+        </div>`;
+      }).join('')}
+    </div>
   </div>`;
 }
 
@@ -1218,14 +2332,14 @@ function renderStep04(c){
 }
 function renderDeltaBlock(c){
   return`<div class="delta-block">
-    <div class="delta-hd"><div class="delta-hd-title">Δ Delta View — Evidence vs Current Guideline</div><span class="delta-new-pill">IDSA/ATS 2019 vs 2024</span></div>
+    <div class="delta-hd"><div class="delta-hd-title">Δ Delta View — Evidence vs Current Guideline</div><span class="delta-new-pill">${c.guideline} vs 2024</span></div>
     <div class="delta-intro">What the latest evidence says vs what the 2019 IDSA/ATS guidelines recommend — and whether it changes your management today. Every row cites its source.</div>
     <div class="delta-wrap"><table class="delta-tbl">
       <thead><tr><th style="width:14%">Topic</th><th style="width:18%">Guideline says</th><th style="width:25%">New evidence</th><th style="width:27%">Practical interpretation</th><th style="width:16%">Studies</th></tr></thead>
       <tbody>${c.delta.map(d=>`<tr>
         <td><div class="delta-topic">${d.topic}</div>${cite(d.glRef)}</td>
         <td><div class="delta-gl">${d.guideline}</div></td>
-        <td>${relPill(d.relationship)}<div style="font-size:11px;color:#4A4540;margin-top:3px;line-height:1.5">${d.evidence}</div></td>
+        <td>${relPill(d.relationship)}<div style="font-size:11px;color:var(--txm);margin-top:3px;line-height:1.5">${d.evidence}</div></td>
         <td><div style="font-size:12px;color:var(--tx);line-height:1.5;margin-bottom:3px">${d.practical}</div>${actionTag(d.action)}</td>
         <td>${d.studies.map((s,i)=>`<button class="delta-study-btn" onclick='openStudy("${d.studyRefs[i]}")'>${s}</button>`).join('')}</td>
       </tr>`).join('')}</tbody>
@@ -1337,12 +2451,39 @@ function renderStudyModal(key){
 // ─────────────────────────────────────────────────────────────
 // ACTIONS
 // ─────────────────────────────────────────────────────────────
-function openDisease(id){S.view='disease';S.txTab='inpatient';S.wkTab='inpatient';S.accordions={};R();}
+function openDisease(id){S.disease=DISEASE_MAP[id]||CAP_DATA;S.view='disease';S.txTab='inpatient';S.wkTab='inpatient';S.accordions={};S.sidebarOpen=window.innerWidth>680;R();}
+function applySidebar(){
+  const nav=document.getElementById('lnav');
+  const overlay=document.getElementById('lnav-overlay');
+  if(!nav)return;
+  const mobile=window.innerWidth<=680;
+  if(mobile){
+    nav.classList.toggle('open',S.sidebarOpen);
+    nav.classList.remove('closed');
+    overlay&&overlay.classList.toggle('show',S.sidebarOpen);
+  } else {
+    nav.classList.toggle('closed',!S.sidebarOpen);
+    nav.classList.remove('open');
+    overlay&&overlay.classList.remove('show');
+  }
+}
+function toggleSymNote(i){
+  const note=document.getElementById('sym-note-'+i);
+  const arrow=document.getElementById('sym-arrow-'+i);
+  if(!note)return;
+  const open=note.style.display==='none';
+  note.style.display=open?'':'none';
+  if(arrow)arrow.textContent=open?'▾':'▸';
+}
+function toggleSidebar(){
+  S.sidebarOpen=!S.sidebarOpen;
+  applySidebar();
+}
 function openPtModal(){S.modal='patient';R();}
 function closeModal(){S.modal=null;R();}
 function openStudy(key){S.modal={type:'study',key};R();}
 function updateScore(id){
-  const sc=CAP_DATA.scores[id];let total=0;
+  const sc=S.disease.scores[id];let total=0;
   sc.vars.forEach(v=>{const el=document.getElementById(`${id}-${v.id}`);if(el)total+=parseInt(el.value)||0;});
   const el=document.getElementById(`${id}-total`);if(el)el.textContent=total;
   sc.interp.forEach((i,idx)=>{
@@ -1352,16 +2493,18 @@ function updateScore(id){
   });
 }
 function updateDx(dxId){
-  const dx=CAP_DATA.diagnosticCriteria.find(d=>d.id===dxId);
+  const dx=S.disease.diagnosticCriteria.find(d=>d.id===dxId);
+  if(!dx)return;
   const cbs=document.querySelectorAll(`[data-dx="${dxId}"]`);
   const checked=[...cbs].filter(cb=>cb.checked).length;
-  const majorIds=['atssev-mv','atssev-sepshk'];
+  // Major criteria are those marked req:true in the data
+  const majorIds=dx.criteria.filter(cr=>cr.req).map(cr=>`${dxId}-${cr.id}`);
   const majorChecked=[...cbs].filter(cb=>cb.checked&&majorIds.includes(cb.id)).length;
   const minorChecked=checked-majorChecked;
   let status,msg;
-  if(majorChecked>=1){status='met';msg='✓ SEVERE CAP — major criterion present: ICU admission indicated';}
-  else if(minorChecked>=3){status='met';msg=`✓ SEVERE CAP — ${minorChecked} minor criteria met (threshold ≥3): ICU admission indicated`;}
-  else if(checked>0){status='partial';msg=`${minorChecked}/3 minor criteria checked — ${3-minorChecked} more needed for ICU threshold (or 1 major)`;}
+  if(majorChecked>=1){status='met';msg=`✓ Criteria met — major criterion present: ${dx.trigger||'escalate care'}`;}
+  else if(minorChecked>=3){status='met';msg=`✓ Criteria met — ${minorChecked} minor criteria (threshold ≥3)`;}
+  else if(checked>0){status='partial';msg=`${minorChecked}/3 minor criteria — ${Math.max(0,3-minorChecked)} more needed (or 1 major)`;}
   else{status='notmet';msg='No criteria checked — check applicable findings above'}
   const el=document.getElementById(`dx-result-${dxId}`);
   if(el){el.className=`dx-result show ${status}`;el.textContent=msg;}
@@ -1382,6 +2525,7 @@ function savePatient(){
 }
 
 R();
+loadEvidence();
 </script>
 </body>
 </html>

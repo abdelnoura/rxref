@@ -306,6 +306,7 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--fn)
 .ex-chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:-18px;margin-bottom:26px}
 .ex-chip{font-size:12px;padding:4px 10px;background:var(--sur);border:1px solid var(--bdr);border-radius:20px;color:var(--txm);cursor:pointer}
 .ex-chip:hover{border-color:var(--acc);color:var(--acc)}
+.ex-chip.disabled{opacity:.5;cursor:default}.ex-chip.disabled:hover{border-color:var(--bdr);color:var(--txm)}
 .d-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px;margin-bottom:28px}
 .d-card{background:var(--sur);border:1px solid var(--bdr);border-radius:9px;padding:14px 16px;cursor:pointer;transition:all .13s}
 .d-card:hover{border-color:var(--acc);box-shadow:0 4px 14px rgba(27,58,92,.1)}
@@ -736,7 +737,7 @@ const REFS = {
     grade:'A',
     key:'PRACTICE DEFINING: 6 mL/kg PBW tidal volume reduces ARDS mortality by ~9%. All ARDS patients on MV should target 4–6 mL/kg PBW with plateau pressure <30 cmH₂O. This is the most important ventilator trial ever conducted.'
   },
-  'ACURASYS2013':{
+  'ACURASYS2010':{
     short:'ACURASYS, NEJM 2010',
     title:'Early Neuromuscular Blockade in Severe ARDS (ACURASYS)',
     authors:'Papazian L, Forel JM, Gacouin A et al.',
@@ -2026,14 +2027,14 @@ function renderHome(){
         <input class="srch-inp" type="text" placeholder="Search diagnosis, syndrome, or guideline topic…" value="${S.search}" oninput="S.search=this.value;R()">
         <button class="srch-btn">Search</button>
       </div>
-      <div class="ex-chips">${[['CAP','cap'],['CHF','chf'],['DKA','dka'],['Sepsis','sepsis'],['Acute PE','pe']].map(([lbl,id])=>`<span class="ex-chip" onclick="openDisease('${id}')">${lbl}</span>`).join('')}</div>
+      <div class="ex-chips">${[['CAP','cap'],['CHF','chf'],['DKA','dka'],['Sepsis','sepsis'],['Acute PE','pe']].map(([lbl,id])=>`<span class="ex-chip${DISEASE_MAP[id]?'':' disabled'}" ${DISEASE_MAP[id]?`onclick="openDisease('${id}')"`:'title="Coming soon"'}>${lbl}</span>`).join('')}</div>
       ${feedSection}
       <div class="home-sec">Conditions</div>
-      <div class="d-grid">${f.map(c=>`<div class="d-card" onclick="openDisease('${c.id}')">
-        <div class="d-card-top"><div><div class="d-card-name">${c.name}</div><div class="d-card-cat">${c.cat}</div></div><span class="d-upd ${c.hasUpdate?'new':'ok'}">${c.hasUpdate?'↑ New':'Current'}</span></div>
+      <div class="d-grid">${f.map(c=>{const avail=!!DISEASE_MAP[c.id];return`<div class="d-card${avail?'':' disabled'}" ${avail?`onclick="openDisease('${c.id}')"`:''}style="${avail?'':'opacity:.55;cursor:default'}" >
+        <div class="d-card-top"><div><div class="d-card-name">${c.name}</div><div class="d-card-cat">${c.cat}</div></div><span class="d-upd ${avail?(c.hasUpdate?'new':'ok'):'ok'}">${avail?(c.hasUpdate?'↑ New':'Current'):'Coming Soon'}</span></div>
         <div class="d-sum">${c.sum}</div>
-        <div class="d-foot"><span>${c.guideline}</span><span style="color:var(--acc);font-weight:700">→</span></div>
-      </div>`).join('')}</div>
+        <div class="d-foot"><span>${c.guideline}</span>${avail?'<span style="color:var(--acc);font-weight:700">→</span>':''}</div>
+      </div>`}).join('')}</div>
     </div>
   </div>`;
 }
@@ -2451,7 +2452,7 @@ function renderStudyModal(key){
 // ─────────────────────────────────────────────────────────────
 // ACTIONS
 // ─────────────────────────────────────────────────────────────
-function openDisease(id){S.disease=DISEASE_MAP[id]||CAP_DATA;S.view='disease';S.txTab='inpatient';S.wkTab='inpatient';S.accordions={};S.sidebarOpen=window.innerWidth>680;R();}
+function openDisease(id){if(!DISEASE_MAP[id])return;S.disease=DISEASE_MAP[id];S.view='disease';S.txTab='inpatient';S.wkTab='inpatient';S.accordions={};S.sidebarOpen=window.innerWidth>680;R();}
 function applySidebar(){
   const nav=document.getElementById('lnav');
   const overlay=document.getElementById('lnav-overlay');
@@ -2483,7 +2484,7 @@ function openPtModal(){S.modal='patient';R();}
 function closeModal(){S.modal=null;R();}
 function openStudy(key){S.modal={type:'study',key};R();}
 function updateScore(id){
-  const sc=S.disease.scores[id];let total=0;
+  const sc=S.disease.scores?.[id];if(!sc)return;let total=0;
   sc.vars.forEach(v=>{const el=document.getElementById(`${id}-${v.id}`);if(el)total+=parseInt(el.value)||0;});
   const el=document.getElementById(`${id}-total`);if(el)el.textContent=total;
   sc.interp.forEach((i,idx)=>{
